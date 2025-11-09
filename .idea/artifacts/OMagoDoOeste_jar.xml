@@ -1,0 +1,25 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="OMagoDoOeste:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/OMagoDoOeste_jar</output-path>
+    <root id="archive" name="OMagoDoOeste.jar">
+      <element id="module-output" name="OMagoDoOeste" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/17.0.6/javafx-fxml-17.0.6-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/23/javafx-base-23-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/23/javafx-base-23.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/23/javafx-controls-23.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/23/javafx-controls-23-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/23/javafx-graphics-23-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/17.0.6/javafx-fxml-17.0.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/23/javafx-graphics-23.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../Program Files/Java/javafx-sdk-17.0.17/lib/javafx.base.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../Program Files/Java/javafx-sdk-17.0.17/lib/javafx.controls.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../Program Files/Java/javafx-sdk-17.0.17/lib/javafx.fxml.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../Program Files/Java/javafx-sdk-17.0.17/lib/javafx.graphics.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../Program Files/Java/javafx-sdk-17.0.17/lib/javafx.media.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../Program Files/Java/javafx-sdk-17.0.17/lib/javafx.properties" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../Program Files/Java/javafx-sdk-17.0.17/lib/javafx.swing.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../Program Files/Java/javafx-sdk-17.0.17/lib/javafx.web.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../Program Files/Java/javafx-sdk-17.0.17/lib/javafx-swt.jar" />
+    </root>
+  </artifact>
+</component>
