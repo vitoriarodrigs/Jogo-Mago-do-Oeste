@@ -36,14 +36,6 @@ public class Player {
             manaAtual = manaMaxima;
         }
     }
-    public void comprarFeitico(int custo){
-        if (custo <= manaAtual){
-            manaAtual -= custo;
-        }
-        if(manaAtual < 0){
-            manaAtual = 0;
-        }
-    }
     public void tomarDano(int dano) {
         hpAtual -= dano;
         if (hpAtual < 0) hpAtual = 0;
@@ -62,6 +54,45 @@ public class Player {
         return hpMaximo;
     }
 
+    public void comprarFeitico(TrechoDeCodigo trecho) {
+        // Caso o jogador compre um laço de repetição
+        if (trecho instanceof LacoDeRepeticao) {
+            if (this.laco == null) {
+                if (manaAtual >= trecho.getCusto()) {
+                    manaAtual -= trecho.getCusto();
+                    setLaco((LacoDeRepeticao) trecho);
+                    System.out.println("Laço comprado com sucesso!");
+                } else {
+                    System.out.println("Mana insuficiente para comprar o laço!");
+                }
+            } else {
+                System.out.println("Você já possui um laço ativo!");
+            }
+        }
+
+        // Caso o jogador compre uma magia
+        else if (trecho instanceof Magia) {
+            if (this.laco == null) {
+                System.out.println("Você precisa comprar um laço antes de adicionar magias!");
+                return;
+            }
+
+            if (manaAtual >= trecho.getCusto()) {
+                manaAtual -= trecho.getCusto();
+
+                if (laco instanceof LacoFor) {
+                    ((LacoFor) laco).setMagia((Magia) trecho);
+                    System.out.println("Magia adicionada ao laço!");
+                }
+            } else {
+                System.out.println("Mana insuficiente para comprar a magia!");
+            }
+        }
+    }
+
+
+
+
     public LacoDeRepeticao getLaco() {
         return laco;
     }
@@ -69,9 +100,11 @@ public class Player {
     public void setLaco(LacoDeRepeticao laco) {
         this.laco = laco;
     }
+
     public void removerLaco(){
         laco = null;
     }
+
     public void comprarMagiaBase(LacoDeRepeticao laco){
         if(manaAtual >= laco.getCusto()){
             manaAtual -= laco.getCusto();

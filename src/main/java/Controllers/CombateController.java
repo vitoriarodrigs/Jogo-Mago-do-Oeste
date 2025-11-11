@@ -3,6 +3,7 @@ package Controllers;
 import Classes.Feitico.LacoFor;
 import Classes.Feitico.Magia;
 import Classes.Feitico.TrechoDeCodigo;
+import Classes.Jogo;
 import Classes.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -21,8 +23,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 
 public class CombateController {
-
-    private Player jogador1 = new Player(100,10);
+    private Player jogador = Jogo.getInstancia().getJogador();
     private ArrayList<TrechoDeCodigo>trechos = new ArrayList<>();
 
 
@@ -57,16 +58,20 @@ public class CombateController {
     private Pane dotesPositionPane;
 
     @FXML
+    private HBox caixaDeMagias;
+
+    @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
         atualizarBarraHp();
         atualizarBarraMana();
         loadMagias();
-        updateMagiasDisponiveis();
+        atualizarMagiasDisponiveis();
+
 
         // Timeline para restaurar 1 ponto de mana a cada 1 segundo
         Timeline manaRegen = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            jogador1.restaurarMana(1);
+            jogador.restaurarMana(1);
             atualizarBarraMana();
         }));
         manaRegen.setCycleCount(Timeline.INDEFINITE); // roda para sempre
@@ -83,7 +88,7 @@ public class CombateController {
         trechos.add(magia);
         trechos.add(laco1);
     }
-    public void updateMagiasDisponiveis (){
+    public void atualizarMagiasDisponiveis (){
         for (int i = 0; i < trechos.size(); i++) {
             TrechoDeCodigo trecho = trechos.get(i);
             Label label = new Label();
@@ -137,32 +142,39 @@ public class CombateController {
 
 
     public void healOnAction(ActionEvent actionEvent){
-        jogador1.restaurarHp(10);
+        jogador.restaurarHp(10);
         atualizarBarraHp();
 
     }
     public void perderHpOnAction(ActionEvent actionEvent){
-        jogador1.tomarDano(10);
+        jogador.tomarDano(10);
         atualizarBarraHp();
     }
 
     private void atualizarBarraHp() {
-        double proporcao = (double) jogador1.getHpAtual() / jogador1.getHpMaximo();
+        double proporcao = (double) jogador.getHpAtual() / jogador.getHpMaximo();
         Hp1.setWidth(HpBase.getWidth() * proporcao);
     }
     private void atualizarBarraMana(){
-        double proporcao = (double) jogador1.getManaAtual() / jogador1.getManaMaxima();
+        double proporcao = (double) jogador.getManaAtual() / jogador.getManaMaxima();
         mana.setWidth(manaBase1.getWidth() * proporcao);
-        if(jogador1.getManaAtual() < 10){
-            manaQuant.setText("0"+String.valueOf(jogador1.getManaAtual()));
+        if(jogador.getManaAtual() < 10){
+            manaQuant.setText("0"+String.valueOf(jogador.getManaAtual()));
         }else{
-            manaQuant.setText(String.valueOf(jogador1.getManaAtual()));
+            manaQuant.setText(String.valueOf(jogador.getManaAtual()));
         }
 
     }
     @FXML
     void comprarFeiticoOnAction(ActionEvent event) {
-        jogador1.comprarFeitico(5);
+        jogador.comprarFeitico(trechos.get(0));
+        atualizarBarraMana();
+    }
+    void comprarFeitico(TrechoDeCodigo trecho, int i) {
+        jogador.comprarFeitico(trecho);
+
+        trechos.remove(i);
+        atualizarMagiasDisponiveis();
         atualizarBarraMana();
     }
 }
