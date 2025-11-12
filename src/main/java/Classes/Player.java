@@ -61,7 +61,7 @@ public class Player {
                 if (manaAtual >= trecho.getCusto()) {
                     manaAtual -= trecho.getCusto();
                     setLaco((LacoDeRepeticao) trecho);
-                    System.out.println("Laço comprado com sucesso!");
+
                 } else {
                     System.out.println("Mana insuficiente para comprar o laço!");
                 }
@@ -103,30 +103,5 @@ public class Player {
 
     public void removerLaco(){
         laco = null;
-    }
-
-    public void comprarMagiaBase(LacoDeRepeticao laco){
-        if(manaAtual >= laco.getCusto()){
-            manaAtual -= laco.getCusto();
-            setLaco(laco);
-        }else {
-            System.out.println("o jogoador não tem mana suficiente");
-        }
-    }
-    public void comprarMagia(Magia magia){
-        if(laco == null){
-            System.out.println("o jogador precisa comprar um laço de repetição primeiro");
-            return;
-        }else{
-            if(manaAtual >= laco.getCusto()) {
-                manaAtual -= laco.getCusto();
-                if (laco instanceof LacoFor) {
-                    ((LacoFor) laco).setMagia(magia);
-                }
-            }else{
-                System.out.println("o jogoador não tem mana suficiente");
-            }
-        }
-
     }
 }

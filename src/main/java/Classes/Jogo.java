@@ -2,6 +2,7 @@ package Classes;
 
 public class Jogo {
     public static Jogo instancia;
+
     private Player jogador;
     //colocar os inimigos
     private String cenaAtual;

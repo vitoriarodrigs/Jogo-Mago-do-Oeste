@@ -105,6 +105,7 @@
                   <Image url="@../Images/Hud/CaixaDeItens.png" />
                </image>
             </ImageView>
+            <Pane fx:id="magiasDisponiveisPane" layoutX="-7.0" layoutY="-6.0" prefHeight="321.0" prefWidth="576.0" />
             <Circle id="0" fill="DODGERBLUE" layoutX="46.0" layoutY="135.0" radius="19.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
             <Circle id="1" fill="DODGERBLUE" layoutX="226.0" layoutY="135.0" radius="19.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
             <Circle id="2" fill="DODGERBLUE" layoutX="411.0" layoutY="135.0" radius="19.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
@@ -115,11 +116,16 @@
       </Pane>
       <Pane layoutX="99.0" layoutY="628.0" prefHeight="252.0" prefWidth="483.0">
          <children>
-            <ImageView fitHeight="252.0" fitWidth="316.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="lacoAtual" fitHeight="252.0" fitWidth="316.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../Images/Hud/caixaFor.png" />
                </image>
             </ImageView>
+            <Label fx:id="lacoAtualText" layoutX="14.0" layoutY="21.0" prefHeight="46.0" prefWidth="455.0" textFill="WHITE" visible="false">
+               <font>
+                  <Font name="Calibri" size="29.0" />
+               </font>
+            </Label>
             <HBox fx:id="caixaDeMagias" layoutY="90.0" prefHeight="86.0" prefWidth="483.0" />
          </children></Pane>
    </children>

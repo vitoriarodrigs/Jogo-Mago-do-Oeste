@@ -1,5 +1,6 @@
 package Controllers;
 
+import Classes.Feitico.LacoDeRepeticao;
 import Classes.Feitico.LacoFor;
 import Classes.Feitico.Magia;
 import Classes.Feitico.TrechoDeCodigo;
@@ -58,7 +59,16 @@ public class CombateController {
     private Pane dotesPositionPane;
 
     @FXML
+    private Pane magiasDisponiveisPane;
+
+    @FXML
     private HBox caixaDeMagias;
+
+    @FXML
+    private ImageView lacoAtual;
+
+    @FXML
+    private Label lacoAtualText;
 
     @FXML
     public void initialize() {
@@ -86,13 +96,24 @@ public class CombateController {
 
         trechos.add(laco1);
         trechos.add(magia);
-        trechos.add(laco1);
+        trechos.add(magia);
+        trechos.add(magia);
+        trechos.add(magia);
+
+
     }
     public void atualizarMagiasDisponiveis (){
+
+        if(magiasDisponiveisPane.getChildren().size() > 0){
+            magiasDisponiveisPane.getChildren().clear();
+        }
+
         for (int i = 0; i < trechos.size(); i++) {
             TrechoDeCodigo trecho = trechos.get(i);
-            Label label = new Label();
 
+            final int index = i;
+
+            Label label = new Label();
             label.setFont(new Font("Arial", 31)); // aumenta o tamanho da fonte
             label.setTextFill(Color.WHITE); // cor do texto
              // deixa em negrito
@@ -121,6 +142,26 @@ public class CombateController {
 
             ImageView img = new ImageView(imagem);
 
+            // 🔹 Aqui você adiciona o evento de clique
+            img.setOnMouseClicked(event -> {
+
+                if(trecho instanceof Magia){
+                    if(jogador.getLaco() != null){
+                        if(jogador.getLaco() instanceof LacoFor){
+                            if(caixaDeMagias.getChildren().size() == 3){
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                trechos.remove(index);
+                magiasDisponiveisPane.getChildren().remove(img);
+                magiasDisponiveisPane.getChildren().remove(label);
+                comprarFeitico(trecho,index);
+
+            });
+
             // Procura um círculo com o mesmo ID do índice
             for (javafx.scene.Node child : dotesPositionPane.getChildren()) {
                 if (child instanceof javafx.scene.shape.Circle circle) {
@@ -134,9 +175,40 @@ public class CombateController {
                     }
                 }
             }
-            dotesPositionPane.getChildren().add(img);
-            dotesPositionPane.getChildren().add(label);
+            magiasDisponiveisPane.getChildren().add(img);
+            magiasDisponiveisPane.getChildren().add(label);
 
+        }
+    }
+
+    public void atualizarMagiaJogador(){
+        LacoDeRepeticao laco = jogador.getLaco();
+
+        if(laco == null){
+            return;
+        }
+        if(caixaDeMagias.getChildren().size()>0){
+            caixaDeMagias.getChildren().clear();
+        }
+
+        lacoAtual.setVisible(true);
+        lacoAtualText.setVisible(true);
+
+        if(laco instanceof LacoFor){
+            Image img = new Image("/images/Hud/caixaFor.png");
+            lacoAtual.setImage(img);
+            lacoAtualText.setText("for(int i = 0: i < "+laco.getDuracao()+"; i++)");
+
+
+            if(((LacoFor) laco).getMagias().size() > 0){
+                for(Magia magia : ((LacoFor) laco).getMagias()){
+                    if(magia.getNome().equals("Fogo")){
+                        Image magiaImg = new Image("/images/Magias/fire.png");
+                        ImageView magiaIV = new ImageView(magiaImg);
+                        caixaDeMagias.getChildren().add(magiaIV);
+                    }
+                }
+            }
         }
     }
 
@@ -173,8 +245,9 @@ public class CombateController {
     void comprarFeitico(TrechoDeCodigo trecho, int i) {
         jogador.comprarFeitico(trecho);
 
-        trechos.remove(i);
+
         atualizarMagiasDisponiveis();
         atualizarBarraMana();
+        atualizarMagiaJogador();
     }
 }
