@@ -96,7 +96,6 @@
       </Label>
       <Button fx:id="perderHp" layoutX="671.0" layoutY="86.0" mnemonicParsing="false" onAction="#perderHpOnAction" text="Perder hp" />
       <Button fx:id="heal" layoutX="783.0" layoutY="86.0" mnemonicParsing="false" onAction="#healOnAction" text="heal" />
-      <Button fx:id="lancarFeitico" layoutX="673.0" layoutY="149.0" mnemonicParsing="false" onAction="#comprarFeiticoOnAction" text="lançar feitiço 5" />
       <ImageView fx:id="jogadorIMG" fitHeight="239.0" fitWidth="251.0" layoutX="48.0" layoutY="262.0" pickOnBounds="true" preserveRatio="true" />
       <Pane fx:id="dotesPositionPane" layoutX="719.0" layoutY="649.0" prefHeight="308.0" prefWidth="562.0">
          <children>
@@ -105,6 +104,11 @@
                   <Image url="@../Images/Hud/CaixaDeItens.png" />
                </image>
             </ImageView>
+            <Label fx:id="timerLabel" textFill="WHITE">
+               <font>
+                  <Font size="31.0" />
+               </font>
+            </Label>
             <Pane fx:id="magiasDisponiveisPane" layoutX="-7.0" layoutY="-6.0" prefHeight="321.0" prefWidth="576.0" />
             <Circle id="0" fill="DODGERBLUE" layoutX="46.0" layoutY="135.0" radius="19.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
             <Circle id="1" fill="DODGERBLUE" layoutX="226.0" layoutY="135.0" radius="19.0" stroke="BLACK" strokeType="INSIDE" visible="false" />

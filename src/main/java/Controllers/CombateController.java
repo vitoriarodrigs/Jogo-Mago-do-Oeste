@@ -22,10 +22,12 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class CombateController {
     private Player jogador = Jogo.getInstancia().getJogador();
     private ArrayList<TrechoDeCodigo>trechos = new ArrayList<>();
+    private int buyTimer = 5;
 
 
     @FXML
@@ -71,6 +73,9 @@ public class CombateController {
     private Label lacoAtualText;
 
     @FXML
+    private Label timerLabel;
+
+    @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
         atualizarBarraHp();
@@ -87,6 +92,24 @@ public class CombateController {
         manaRegen.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         manaRegen.play();
 
+        Timeline timerToBuy = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            //10 por que precisa ter um ultimo lugar pra mostrar o contador e cada item são 2 itens.
+            if(trechos.size() < 6){
+                if(buyTimer <= 5 && buyTimer != 0){
+                    buyTimer -= 1;
+                }else{
+                    createMagia();
+                    atualizarMagiasDisponiveis();
+                    buyTimer = 5;
+                }
+            }else{
+                buyTimer = 5;
+            }
+            timerLabel.setText(String.valueOf(buyTimer));
+        }));
+        timerToBuy.setCycleCount(Timeline.INDEFINITE); // roda para sempre
+        timerToBuy.play();
+
         Image gif = new Image(getClass().getResource("/images/oia.gif").toExternalForm());
         jogadorIMG.setImage(gif);
     }
@@ -100,6 +123,25 @@ public class CombateController {
         trechos.add(magia);
         trechos.add(magia);
 
+
+
+    }
+    public void createMagia(){
+        //implementar melhor quando tiver mais variedades de magias
+
+        String escolha;
+
+        Random random = new Random();
+        int sorteado = random.nextInt(2) + 1;
+        switch (sorteado){
+            case 1 : Magia magia = new Magia("Ataque","Fogo",2,6);
+                     trechos.add(magia);
+                     return;
+            case 2 : LacoFor laco = new LacoFor(3,4);
+                     trechos.add(laco);
+                     return;
+        }
+        atualizarMagiasDisponiveis();
 
     }
     public void atualizarMagiasDisponiveis (){
@@ -136,13 +178,12 @@ public class CombateController {
                     endereco = "/images/Magias/fire.png";
                 }
             } else {
-                label.setText("Trecho desconhecido");
+                endereco = "desconhecido";
             }
             Image imagem = new Image(endereco);
 
             ImageView img = new ImageView(imagem);
 
-            // 🔹 Aqui você adiciona o evento de clique
             img.setOnMouseClicked(event -> {
 
                 if(trecho instanceof Magia){
@@ -152,6 +193,11 @@ public class CombateController {
                                 return;
                             }
                         }
+                    }
+                }
+                if(trecho instanceof LacoDeRepeticao){
+                    if(jogador.getLaco() != null){
+                        return;
                     }
                 }
 
@@ -177,6 +223,26 @@ public class CombateController {
             }
             magiasDisponiveisPane.getChildren().add(img);
             magiasDisponiveisPane.getChildren().add(label);
+
+            if(trechos.size() < 6 && i+1 == trechos.size()){
+                Image imgTimer = new Image("/images/Hud/timerBox.png");
+
+                ImageView imgVTimer = new ImageView(imgTimer);
+
+                for (javafx.scene.Node child : dotesPositionPane.getChildren()) {
+                    if (child instanceof javafx.scene.shape.Circle circle) {
+                        if (circle.getId() != null && circle.getId().equals(String.valueOf(i+1))) {
+
+                            timerLabel.setLayoutX(circle.getLayoutX() + 77);
+                            timerLabel.setLayoutY(circle.getLayoutY() - 15);
+
+                            imgVTimer.setLayoutX(circle.getLayoutX() - 25);
+                            imgVTimer.setLayoutY(circle.getLayoutY()- 30);
+                        }
+                    }
+                }
+                magiasDisponiveisPane.getChildren().add(imgVTimer);
+            }
 
         }
     }
@@ -237,11 +303,7 @@ public class CombateController {
         }
 
     }
-    @FXML
-    void comprarFeiticoOnAction(ActionEvent event) {
-        jogador.comprarFeitico(trechos.get(0));
-        atualizarBarraMana();
-    }
+
     void comprarFeitico(TrechoDeCodigo trecho, int i) {
         jogador.comprarFeitico(trecho);
 
