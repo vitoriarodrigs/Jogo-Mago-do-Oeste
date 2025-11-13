@@ -5,7 +5,8 @@ import Classes.Feitico.LacoFor;
 import Classes.Feitico.Magia;
 import Classes.Feitico.TrechoDeCodigo;
 import Classes.Jogo;
-import Classes.Player;
+import Classes.Personagem.Inimigo.Inimigo;
+import Classes.Personagem.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -26,6 +27,7 @@ import java.util.Random;
 
 public class CombateController {
     private Player jogador = Jogo.getInstancia().getJogador();
+    private Inimigo inimigo = Jogo.getInstancia().getInimigo(0); //arrumar depois
     private ArrayList<TrechoDeCodigo>trechos = new ArrayList<>();
     private int buyTimer = 5;
 
@@ -119,9 +121,7 @@ public class CombateController {
 
         trechos.add(laco1);
         trechos.add(magia);
-        trechos.add(magia);
-        trechos.add(magia);
-        trechos.add(magia);
+
 
 
 
