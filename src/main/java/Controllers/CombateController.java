@@ -1,10 +1,12 @@
 package Controllers;
 
+import Classes.Feitico.LacoDeRepeticao;
 import Classes.Feitico.LacoFor;
 import Classes.Feitico.Magia;
 import Classes.Feitico.TrechoDeCodigo;
 import Classes.Jogo;
-import Classes.Player;
+import Classes.Personagem.Inimigo.Inimigo;
+import Classes.Personagem.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,10 +23,13 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class CombateController {
     private Player jogador = Jogo.getInstancia().getJogador();
+    private Inimigo inimigo = Jogo.getInstancia().getInimigo(0); //arrumar depois
     private ArrayList<TrechoDeCodigo>trechos = new ArrayList<>();
+    private int buyTimer = 5;
 
 
     @FXML
@@ -58,7 +63,19 @@ public class CombateController {
     private Pane dotesPositionPane;
 
     @FXML
+    private Pane magiasDisponiveisPane;
+
+    @FXML
     private HBox caixaDeMagias;
+
+    @FXML
+    private ImageView lacoAtual;
+
+    @FXML
+    private Label lacoAtualText;
+
+    @FXML
+    private Label timerLabel;
 
     @FXML
     public void initialize() {
@@ -77,6 +94,24 @@ public class CombateController {
         manaRegen.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         manaRegen.play();
 
+        Timeline timerToBuy = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            //10 por que precisa ter um ultimo lugar pra mostrar o contador e cada item são 2 itens.
+            if(trechos.size() < 6){
+                if(buyTimer <= 5 && buyTimer != 0){
+                    buyTimer -= 1;
+                }else{
+                    createMagia();
+                    atualizarMagiasDisponiveis();
+                    buyTimer = 5;
+                }
+            }else{
+                buyTimer = 5;
+            }
+            timerLabel.setText(String.valueOf(buyTimer));
+        }));
+        timerToBuy.setCycleCount(Timeline.INDEFINITE); // roda para sempre
+        timerToBuy.play();
+
         Image gif = new Image(getClass().getResource("/images/oia.gif").toExternalForm());
         jogadorIMG.setImage(gif);
     }
@@ -86,13 +121,41 @@ public class CombateController {
 
         trechos.add(laco1);
         trechos.add(magia);
-        trechos.add(laco1);
+
+
+
+
+    }
+    public void createMagia(){
+        //implementar melhor quando tiver mais variedades de magias
+
+        String escolha;
+
+        Random random = new Random();
+        int sorteado = random.nextInt(2) + 1;
+        switch (sorteado){
+            case 1 : Magia magia = new Magia("Ataque","Fogo",2,6);
+                     trechos.add(magia);
+                     return;
+            case 2 : LacoFor laco = new LacoFor(3,4);
+                     trechos.add(laco);
+                     return;
+        }
+        atualizarMagiasDisponiveis();
+
     }
     public void atualizarMagiasDisponiveis (){
+
+        if(magiasDisponiveisPane.getChildren().size() > 0){
+            magiasDisponiveisPane.getChildren().clear();
+        }
+
         for (int i = 0; i < trechos.size(); i++) {
             TrechoDeCodigo trecho = trechos.get(i);
-            Label label = new Label();
 
+            final int index = i;
+
+            Label label = new Label();
             label.setFont(new Font("Arial", 31)); // aumenta o tamanho da fonte
             label.setTextFill(Color.WHITE); // cor do texto
              // deixa em negrito
@@ -115,11 +178,35 @@ public class CombateController {
                     endereco = "/images/Magias/fire.png";
                 }
             } else {
-                label.setText("Trecho desconhecido");
+                endereco = "desconhecido";
             }
             Image imagem = new Image(endereco);
 
             ImageView img = new ImageView(imagem);
+
+            img.setOnMouseClicked(event -> {
+
+                if(trecho instanceof Magia){
+                    if(jogador.getLaco() != null){
+                        if(jogador.getLaco() instanceof LacoFor){
+                            if(caixaDeMagias.getChildren().size() == 3){
+                                return;
+                            }
+                        }
+                    }
+                }
+                if(trecho instanceof LacoDeRepeticao){
+                    if(jogador.getLaco() != null){
+                        return;
+                    }
+                }
+
+                trechos.remove(index);
+                magiasDisponiveisPane.getChildren().remove(img);
+                magiasDisponiveisPane.getChildren().remove(label);
+                comprarFeitico(trecho,index);
+
+            });
 
             // Procura um círculo com o mesmo ID do índice
             for (javafx.scene.Node child : dotesPositionPane.getChildren()) {
@@ -134,9 +221,60 @@ public class CombateController {
                     }
                 }
             }
-            dotesPositionPane.getChildren().add(img);
-            dotesPositionPane.getChildren().add(label);
+            magiasDisponiveisPane.getChildren().add(img);
+            magiasDisponiveisPane.getChildren().add(label);
 
+            if(trechos.size() < 6 && i+1 == trechos.size()){
+                Image imgTimer = new Image("/images/Hud/timerBox.png");
+
+                ImageView imgVTimer = new ImageView(imgTimer);
+
+                for (javafx.scene.Node child : dotesPositionPane.getChildren()) {
+                    if (child instanceof javafx.scene.shape.Circle circle) {
+                        if (circle.getId() != null && circle.getId().equals(String.valueOf(i+1))) {
+
+                            timerLabel.setLayoutX(circle.getLayoutX() + 77);
+                            timerLabel.setLayoutY(circle.getLayoutY() - 15);
+
+                            imgVTimer.setLayoutX(circle.getLayoutX() - 25);
+                            imgVTimer.setLayoutY(circle.getLayoutY()- 30);
+                        }
+                    }
+                }
+                magiasDisponiveisPane.getChildren().add(imgVTimer);
+            }
+
+        }
+    }
+
+    public void atualizarMagiaJogador(){
+        LacoDeRepeticao laco = jogador.getLaco();
+
+        if(laco == null){
+            return;
+        }
+        if(caixaDeMagias.getChildren().size()>0){
+            caixaDeMagias.getChildren().clear();
+        }
+
+        lacoAtual.setVisible(true);
+        lacoAtualText.setVisible(true);
+
+        if(laco instanceof LacoFor){
+            Image img = new Image("/images/Hud/caixaFor.png");
+            lacoAtual.setImage(img);
+            lacoAtualText.setText("for(int i = 0: i < "+laco.getDuracao()+"; i++)");
+
+
+            if(((LacoFor) laco).getMagias().size() > 0){
+                for(Magia magia : ((LacoFor) laco).getMagias()){
+                    if(magia.getNome().equals("Fogo")){
+                        Image magiaImg = new Image("/images/Magias/fire.png");
+                        ImageView magiaIV = new ImageView(magiaImg);
+                        caixaDeMagias.getChildren().add(magiaIV);
+                    }
+                }
+            }
         }
     }
 
@@ -165,16 +303,13 @@ public class CombateController {
         }
 
     }
-    @FXML
-    void comprarFeiticoOnAction(ActionEvent event) {
-        jogador.comprarFeitico(trechos.get(0));
-        atualizarBarraMana();
-    }
+
     void comprarFeitico(TrechoDeCodigo trecho, int i) {
         jogador.comprarFeitico(trecho);
 
-        trechos.remove(i);
+
         atualizarMagiasDisponiveis();
         atualizarBarraMana();
+        atualizarMagiaJogador();
     }
 }

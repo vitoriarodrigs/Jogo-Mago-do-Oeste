@@ -1,8 +1,16 @@
 package Classes;
 
+import Classes.Personagem.Inimigo.Inimigo;
+import Classes.Personagem.Inimigo.InimigoTutorial;
+import Classes.Personagem.Player;
+
+import java.util.ArrayList;
+
 public class Jogo {
     public static Jogo instancia;
+
     private Player jogador;
+    private ArrayList<Inimigo> inimigos;
     //colocar os inimigos
     private String cenaAtual;
     private String inimigoAtual;
@@ -10,6 +18,8 @@ public class Jogo {
 
     protected Jogo (){
         this.jogador = new Player(100,10);
+        this.inimigos = new ArrayList<>();
+        this.inimigos.add(new InimigoTutorial(200,10,5000));
         pergaminhos = new boolean[]{
                 false,false,false,false
         };
@@ -27,6 +37,10 @@ public class Jogo {
 
     public Player getJogador() {
         return jogador;
+    }
+
+    public Inimigo getInimigo(int i){
+        return inimigos.get(i);
     }
     public Boolean getPergaminho(int i){
        if(i< pergaminhos.length && i >=0){
