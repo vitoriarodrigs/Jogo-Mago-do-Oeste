@@ -156,7 +156,7 @@ public class CombateController {
             final int index = i;
 
             Label label = new Label();
-            label.setFont(new Font("Arial", 31)); // aumenta o tamanho da fonte
+            label.setFont(new Font("Arial", 25)); // aumenta o tamanho da fonte
             label.setTextFill(Color.WHITE); // cor do texto
              // deixa em negrito
             label.setWrapText(true);
@@ -213,8 +213,8 @@ public class CombateController {
                 if (child instanceof javafx.scene.shape.Circle circle) {
                     if (circle.getId() != null && circle.getId().equals(String.valueOf(i))) {
 
-                        label.setLayoutX(circle.getLayoutX() + 77);
-                        label.setLayoutY(circle.getLayoutY() - 15);
+                        label.setLayoutX(circle.getLayoutX() + 50);
+                        label.setLayoutY(circle.getLayoutY() - 20);
 
                         img.setLayoutX(circle.getLayoutX() - 25);
                         img.setLayoutY(circle.getLayoutY()- 30);
@@ -233,8 +233,8 @@ public class CombateController {
                     if (child instanceof javafx.scene.shape.Circle circle) {
                         if (circle.getId() != null && circle.getId().equals(String.valueOf(i+1))) {
 
-                            timerLabel.setLayoutX(circle.getLayoutX() + 77);
-                            timerLabel.setLayoutY(circle.getLayoutY() - 15);
+                            timerLabel.setLayoutX(circle.getLayoutX() + 30);
+                            timerLabel.setLayoutY(circle.getLayoutY() - 25);
 
                             imgVTimer.setLayoutX(circle.getLayoutX() - 25);
                             imgVTimer.setLayoutY(circle.getLayoutY()- 30);
@@ -244,6 +244,25 @@ public class CombateController {
                 magiasDisponiveisPane.getChildren().add(imgVTimer);
             }
 
+        }
+        if(trechos.size() == 0){
+            Image imgTimer = new Image("/images/Hud/timerBox.png");
+
+            ImageView imgVTimer = new ImageView(imgTimer);
+
+            for (javafx.scene.Node child : dotesPositionPane.getChildren()) {
+                if (child instanceof javafx.scene.shape.Circle circle) {
+                    if (circle.getId() != null && circle.getId().equals(String.valueOf(0))) {
+
+                        timerLabel.setLayoutX(circle.getLayoutX() + 30);
+                        timerLabel.setLayoutY(circle.getLayoutY() - 25);
+
+                        imgVTimer.setLayoutX(circle.getLayoutX() - 25);
+                        imgVTimer.setLayoutY(circle.getLayoutY()- 30);
+                    }
+                }
+            }
+            magiasDisponiveisPane.getChildren().add(imgVTimer);
         }
     }
 
