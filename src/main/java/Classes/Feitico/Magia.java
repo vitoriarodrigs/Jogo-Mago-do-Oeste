@@ -2,11 +2,11 @@ package Classes.Feitico;
 
 public class Magia extends TrechoDeCodigo{
 
-    private String tipo;
+    private TipoMagia tipo;
     private String nome;
     private int poder;
 
-    public Magia (String tipo, String nome, int custo, int poder){
+    public Magia (TipoMagia tipo, String nome, int custo, int poder){
         super(custo);
         this.poder= poder;
         this.nome = nome;
@@ -14,7 +14,7 @@ public class Magia extends TrechoDeCodigo{
     }
 
     public String getTipo() {
-        return tipo;
+        return tipo.toString();
     }
 
     public String getNome() {
@@ -25,7 +25,7 @@ public class Magia extends TrechoDeCodigo{
         return poder;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoMagia tipo) {
         this.tipo = tipo;
     }
 

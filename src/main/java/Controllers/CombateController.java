@@ -1,13 +1,12 @@
 package Controllers;
 
-import Classes.Feitico.LacoDeRepeticao;
-import Classes.Feitico.LacoFor;
-import Classes.Feitico.Magia;
-import Classes.Feitico.TrechoDeCodigo;
+import Classes.Feitico.*;
 import Classes.Jogo;
 import Classes.Personagem.Inimigo.Inimigo;
 import Classes.Personagem.Personagem;
 import Classes.Personagem.Player;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -95,6 +94,9 @@ public class CombateController {
     private ImageView ataqueButtonImg;
 
     @FXML
+    private Pane enemyEfeictsBox;
+
+    @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
         atualizarBarraHp(jogador,heroMaxHp,heroHp, false);
@@ -146,7 +148,7 @@ public class CombateController {
     }
     public void loadMagias(){
         LacoFor laco1 = new LacoFor(3,4);
-        Magia magia = new Magia("Ataque","Fogo",2,6);
+        Magia magia = new Magia(TipoMagia.ATAQUE,"FOGO",2,6);
 
         trechos.add(laco1);
         trechos.add(magia);
@@ -160,7 +162,7 @@ public class CombateController {
         Random random = new Random();
         int sorteado = random.nextInt(2) + 1;
         switch (sorteado){
-            case 1 : Magia magia = new Magia("Ataque","Fogo",2,6);
+            case 1 : Magia magia = new Magia(TipoMagia.ATAQUE,"FOGO",2,6);
                      trechos.add(magia);
                      return;
             case 2 : LacoFor laco = new LacoFor(3,4);
@@ -198,7 +200,7 @@ public class CombateController {
             if (trecho instanceof LacoFor laco) {
                endereco = "/images/Magias/for.png";
             } else if (trecho instanceof Magia magia) {
-                if(magia.getNome().equals("Fogo")){
+                if(magia.getNome().equals("FOGO")){
                     endereco = "/images/Magias/fire.png";
                 }else{
                     endereco = "/images/Magias/fire.png";
@@ -319,7 +321,7 @@ public class CombateController {
                 ataqueButtonImg.setVisible(true);
 
                 for(Magia magia : ((LacoFor) laco).getMagias()){
-                    if(magia.getNome().equals("Fogo")){
+                    if(magia.getNome().equals("FOGO")){
                         Image magiaImg = new Image("/images/Magias/fire.png");
                         ImageView magiaIV = new ImageView(magiaImg);
                         caixaDeMagias.getChildren().add(magiaIV);
@@ -336,11 +338,9 @@ public class CombateController {
         hp.setWidth(novaLargura);
 
         if (inimigo) {
-            // Diminui da esquerda para a direita (inimigo)
             double direita = maxHp.getX() + maxHp.getWidth();
             hp.setX(direita - novaLargura);
         } else {
-            // Diminui da direita para a esquerda (herói)
             hp.setX(maxHp.getX());
         }
     }
@@ -350,17 +350,13 @@ public class CombateController {
 
         mana.setWidth(novaLargura);
 
-        // --- Direção da barra ---
         if (inimigo) {
-            // Barra diminui da esquerda para a direita (ancora na direita)
             double direita = maxMana.getX() + maxMana.getWidth();
             mana.setX(direita - novaLargura);
         } else {
-            // Barra diminui da direita para a esquerda (ancora na esquerda)
             mana.setX(maxMana.getX());
         }
 
-        // --- Exibir a quantidade ---
         int qnt = personagem.getManaAtual();
         manaQuant.setText(qnt < 10 ? "0" + qnt : String.valueOf(qnt));
     }
@@ -376,22 +372,43 @@ public class CombateController {
 
     @FXML
     void lancarFeitico(ActionEvent event) {
-        System.out.println("atacou");
         LacoDeRepeticao laco = jogador.getLaco();
+        enemyEfeictsBox.getChildren().clear();
+        SequentialTransition sequencial = new SequentialTransition();
 
-        if(laco instanceof LacoFor){
-            for(int i = 0; i < laco.getDuracao();i++){
-                for(Magia magia: ((LacoFor) laco).getMagias()){
-                    jogador.atacar(inimigo,magia.getPoder());
+        if (laco instanceof LacoFor) {
+            for (int i = 0; i < laco.getDuracao(); i++) {
+                for (Magia magia : ((LacoFor) laco).getMagias()) {
+                    if (magia.getTipo().equals("ATAQUE")) {
+                        PauseTransition ataquePause = new PauseTransition(Duration.millis(300));
+                        ataquePause.setOnFinished(e -> {
+                            criarEfeito(magia, "FOR", enemySprite.getLayoutX(), enemySprite.getLayoutY());
+                            jogador.atacar(inimigo, magia.getPoder());
+                            atualizarBarraHp(inimigo, enemyMaxHp, enemyHp, true);
+                        });
+                        sequencial.getChildren().add(ataquePause);
+                    }
                 }
             }
+            sequencial.play();
         }
+
         jogador.removerLaco();
         ataqueButton.setDisable(true);
         ataqueButtonImg.setVisible(false);
         lacoAtual.setVisible(false);
         lacoAtualText.setVisible(false);
-        atualizarBarraHp(inimigo,enemyMaxHp,enemyHp,true);
         atualizarMagiaJogador();
+    }
+    public void criarEfeito(Magia magia, String laco, double posX, double posY){
+        if(magia.getNome().equals("FOGO")){
+            if(laco.equals("FOR")){
+                Image img = new Image(getClass().getResource("/images/Magias/fire.png").toString());
+               ImageView imgV = new ImageView(img);
+               imgV.setLayoutX(posX);
+               imgV.setLayoutY(posY);
+               enemyEfeictsBox.getChildren().add(imgV);
+            }
+        }
     }
 }
