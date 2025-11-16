@@ -4,6 +4,7 @@ import Classes.Feitico.LacoDeRepeticao;
 import Classes.Feitico.LacoFor;
 import Classes.Feitico.Magia;
 import Classes.Feitico.TrechoDeCodigo;
+import Classes.Personagem.Inimigo.Inimigo;
 
 public class Player extends Personagem {
 
@@ -51,7 +52,9 @@ public class Player extends Personagem {
         }
     }
 
-
+    public void atacar(Inimigo inimigo, int dano){
+        inimigo.tomarDano(dano);
+    }
 
 
     public LacoDeRepeticao getLaco() {

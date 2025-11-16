@@ -89,11 +89,17 @@ public class CombateController {
     private Label timerLabel;
 
     @FXML
+    private Button ataqueButton;
+
+    @FXML
+    private ImageView ataqueButtonImg;
+
+    @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
-        atualizarBarraHp();
-        atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant);
-        atualizarBarraMana(inimigo,enemyMaxMana,enemyMana,enemyManaQuant);
+        atualizarBarraHp(jogador,heroMaxHp,heroHp, false);
+        atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant, false);
+        atualizarBarraMana(inimigo,enemyMaxMana,enemyMana,enemyManaQuant,true);
         loadMagias();
         atualizarMagiasDisponiveis();
 
@@ -101,16 +107,16 @@ public class CombateController {
         // Timeline para restaurar 1 ponto de mana a cada 1 segundo
         Timeline manaRegen = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             jogador.restaurarMana(1);
-            atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant);
+            atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant,false);
             inimigo.restaurarMana(1);
-            atualizarBarraMana(inimigo,enemyMaxMana,enemyMana,enemyManaQuant);
+            atualizarBarraMana(inimigo,enemyMaxMana,enemyMana,enemyManaQuant,true);
 
         }));
         manaRegen.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         manaRegen.play();
         Timeline enemyColldown = new Timeline(new KeyFrame(Duration.seconds(inimigo.getColldownDeAtaque()), event -> {
             inimigo.atacar(jogador);
-            atualizarBarraHp();
+            atualizarBarraHp(jogador,heroMaxHp,heroHp,false);
         }));
         enemyColldown.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         enemyColldown.play();
@@ -144,9 +150,6 @@ public class CombateController {
 
         trechos.add(laco1);
         trechos.add(magia);
-
-
-
 
     }
     public void createMagia(){
@@ -216,6 +219,8 @@ public class CombateController {
                                 return;
                             }
                         }
+                    }else{
+                        return;
                     }
                 }
                 if(trecho instanceof LacoDeRepeticao){
@@ -292,11 +297,11 @@ public class CombateController {
     public void atualizarMagiaJogador(){
         LacoDeRepeticao laco = jogador.getLaco();
 
-        if(laco == null){
-            return;
-        }
         if(caixaDeMagias.getChildren().size()>0){
             caixaDeMagias.getChildren().clear();
+        }
+        if(laco == null){
+            return;
         }
 
         lacoAtual.setVisible(true);
@@ -309,6 +314,10 @@ public class CombateController {
 
 
             if(((LacoFor) laco).getMagias().size() > 0){
+
+                ataqueButton.setDisable(false);
+                ataqueButtonImg.setVisible(true);
+
                 for(Magia magia : ((LacoFor) laco).getMagias()){
                     if(magia.getNome().equals("Fogo")){
                         Image magiaImg = new Image("/images/Magias/fire.png");
@@ -320,27 +329,69 @@ public class CombateController {
         }
     }
 
-    private void atualizarBarraHp() {
-        double proporcao = (double) jogador.getHpAtual() / jogador.getHpMaximo();
-        heroHp.setWidth(heroMaxHp.getWidth() * proporcao);
+    private void atualizarBarraHp(Personagem personagem, Rectangle maxHp, Rectangle hp, boolean inimigo) {
+        double proporcao = (double) personagem.getHpAtual() / personagem.getHpMaximo();
+        double novaLargura = maxHp.getWidth() * proporcao;
+
+        hp.setWidth(novaLargura);
+
+        if (inimigo) {
+            // Diminui da esquerda para a direita (inimigo)
+            double direita = maxHp.getX() + maxHp.getWidth();
+            hp.setX(direita - novaLargura);
+        } else {
+            // Diminui da direita para a esquerda (herói)
+            hp.setX(maxHp.getX());
+        }
     }
-    private void atualizarBarraMana(Personagem personagem, Rectangle maxMana, Rectangle mana, Label manaQuant){
+    private void atualizarBarraMana(Personagem personagem, Rectangle maxMana, Rectangle mana, Label manaQuant, boolean inimigo) {
         double proporcao = (double) personagem.getManaAtual() / personagem.getManaMaxima();
-        mana.setWidth(maxMana.getWidth() * proporcao);
-        if(personagem.getManaAtual() < 10){
-            manaQuant.setText("0"+String.valueOf(personagem.getManaAtual()));
-        }else{
-            manaQuant.setText(String.valueOf(personagem.getManaAtual()));
+        double novaLargura = maxMana.getWidth() * proporcao;
+
+        mana.setWidth(novaLargura);
+
+        // --- Direção da barra ---
+        if (inimigo) {
+            // Barra diminui da esquerda para a direita (ancora na direita)
+            double direita = maxMana.getX() + maxMana.getWidth();
+            mana.setX(direita - novaLargura);
+        } else {
+            // Barra diminui da direita para a esquerda (ancora na esquerda)
+            mana.setX(maxMana.getX());
         }
 
+        // --- Exibir a quantidade ---
+        int qnt = personagem.getManaAtual();
+        manaQuant.setText(qnt < 10 ? "0" + qnt : String.valueOf(qnt));
     }
 
-    void comprarFeitico(TrechoDeCodigo trecho, int i) {
+    public void comprarFeitico(TrechoDeCodigo trecho, int i) {
         jogador.comprarFeitico(trecho);
 
 
         atualizarMagiasDisponiveis();
-        atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant);
+        atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant,false);
+        atualizarMagiaJogador();
+    }
+
+    @FXML
+    void lancarFeitico(ActionEvent event) {
+        System.out.println("atacou");
+        LacoDeRepeticao laco = jogador.getLaco();
+
+        if(laco instanceof LacoFor){
+            for(int i = 0; i < laco.getDuracao();i++){
+                for(Magia magia: ((LacoFor) laco).getMagias()){
+                    jogador.atacar(inimigo,magia.getPoder());
+                }
+            }
+        }
+        jogador.removerLaco();
+        ataqueButton.setDisable(true);
+        ataqueButtonImg.setVisible(false);
+        lacoAtual.setVisible(false);
+        lacoAtualText.setVisible(false);
+        atualizarBarraHp(inimigo,enemyMaxHp,enemyHp,true);
         atualizarMagiaJogador();
     }
 }

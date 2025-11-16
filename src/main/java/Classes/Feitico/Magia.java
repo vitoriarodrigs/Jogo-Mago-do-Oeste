@@ -4,11 +4,11 @@ public class Magia extends TrechoDeCodigo{
 
     private String tipo;
     private String nome;
-    private int valor;
+    private int poder;
 
-    public Magia (String tipo, String nome, int custo, int valor){
+    public Magia (String tipo, String nome, int custo, int poder){
         super(custo);
-        this.valor= valor;
+        this.poder= poder;
         this.nome = nome;
         this.tipo = tipo;
     }
@@ -21,8 +21,8 @@ public class Magia extends TrechoDeCodigo{
         return nome;
     }
 
-    public int getValor() {
-        return valor;
+    public int getPoder() {
+        return poder;
     }
 
     public void setTipo(String tipo) {
@@ -33,7 +33,7 @@ public class Magia extends TrechoDeCodigo{
         this.nome = nome;
     }
 
-    public void setValor(int valor) {
-        this.valor = valor;
+    public void setValor(int poder) {
+        this.poder = poder;
     }
 }
