@@ -1,6 +1,3 @@
-
-# 🎉 **README.md COMPLETO — PRONTO PARA COLAR**
-
 ```markdown
 # 🧙‍♂️ O Mago do Oeste — Jogo Educacional em JavaFX
 
