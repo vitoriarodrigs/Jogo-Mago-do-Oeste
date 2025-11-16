@@ -13,18 +13,22 @@ public class Jogo {
     private ArrayList<Inimigo> inimigos;
     //colocar os inimigos
     private String cenaAtual;
-    private String inimigoAtual;
+    private int inimigoAtual;
     private boolean[] pergaminhos;
 
     protected Jogo (){
         this.jogador = new Player(100,10);
         this.inimigos = new ArrayList<>();
-        this.inimigos.add(new InimigoTutorial(200,10,5000));
+        this.inimigos.add(new InimigoTutorial(200,10,5));
         pergaminhos = new boolean[]{
                 false,false,false,false
         };
         this.cenaAtual = "";
-        this.inimigoAtual = "";
+        this.inimigoAtual = 0;
+
+        inimigos = new ArrayList<>();
+        InimigoTutorial inimigo1 = new InimigoTutorial(200,10,5);
+        inimigos.add(inimigo1);
     }
 
     //metodo do padrão singleton
@@ -42,6 +46,13 @@ public class Jogo {
     public Inimigo getInimigo(int i){
         return inimigos.get(i);
     }
+    public Inimigo getInimigoAtual(){
+        if(inimigos.get(inimigoAtual) != null){
+            return inimigos.get(inimigoAtual);
+        }
+        return null;
+    }
+
     public Boolean getPergaminho(int i){
        if(i< pergaminhos.length && i >=0){
            return pergaminhos[i];
@@ -54,16 +65,8 @@ public class Jogo {
         return cenaAtual;
     }
 
-    public String getInimigoAtual() {
-        return inimigoAtual;
-    }
-
     public void setCenaAtual(String cenaAtual) {
         this.cenaAtual = cenaAtual;
-    }
-
-    public void setInimigoAtual(String inimigoAtual) {
-        this.inimigoAtual = inimigoAtual;
     }
 
     //fazer metodo com switch para retornar o endereço da cena atual com o inimigo atual(anda faltam as imagens)

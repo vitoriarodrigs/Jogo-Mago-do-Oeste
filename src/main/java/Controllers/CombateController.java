@@ -6,6 +6,7 @@ import Classes.Feitico.Magia;
 import Classes.Feitico.TrechoDeCodigo;
 import Classes.Jogo;
 import Classes.Personagem.Inimigo.Inimigo;
+import Classes.Personagem.Personagem;
 import Classes.Personagem.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,46 +28,47 @@ import java.util.Random;
 
 public class CombateController {
     private Player jogador = Jogo.getInstancia().getJogador();
-    private Inimigo inimigo = Jogo.getInstancia().getInimigo(0); //arrumar depois
+    private Inimigo inimigo = Jogo.getInstancia().getInimigoAtual(); //arrumar depois
     private ArrayList<TrechoDeCodigo>trechos = new ArrayList<>();
     private int buyTimer = 5;
 
 
-    @FXML
-    private Rectangle Hp1;
 
     @FXML
-    private Rectangle HpBase;
-
-    @FXML
-    private Button heal;
-
-    @FXML
-    private Button perderHp;
-
-    @FXML
-    private Rectangle mana;
-
-    @FXML
-    private Rectangle manaBase1;
-
-    @FXML
-    private Button lancarFeitico;
-
-    @FXML
-    private Label manaQuant;
-
-    @FXML
-    private ImageView jogadorIMG;
+    private HBox caixaDeMagias;
 
     @FXML
     private Pane dotesPositionPane;
 
     @FXML
-    private Pane magiasDisponiveisPane;
+    private Rectangle enemyHp;
 
     @FXML
-    private HBox caixaDeMagias;
+    private Rectangle enemyMana;
+
+    @FXML
+    private Rectangle enemyMaxHp;
+
+    @FXML
+    private Rectangle enemyMaxMana;
+
+    @FXML
+    private ImageView enemySprite;
+
+    @FXML
+    private Rectangle heroHp;
+
+    @FXML
+    private Rectangle heroMana;
+
+    @FXML
+    private Rectangle heroMaxHp;
+
+    @FXML
+    private Rectangle heroMaxMana;
+
+    @FXML
+    private ImageView jogadorIMG;
 
     @FXML
     private ImageView lacoAtual;
@@ -75,13 +77,23 @@ public class CombateController {
     private Label lacoAtualText;
 
     @FXML
+    private Pane magiasDisponiveisPane;
+
+    @FXML
+    private Label heroManaQuant;
+
+    @FXML
+    private Label enemyManaQuant;
+
+    @FXML
     private Label timerLabel;
 
     @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
         atualizarBarraHp();
-        atualizarBarraMana();
+        atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant);
+        atualizarBarraMana(inimigo,enemyMaxMana,enemyMana,enemyManaQuant);
         loadMagias();
         atualizarMagiasDisponiveis();
 
@@ -89,10 +101,18 @@ public class CombateController {
         // Timeline para restaurar 1 ponto de mana a cada 1 segundo
         Timeline manaRegen = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             jogador.restaurarMana(1);
-            atualizarBarraMana();
+            atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant);
+            inimigo.restaurarMana(1);
+            atualizarBarraMana(inimigo,enemyMaxMana,enemyMana,enemyManaQuant);
+
         }));
         manaRegen.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         manaRegen.play();
+        Timeline enemyColldown = new Timeline(new KeyFrame(Duration.seconds(inimigo.getColldownDeAtaque()), event -> {
+            inimigo.atacar(jogador);
+
+
+        }));
 
         Timeline timerToBuy = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             //10 por que precisa ter um ultimo lugar pra mostrar o contador e cada item são 2 itens.
@@ -112,8 +132,10 @@ public class CombateController {
         timerToBuy.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         timerToBuy.play();
 
-        Image gif = new Image(getClass().getResource("/images/oia.gif").toExternalForm());
-        jogadorIMG.setImage(gif);
+        Image heroImg = new Image(getClass().getResource("/images/Personagens/personagemPrincipal.png").toExternalForm());
+        jogadorIMG.setImage(heroImg);
+        Image enemyImg = new Image(getClass().getResource("/images/Personagens/personagemTutorial.png").toExternalForm());
+        enemySprite.setImage(enemyImg);
     }
     public void loadMagias(){
         LacoFor laco1 = new LacoFor(3,4);
@@ -310,15 +332,15 @@ public class CombateController {
 
     private void atualizarBarraHp() {
         double proporcao = (double) jogador.getHpAtual() / jogador.getHpMaximo();
-        Hp1.setWidth(HpBase.getWidth() * proporcao);
+        heroHp.setWidth(heroMaxHp.getWidth() * proporcao);
     }
-    private void atualizarBarraMana(){
-        double proporcao = (double) jogador.getManaAtual() / jogador.getManaMaxima();
-        mana.setWidth(manaBase1.getWidth() * proporcao);
-        if(jogador.getManaAtual() < 10){
-            manaQuant.setText("0"+String.valueOf(jogador.getManaAtual()));
+    private void atualizarBarraMana(Personagem personagem, Rectangle maxMana, Rectangle mana, Label manaQuant){
+        double proporcao = (double) personagem.getManaAtual() / personagem.getManaMaxima();
+        mana.setWidth(maxMana.getWidth() * proporcao);
+        if(personagem.getManaAtual() < 10){
+            manaQuant.setText("0"+String.valueOf(personagem.getManaAtual()));
         }else{
-            manaQuant.setText(String.valueOf(jogador.getManaAtual()));
+            manaQuant.setText(String.valueOf(personagem.getManaAtual()));
         }
 
     }
