@@ -350,7 +350,7 @@ public class CombateController {
 
 
         atualizarMagiasDisponiveis();
-        atualizarBarraMana();
+        atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant);
         atualizarMagiaJogador();
     }
 }
