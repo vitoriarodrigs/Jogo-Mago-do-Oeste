@@ -110,9 +110,10 @@ public class CombateController {
         manaRegen.play();
         Timeline enemyColldown = new Timeline(new KeyFrame(Duration.seconds(inimigo.getColldownDeAtaque()), event -> {
             inimigo.atacar(jogador);
-
-
+            atualizarBarraHp();
         }));
+        enemyColldown.setCycleCount(Timeline.INDEFINITE); // roda para sempre
+        enemyColldown.play();
 
         Timeline timerToBuy = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             //10 por que precisa ter um ultimo lugar pra mostrar o contador e cada item são 2 itens.
@@ -317,17 +318,6 @@ public class CombateController {
                 }
             }
         }
-    }
-
-
-    public void healOnAction(ActionEvent actionEvent){
-        jogador.restaurarHp(10);
-        atualizarBarraHp();
-
-    }
-    public void perderHpOnAction(ActionEvent actionEvent){
-        jogador.tomarDano(10);
-        atualizarBarraHp();
     }
 
     private void atualizarBarraHp() {
