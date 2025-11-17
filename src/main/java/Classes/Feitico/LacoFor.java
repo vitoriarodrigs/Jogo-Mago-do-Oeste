@@ -18,8 +18,7 @@ public class LacoFor extends LacoDeRepeticao{
         if(magias.size() == 3){
             return;
         }
-        if(magia.getTipo().equals("ATAQUE")){
             magias.add(magia);
-        }
+
     }
 }

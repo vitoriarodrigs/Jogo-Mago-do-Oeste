@@ -97,6 +97,9 @@ public class CombateController {
     private Pane enemyEfeictsBox;
 
     @FXML
+    private Pane enemyDamageBox;
+
+    @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
         atualizarBarraHp(jogador,heroMaxHp,heroHp, false);
@@ -150,7 +153,7 @@ public class CombateController {
     }
     public void loadMagias(){
         LacoFor laco1 = new LacoFor(3,4);
-        Magia magia = new Magia(TipoMagia.ATAQUE,"FOGO",2,6);
+        Magia magia = new Magia(TipoMagia.ATAQUE,NomeMagia.FOGO,2,6);
 
         trechos.add(laco1);
         trechos.add(magia);
@@ -166,7 +169,7 @@ public class CombateController {
         int duracao = random.nextInt(5) +1;
         int custo = random.nextInt(7)+1;
         switch (sorteado){
-            case 1 : Magia magia = new Magia(TipoMagia.ATAQUE,"FOGO",2,6);
+            case 1 : Magia magia = new Magia(TipoMagia.ATAQUE,NomeMagia.FOGO,2,6);
                      trechos.add(magia);
                      return;
             case 2 : LacoFor laco = new LacoFor(duracao,custo);
@@ -338,7 +341,7 @@ public class CombateController {
                 ataqueButtonImg.setVisible(true);
 
                 for(Magia magia : ((LacoFor) laco).getMagias()){
-                    if(magia.getNome().equals("FOGO")){
+                    if(magia.getNome() == NomeMagia.FOGO){
                         Image magiaImg = new Image("/images/Magias/fire.png");
                         ImageView magiaIV = new ImageView(magiaImg);
                         caixaDeMagias.getChildren().add(magiaIV);
@@ -394,17 +397,35 @@ public class CombateController {
         SequentialTransition sequencial = new SequentialTransition();
         double posX = 50;
         double posY = 50;
+        int totalDamage = 0;
+
+        Label label = new Label();
+        label.setFont(new Font("Arial Black", 40));
+        label.setTextFill(Color.WHITE);
+
+        enemyDamageBox.getChildren().add(label);
 
         if (laco instanceof LacoFor) {
             for (int i = 0; i < laco.getDuracao(); i++) {
                 for (Magia magia : ((LacoFor) laco).getMagias()) {
                     double pposX = posX;
                     double pposY =posY;
-                    if (magia.getTipo().equals("ATAQUE")) {
+                    totalDamage += magia.getPoder();
+                    int curentDamage = totalDamage;
+
+                    if (magia.getTipo() == TipoMagia.ATAQUE) {
                         PauseTransition ataquePause = new PauseTransition(Duration.millis(100));
                         ataquePause.setOnFinished(e -> {
                             criarEfeito(magia, "FOR", pposX, pposY);
+
                             jogador.atacar(inimigo, magia.getPoder());
+
+                            if(curentDamage < 10){
+                                label.setText("0"+curentDamage);
+                            }else{
+                                label.setText(String.valueOf(curentDamage));
+                            }
+
                             atualizarBarraHp(inimigo, enemyMaxHp, enemyHp, true);
                         });
                         sequencial.getChildren().add(ataquePause);
@@ -423,6 +444,7 @@ public class CombateController {
             sequencial.play();
             sequencial.setOnFinished(e->{
                 enemyEfeictsBox.getChildren().clear();
+                enemyDamageBox.getChildren().clear();
             });
         }
 
@@ -434,7 +456,7 @@ public class CombateController {
         atualizarMagiaJogador();
     }
     public void criarEfeito(Magia magia, String laco, double posX, double posY){
-        if(magia.getNome().equals("FOGO")){
+        if(magia.getNome() == NomeMagia.FOGO){
             if(laco.equals("FOR")){
                 Image img = new Image(getClass().getResource("/images/Efeitos/magiaFogoFor.gif").toExternalForm());
                ImageView imgV = new ImageView(img);

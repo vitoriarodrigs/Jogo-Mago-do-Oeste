@@ -3,21 +3,21 @@ package Classes.Feitico;
 public class Magia extends TrechoDeCodigo{
 
     private TipoMagia tipo;
-    private String nome;
+    private NomeMagia nome;
     private int poder;
 
-    public Magia (TipoMagia tipo, String nome, int custo, int poder){
+    public Magia (TipoMagia tipo, NomeMagia nome, int custo, int poder){
         super(custo);
         this.poder= poder;
         this.nome = nome;
         this.tipo = tipo;
     }
 
-    public String getTipo() {
-        return tipo.toString();
+    public TipoMagia getTipo() {
+        return tipo;
     }
 
-    public String getNome() {
+    public NomeMagia getNome() {
         return nome;
     }
 
@@ -29,7 +29,7 @@ public class Magia extends TrechoDeCodigo{
         this.tipo = tipo;
     }
 
-    public void setNome(String nome) {
+    public void setNome(NomeMagia nome) {
         this.nome = nome;
     }
 
