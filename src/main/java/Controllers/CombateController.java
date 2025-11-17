@@ -29,7 +29,7 @@ public class CombateController {
     private Player jogador = Jogo.getInstancia().getJogador();
     private Inimigo inimigo = Jogo.getInstancia().getInimigoAtual(); //arrumar depois
     private ArrayList<TrechoDeCodigo>trechos = new ArrayList<>();
-    private int buyTimer = 5;
+    private int buyTimer = 3;
 
 
 
@@ -131,10 +131,12 @@ public class CombateController {
                 }else{
                     createMagia();
                     atualizarMagiasDisponiveis();
-                    buyTimer = 5;
+                    buyTimer = 3;
                 }
             }else{
-                buyTimer = 5;
+                buyTimer = 3;
+                trechos.remove(0);
+                atualizarMagiasDisponiveis();
             }
             timerLabel.setText(String.valueOf(buyTimer));
         }));
@@ -213,6 +215,19 @@ public class CombateController {
             Image imagem = new Image(endereco);
 
             ImageView img = new ImageView(imagem);
+
+            if(trechos.size() ==6 || trechos.size() ==5){
+                if(i == 0){
+                    label.setOpacity(0.5);
+                    img.setOpacity(0.5);
+                }
+                if(i == 1){
+                    label.setOpacity(0.8);
+                    img.setOpacity(0.8);
+                }
+            }
+
+
 
             img.setOnMouseClicked(event -> {
 
