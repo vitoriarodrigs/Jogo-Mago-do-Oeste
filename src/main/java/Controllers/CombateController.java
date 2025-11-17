@@ -5,10 +5,10 @@ import Classes.Jogo;
 import Classes.Personagem.Inimigo.Inimigo;
 import Classes.Personagem.Personagem;
 import Classes.Personagem.Player;
-import javafx.animation.PauseTransition;
-import javafx.animation.SequentialTransition;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -17,9 +17,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -100,6 +99,9 @@ public class CombateController {
     private Pane enemyDamageBox;
 
     @FXML
+    private Text avisosText;
+
+    @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
         atualizarBarraHp(jogador,heroMaxHp,heroHp, false);
@@ -107,6 +109,7 @@ public class CombateController {
         atualizarBarraMana(inimigo,enemyMaxMana,enemyMana,enemyManaQuant,true);
         loadMagias();
         atualizarMagiasDisponiveis();
+        avisosText.setText("compre um laço de repetição.");
 
 
         // Timeline para restaurar 1 ponto de mana a cada 1 segundo
@@ -233,29 +236,10 @@ public class CombateController {
 
 
             img.setOnMouseClicked(event -> {
-
-                if(trecho instanceof Magia){
-                    if(jogador.getLaco() != null){
-                        if(jogador.getLaco() instanceof LacoFor){
-                            if(caixaDeMagias.getChildren().size() == 3){
-                                return;
-                            }
-                        }
-                    }else{
-                        return;
-                    }
-                }
-                if(trecho instanceof LacoDeRepeticao){
-                    if(jogador.getLaco() != null){
-                        return;
-                    }
-                }
-
-                trechos.remove(index);
-                magiasDisponiveisPane.getChildren().remove(img);
-                magiasDisponiveisPane.getChildren().remove(label);
-                comprarFeitico(trecho,index);
-
+                comprarFeitico(trecho,index,img,label);
+            });
+            label.setOnMouseClicked(event -> {
+                comprarFeitico(trecho,index,img,label);
             });
 
             // Procura um círculo com o mesmo ID do índice
@@ -314,6 +298,41 @@ public class CombateController {
             }
             magiasDisponiveisPane.getChildren().add(imgVTimer);
         }
+    }
+    public void comprarFeitico(TrechoDeCodigo trecho, int index, ImageView img,Label label) {
+
+        if(jogador.getManaAtual() < trecho.getCusto()){
+            avisosText.setText("sem mana suficiente para comprar a magia.");
+            return;
+        }
+        if(trecho instanceof Magia){
+            if(jogador.getLaco() != null){
+                if(jogador.getLaco() instanceof LacoFor){
+                    if(caixaDeMagias.getChildren().size() == 3){
+                        avisosText.setText("quantidade máxima de magias atingida.");
+                        return;
+                    }
+                }
+            }else{
+                avisosText.setText("compre primeiro um laço de repetição.");
+                return;
+            }
+        }
+        if(trecho instanceof LacoDeRepeticao){
+            if(jogador.getLaco() != null){
+                avisosText.setText("você já possui um laço de repetição.");
+                return;
+            }
+        }
+
+        trechos.remove(index);
+        magiasDisponiveisPane.getChildren().remove(img);
+        magiasDisponiveisPane.getChildren().remove(label);
+        jogador.comprarFeitico(trecho);
+        avisosText.setText("");
+        atualizarMagiasDisponiveis();
+        atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant,false);
+        atualizarMagiaJogador();
     }
 
     public void atualizarMagiaJogador(){
@@ -381,14 +400,6 @@ public class CombateController {
         manaQuant.setText(qnt < 10 ? "0" + qnt : String.valueOf(qnt));
     }
 
-    public void comprarFeitico(TrechoDeCodigo trecho, int i) {
-        jogador.comprarFeitico(trecho);
-
-
-        atualizarMagiasDisponiveis();
-        atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant,false);
-        atualizarMagiaJogador();
-    }
 
     @FXML
     void lancarFeitico(ActionEvent event) {
@@ -416,7 +427,7 @@ public class CombateController {
                     if (magia.getTipo() == TipoMagia.ATAQUE) {
                         PauseTransition ataquePause = new PauseTransition(Duration.millis(100));
                         ataquePause.setOnFinished(e -> {
-                            criarEfeito(magia, "FOR", pposX, pposY);
+                            criarEfeito(magia, "FOR", pposX, pposY, label);
 
                             jogador.atacar(inimigo, magia.getPoder());
 
@@ -444,10 +455,10 @@ public class CombateController {
             sequencial.play();
             sequencial.setOnFinished(e->{
                 enemyEfeictsBox.getChildren().clear();
-                enemyDamageBox.getChildren().clear();
+               slideToTop(label,enemyDamageBox);
+               avisosText.setText("compre um laço de repetição.");
             });
         }
-
         jogador.removerLaco();
         ataqueButton.setDisable(true);
         ataqueButtonImg.setVisible(false);
@@ -455,8 +466,9 @@ public class CombateController {
         lacoAtualText.setVisible(false);
         atualizarMagiaJogador();
     }
-    public void criarEfeito(Magia magia, String laco, double posX, double posY){
+    public void criarEfeito(Magia magia, String laco, double posX, double posY, Label label){
         if(magia.getNome() == NomeMagia.FOGO){
+            label.setTextFill(Color.web("#FF5733"));
             if(laco.equals("FOR")){
                 Image img = new Image(getClass().getResource("/images/Efeitos/magiaFogoFor.gif").toExternalForm());
                ImageView imgV = new ImageView(img);
@@ -466,5 +478,26 @@ public class CombateController {
                 imgV.setLayoutY(imgV.getLayoutY() + posY);
             }
         }
+    }
+
+    public void slideToTop(Node node, Pane pane) {
+
+        // --- Movimento ---
+        TranslateTransition translate = new TranslateTransition(Duration.millis(400), node);
+        translate.setByY(20 - node.getLayoutY());
+
+        // --- Desaparecer ---
+        FadeTransition fade = new FadeTransition(Duration.millis(400), node);
+        fade.setFromValue(1.0);  // opacidade total
+        fade.setToValue(0.0);    // desaparece completamente
+
+        // --- Rodar ao mesmo tempo ---
+        ParallelTransition animation = new ParallelTransition(translate, fade);
+
+        // Se quiser remover o node da tela depois que sumir:
+        animation.setOnFinished(e ->
+        pane.getChildren().clear());
+
+        animation.play();
     }
 }
