@@ -9,6 +9,7 @@ public class InimigoTutorial extends Inimigo{
     public InimigoTutorial(int hpMaximo, int manaMaxima, int colldownDeAtaque) {
         super(hpMaximo, manaMaxima, colldownDeAtaque);
         this.sprite = "/images/Personagens/personagemTutorial.png";
+        this.lancarMagiaSprite="/images/Efeitos/lancarMagiaTutorial.png";
     }
     @Override
     public void atacar( Player jogador){

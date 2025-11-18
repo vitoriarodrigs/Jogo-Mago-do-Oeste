@@ -1,5 +1,6 @@
 package Controllers;
 
+import Classes.Animator;
 import Classes.Feitico.*;
 import Classes.Jogo;
 import Classes.Personagem.Inimigo.Inimigo;
@@ -28,6 +29,7 @@ public class CombateController {
     private Player jogador = Jogo.getInstancia().getJogador();
     private Inimigo inimigo = Jogo.getInstancia().getInimigoAtual(); //arrumar depois
     private ArrayList<TrechoDeCodigo>trechos = new ArrayList<>();
+    private Animator animator = new Animator();
     private int buyTimer = 3;
 
 
@@ -102,6 +104,12 @@ public class CombateController {
     private Text avisosText;
 
     @FXML
+    private ImageView heroMagiaImg;
+
+    @FXML
+    private ImageView enemyMagiaImg;
+
+    @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
         atualizarBarraHp(jogador,heroMaxHp,heroHp, false);
@@ -123,6 +131,7 @@ public class CombateController {
         manaRegen.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         manaRegen.play();
         Timeline enemyColldown = new Timeline(new KeyFrame(Duration.seconds(inimigo.getColldownDeAtaque()), event -> {
+
             inimigo.atacar(jogador);
             atualizarBarraHp(jogador,heroMaxHp,heroHp,false);
         }));
@@ -151,8 +160,10 @@ public class CombateController {
 
         Image heroImg = new Image(getClass().getResource("/images/Personagens/personagemPrincipal.png").toExternalForm());
         jogadorIMG.setImage(heroImg);
-        Image enemyImg = new Image(getClass().getResource("/images/Personagens/personagemTutorial.png").toExternalForm());
+        Image enemyImg = new Image(getClass().getResource(inimigo.getSprite()).toExternalForm());
         enemySprite.setImage(enemyImg);
+        Image enemySpell = new Image(inimigo.getLancarMagiaSprite());
+        enemyMagiaImg.setImage(enemySpell);
     }
     public void loadMagias(){
         LacoFor laco1 = new LacoFor(3,4);
@@ -413,8 +424,16 @@ public class CombateController {
         Label label = new Label();
         label.setFont(new Font("Arial Black", 40));
         label.setTextFill(Color.WHITE);
-
+        animator.appear(label,false);
         enemyDamageBox.getChildren().add(label);
+
+        heroMagiaImg.setVisible(true);
+        animator.appear(heroMagiaImg,true);
+        PauseTransition lancarPause = new PauseTransition(Duration.millis(400));
+        lancarPause.setOnFinished(e->{
+            heroMagiaImg.setVisible(false);
+        });
+        sequencial.getChildren().add(lancarPause);
 
         if (laco instanceof LacoFor) {
             for (int i = 0; i < laco.getDuracao(); i++) {
@@ -455,7 +474,7 @@ public class CombateController {
             sequencial.play();
             sequencial.setOnFinished(e->{
                 enemyEfeictsBox.getChildren().clear();
-               slideToTop(label,enemyDamageBox);
+                animator.slideToDown(label,enemyDamageBox);
                avisosText.setText("compre um laço de repetição.");
             });
         }
