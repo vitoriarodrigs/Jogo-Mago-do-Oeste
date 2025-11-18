@@ -411,6 +411,15 @@ public class CombateController {
         manaQuant.setText(qnt < 10 ? "0" + qnt : String.valueOf(qnt));
     }
 
+    private void ataqueInimigo(){
+        inimigo.definirAtaque();
+        if(inimigo.podeAtacar(inimigo.getPrecoDoAtaque())){
+            //fazer animação
+            // fim da animação: dar o dano e atualizar a barra de hp
+        }
+        inimigo.atacar(jogador);
+        atualizarBarraHp(jogador,heroMaxHp,heroHp,false);
+    }
 
     @FXML
     void lancarFeitico(ActionEvent event) {
