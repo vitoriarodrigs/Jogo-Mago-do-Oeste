@@ -15,6 +15,7 @@ public abstract class Inimigo extends Personagem {
     protected String magiaFracaSprite;
     protected String magiaForteSprite;
     protected TipoAtaque ataqueEscolhido;
+    protected int danoDoAtaque;
     protected ModoAtaque modoDeAtaque;
     protected int precoDoAtaque;
     protected NomeMagia elemento;
@@ -30,6 +31,7 @@ public abstract class Inimigo extends Personagem {
         this.modoDeAtaque = null;
         this.precoDoAtaque = 10;
         this.elemento = null;
+        this.danoDoAtaque = 0;
     }
 
     public String getSprite() {
@@ -78,6 +80,14 @@ public abstract class Inimigo extends Personagem {
 
     public void setPrecoDoAtaque(int precoDoAtaque) {
         this.precoDoAtaque = precoDoAtaque;
+    }
+
+    public int getDanoDoAtaque() {
+        return danoDoAtaque;
+    }
+
+    public void setDanoDoAtaque(int danoDoAtaque) {
+        this.danoDoAtaque = danoDoAtaque;
     }
 
     public int getColldownDeAtaque() {

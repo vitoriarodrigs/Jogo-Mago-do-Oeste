@@ -24,18 +24,13 @@ public class Player extends Personagem {
                     manaAtual -= trecho.getCusto();
                     setLaco((LacoDeRepeticao) trecho);
 
-                } else {
-                    System.out.println("Mana insuficiente para comprar o laço!");
                 }
-            } else {
-                System.out.println("Você já possui um laço ativo!");
             }
         }
 
         // Caso o jogador compre uma magia
         else if (trecho instanceof Magia) {
             if (this.laco == null) {
-                System.out.println("Você precisa comprar um laço antes de adicionar magias!");
                 return;
             }
 
@@ -44,10 +39,7 @@ public class Player extends Personagem {
 
                 if (laco instanceof LacoFor) {
                     ((LacoFor) laco).setMagia((Magia) trecho);
-                    System.out.println("Magia adicionada ao laço!");
                 }
-            } else {
-                System.out.println("Mana insuficiente para comprar a magia!");
             }
         }
     }

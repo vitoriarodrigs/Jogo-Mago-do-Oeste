@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -432,14 +433,29 @@ public class CombateController {
         Image img = new Image(urlAtaque);
         ImageView imgView = new ImageView(img);
 
+        Label label = new Label();
+        label.setFont(new Font("Arial Black", 40));
+        if(inimigo.getDanoDoAtaque() < 10){
+            label.setText("0"+String.valueOf(inimigo.getDanoDoAtaque()));
+        }else{
+            label.setText(String.valueOf(inimigo.getDanoDoAtaque()));
+        }
+        label.setOpacity(0);
+
         if(inimigo.podeAtacar(inimigo.getPrecoDoAtaque())){
             inimigo.gastarManaAtual(inimigo.getPrecoDoAtaque());
-            if(inimigo.getAtaqueEscolhido() == TipoAtaque.FRACO){
+            atualizarBarraMana(inimigo,enemyMaxMana,enemyMana,enemyManaQuant,true);
+
+            animator.enemyElementAppear(enemyMagiaImg);
+
                 if(inimigo.getModoDeAtaque() == ModoAtaque.HORIZONTAL_ESQUERDA){
-                    animator.enemyAttackSlideLeft(imgView,heroEfeictsBox, heroDamageBox, inimigo.getElemento(),() -> aplicarDanoInimigo());
+                    animator.enemyAttackSlideLeft
+                            (imgView,heroEfeictsBox, heroDamageBox, inimigo.getElemento(),label,() -> aplicarDanoInimigo());
+                }else if(inimigo.getModoDeAtaque() == ModoAtaque.DIAGONAL_ESQUERDA){
+                    animator.enemyAttackSlideToDiagonalLeft
+                            (imgView,heroEfeictsBox, heroDamageBox, inimigo.getElemento(),label,() -> aplicarDanoInimigo());
                 }
-            }
-            // fim da animação: dar o dano e atualizar a barra de hp
+
         }
     }
     private void aplicarDanoInimigo() {

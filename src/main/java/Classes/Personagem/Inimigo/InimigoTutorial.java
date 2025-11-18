@@ -18,6 +18,12 @@ public class InimigoTutorial extends Inimigo{
     }
     @Override
     public void definirAtaque(){
+       escolher();
+       while (podeAtacar(precoDoAtaque) == false){
+           escolher();
+       }
+    }
+    public void escolher (){
         Random random = new Random();
 
         int escolha = random.nextInt(2)+1;
@@ -26,10 +32,12 @@ public class InimigoTutorial extends Inimigo{
             setAtaqueEscolhido(TipoAtaque.FRACO);
             setModoDeAtaque(ModoAtaque.HORIZONTAL_ESQUERDA);
             setPrecoDoAtaque(4);
+            setDanoDoAtaque(5);
         }else{
-            setAtaqueEscolhido(TipoAtaque.FRACO);
-            setModoDeAtaque(ModoAtaque.HORIZONTAL_ESQUERDA);
-            setPrecoDoAtaque(4);
+            setAtaqueEscolhido(TipoAtaque.FORTE);
+            setModoDeAtaque(ModoAtaque.DIAGONAL_ESQUERDA);
+            setPrecoDoAtaque(8);
+            setDanoDoAtaque(10);
         }
     }
     @Override
@@ -42,26 +50,11 @@ public class InimigoTutorial extends Inimigo{
     }
 
     public void ataqueFraco(Player jogador){
-        if (manaAtual >= 4){
-
             setColldownDeAtaque(5);
-
             jogador.tomarDano(5);
-            return;
-        }else{
-            setColldownDeAtaque(0);
-            return;
-        }
-
     }
     public void ataqueForte(Player jogador){
-        if (manaAtual >= 8){
             setColldownDeAtaque(5);
             jogador.tomarDano(10);
-            return;
-        }else{
-            setColldownDeAtaque(0);
-            return;
-        }
     }
 }

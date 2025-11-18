@@ -244,7 +244,7 @@
             <Image url="@../Images/Efeitos/lancarMagiaPrincipal.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="enemyMagiaImg" fitHeight="191.0" fitWidth="190.0" layoutX="795.0" layoutY="144.0" pickOnBounds="true" preserveRatio="true" visible="false">
+      <ImageView fx:id="enemyMagiaImg" fitHeight="191.0" fitWidth="190.0" layoutX="795.0" layoutY="144.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Images/Efeitos/lancarMagiaTutorial.png" />
          </image>
