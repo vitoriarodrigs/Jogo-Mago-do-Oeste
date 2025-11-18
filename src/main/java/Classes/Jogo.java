@@ -19,7 +19,7 @@ public class Jogo {
     protected Jogo (){
         this.jogador = new Player(100,10);
         this.inimigos = new ArrayList<>();
-        this.inimigos.add(new InimigoTutorial(200,10,5));
+        this.inimigos.add(new InimigoTutorial(200,10,3));
         pergaminhos = new boolean[]{
                 false,false,false,false
         };

@@ -1,5 +1,7 @@
 package Classes.Personagem.Inimigo;
 
+import Classes.Feitico.NomeMagia;
+import Classes.Feitico.TipoMagia;
 import Classes.Personagem.Player;
 
 import java.util.Random;
@@ -12,6 +14,7 @@ public class InimigoTutorial extends Inimigo{
         this.lancarMagiaSprite="/images/Efeitos/lancarMagiaTutorial.png";
         this.magiaFracaSprite = "/images/Efeitos/magiaGeloPequena.png";
         this.magiaForteSprite = "/images/Efeitos/magiaGeloGrande.png";
+        this.elemento = NomeMagia.GELO;
     }
     @Override
     public void definirAtaque(){
@@ -24,9 +27,9 @@ public class InimigoTutorial extends Inimigo{
             setModoDeAtaque(ModoAtaque.HORIZONTAL_ESQUERDA);
             setPrecoDoAtaque(4);
         }else{
-            setAtaqueEscolhido(TipoAtaque.FORTE);
-            setModoDeAtaque(ModoAtaque.DIAGONAL_ESQUERDA);
-            setPrecoDoAtaque(8);
+            setAtaqueEscolhido(TipoAtaque.FRACO);
+            setModoDeAtaque(ModoAtaque.HORIZONTAL_ESQUERDA);
+            setPrecoDoAtaque(4);
         }
     }
     @Override
@@ -40,7 +43,7 @@ public class InimigoTutorial extends Inimigo{
 
     public void ataqueFraco(Player jogador){
         if (manaAtual >= 4){
-            gastarManaAtual(4);
+
             setColldownDeAtaque(5);
 
             jogador.tomarDano(5);
@@ -53,7 +56,6 @@ public class InimigoTutorial extends Inimigo{
     }
     public void ataqueForte(Player jogador){
         if (manaAtual >= 8){
-            gastarManaAtual(8);
             setColldownDeAtaque(5);
             jogador.tomarDano(10);
             return;

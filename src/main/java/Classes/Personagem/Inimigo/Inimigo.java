@@ -1,5 +1,7 @@
 package Classes.Personagem.Inimigo;
 
+import Classes.Feitico.NomeMagia;
+import Classes.Feitico.TipoMagia;
 import Classes.Personagem.Personagem;
 import Classes.Personagem.Player;
 
@@ -15,6 +17,7 @@ public abstract class Inimigo extends Personagem {
     protected TipoAtaque ataqueEscolhido;
     protected ModoAtaque modoDeAtaque;
     protected int precoDoAtaque;
+    protected NomeMagia elemento;
 
     public Inimigo(int hpMaximo, int manaMaxima, int colldownDeAtaque) {
         super(hpMaximo, manaMaxima);
@@ -26,6 +29,7 @@ public abstract class Inimigo extends Personagem {
         this.ataqueEscolhido = null;
         this.modoDeAtaque = null;
         this.precoDoAtaque = 10;
+        this.elemento = null;
     }
 
     public String getSprite() {
@@ -34,6 +38,10 @@ public abstract class Inimigo extends Personagem {
 
     public void setSprite(String sprite) {
         this.sprite = sprite;
+    }
+
+    public NomeMagia getElemento() {
+        return elemento;
     }
 
     public String getLancarMagiaSprite() {

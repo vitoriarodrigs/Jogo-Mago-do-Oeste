@@ -249,5 +249,7 @@
             <Image url="@../Images/Efeitos/lancarMagiaTutorial.png" />
          </image>
       </ImageView>
+      <Pane fx:id="heroEfeictsBox" layoutX="69.0" layoutY="102.0" prefHeight="350.0" prefWidth="407.0" />
+      <Pane fx:id="heroDamageBox" layoutX="323.0" layoutY="97.0" prefHeight="97.0" prefWidth="101.0" />
    </children>
 </Pane>

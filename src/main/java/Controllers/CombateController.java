@@ -4,6 +4,8 @@ import Classes.Animator;
 import Classes.Feitico.*;
 import Classes.Jogo;
 import Classes.Personagem.Inimigo.Inimigo;
+import Classes.Personagem.Inimigo.ModoAtaque;
+import Classes.Personagem.Inimigo.TipoAtaque;
 import Classes.Personagem.Personagem;
 import Classes.Personagem.Player;
 import javafx.animation.*;
@@ -100,6 +102,13 @@ public class CombateController {
     @FXML
     private Pane enemyDamageBox;
 
+
+    @FXML
+    private Pane heroDamageBox;
+
+    @FXML
+    private Pane heroEfeictsBox;
+
     @FXML
     private Text avisosText;
 
@@ -131,9 +140,7 @@ public class CombateController {
         manaRegen.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         manaRegen.play();
         Timeline enemyColldown = new Timeline(new KeyFrame(Duration.seconds(inimigo.getColldownDeAtaque()), event -> {
-
-            inimigo.atacar(jogador);
-            atualizarBarraHp(jogador,heroMaxHp,heroHp,false);
+            ataqueInimigo();
         }));
         enemyColldown.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         enemyColldown.play();
@@ -413,12 +420,31 @@ public class CombateController {
 
     private void ataqueInimigo(){
         inimigo.definirAtaque();
+
+        String urlAtaque;
+
+        if(inimigo.getAtaqueEscolhido() == TipoAtaque.FORTE){
+            urlAtaque = inimigo.getMagiaForteSprite();
+        }else{
+            urlAtaque = inimigo.getMagiaFracaSprite();
+        }
+
+        Image img = new Image(urlAtaque);
+        ImageView imgView = new ImageView(img);
+
         if(inimigo.podeAtacar(inimigo.getPrecoDoAtaque())){
-            //fazer animação
+            inimigo.gastarManaAtual(inimigo.getPrecoDoAtaque());
+            if(inimigo.getAtaqueEscolhido() == TipoAtaque.FRACO){
+                if(inimigo.getModoDeAtaque() == ModoAtaque.HORIZONTAL_ESQUERDA){
+                    animator.enemyAttackSlideLeft(imgView,heroEfeictsBox, heroDamageBox, inimigo.getElemento(),() -> aplicarDanoInimigo());
+                }
+            }
             // fim da animação: dar o dano e atualizar a barra de hp
         }
+    }
+    private void aplicarDanoInimigo() {
         inimigo.atacar(jogador);
-        atualizarBarraHp(jogador,heroMaxHp,heroHp,false);
+        atualizarBarraHp(jogador, heroMaxHp, heroHp, false);
     }
 
     @FXML
@@ -508,24 +534,4 @@ public class CombateController {
         }
     }
 
-    public void slideToTop(Node node, Pane pane) {
-
-        // --- Movimento ---
-        TranslateTransition translate = new TranslateTransition(Duration.millis(400), node);
-        translate.setByY(20 - node.getLayoutY());
-
-        // --- Desaparecer ---
-        FadeTransition fade = new FadeTransition(Duration.millis(400), node);
-        fade.setFromValue(1.0);  // opacidade total
-        fade.setToValue(0.0);    // desaparece completamente
-
-        // --- Rodar ao mesmo tempo ---
-        ParallelTransition animation = new ParallelTransition(translate, fade);
-
-        // Se quiser remover o node da tela depois que sumir:
-        animation.setOnFinished(e ->
-        pane.getChildren().clear());
-
-        animation.play();
-    }
 }
