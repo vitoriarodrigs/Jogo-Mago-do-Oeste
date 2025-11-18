@@ -2,38 +2,38 @@ package Classes.Feitico;
 
 public class Magia extends TrechoDeCodigo{
 
-    private String tipo;
-    private String nome;
-    private int valor;
+    private TipoMagia tipo;
+    private NomeMagia nome;
+    private int poder;
 
-    public Magia (String tipo, String nome, int custo, int valor){
+    public Magia (TipoMagia tipo, NomeMagia nome, int custo, int poder){
         super(custo);
-        this.valor= valor;
+        this.poder= poder;
         this.nome = nome;
         this.tipo = tipo;
     }
 
-    public String getTipo() {
+    public TipoMagia getTipo() {
         return tipo;
     }
 
-    public String getNome() {
+    public NomeMagia getNome() {
         return nome;
     }
 
-    public int getValor() {
-        return valor;
+    public int getPoder() {
+        return poder;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoMagia tipo) {
         this.tipo = tipo;
     }
 
-    public void setNome(String nome) {
+    public void setNome(NomeMagia nome) {
         this.nome = nome;
     }
 
-    public void setValor(int valor) {
-        this.valor = valor;
+    public void setValor(int poder) {
+        this.poder = poder;
     }
 }
