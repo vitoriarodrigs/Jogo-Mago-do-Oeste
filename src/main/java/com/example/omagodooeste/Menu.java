@@ -11,10 +11,10 @@ public class Menu extends Application {
     public void start(Stage stage) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/fxml/StartScreen.fxml")
+                    getClass().getResource("/Combate/Combate.fxml")
             );
 
-            Scene scene = new Scene(loader.load(), 1280, 720);
+            Scene scene = new Scene(loader.load(), 1300, 720);
 
             stage.setTitle("O Mago do Oeste");
             stage.setScene(scene);

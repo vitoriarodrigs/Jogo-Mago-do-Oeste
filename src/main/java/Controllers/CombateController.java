@@ -152,7 +152,7 @@ public class CombateController {
                 if(buyTimer <= 5 && buyTimer != 0){
                     buyTimer -= 1;
                 }else{
-                    createMagia();
+                    createTrecho();
                     atualizarMagiasDisponiveis();
                     buyTimer = 3;
                 }
@@ -181,26 +181,69 @@ public class CombateController {
         trechos.add(magia);
 
     }
-    public void createMagia(){
-        //implementar melhor quando tiver mais variedades de magias
-
-        String escolha;
+    public void createTrecho(){
 
         Random random = new Random();
-        int sorteado = random.nextInt(2) + 1;
-        int duracao = random.nextInt(5) +1;
-        int custo = random.nextInt(7)+1;
+        int sorteado = random.nextInt(3) + 1;
+
+        int quantMagias = 0;
+        int quantLacos = 0;
+        for(TrechoDeCodigo trecho: trechos){
+          if(trecho instanceof Magia){
+              quantMagias ++;
+          }else{
+              quantLacos ++;
+          }
+        }
+        if(quantMagias >= 3 && quantLacos == 0){
+            createLaco();
+            return;
+        }
+        if(quantLacos >= 2 && quantMagias == 0){
+            createMagia();
+            return;
+        }
+
         switch (sorteado){
-            case 1 : Magia magia = new Magia(TipoMagia.ATAQUE,NomeMagia.FOGO,2,6);
-                     trechos.add(magia);
+            case 1 : createLaco();
                      return;
-            case 2 : LacoFor laco = new LacoFor(duracao,custo);
-                     trechos.add(laco);
+            case 2,3 : createMagia();
                      return;
         }
         atualizarMagiasDisponiveis();
 
     }
+    public void createLaco(){
+
+        Random random = new Random();
+        int sorteado = random.nextInt(2);
+        int duracao = random.nextInt(5) +1;
+        int custo = random.nextInt(7)+1;
+        switch (sorteado){
+            case 0,1 : LacoFor laco = new LacoFor(duracao,custo);
+                trechos.add(laco);
+                return;
+        }
+    }
+    public void createMagia(){
+
+        Random random = new Random();
+        int sorteado = random.nextInt(3) + 1;
+
+        switch (sorteado){
+            case 1 : Magia fogo = new Magia(TipoMagia.ATAQUE,NomeMagia.FOGO,4,6);
+                trechos.add(fogo);
+                return;
+            case 2 : Magia raio = new Magia(TipoMagia.ATAQUE,NomeMagia.THUNDER,3,4);
+                trechos.add(raio);
+                return;
+            case 3 : Magia agua = new Magia(TipoMagia.ATAQUE,NomeMagia.WATER,2,3);
+                trechos.add(agua);
+                return;
+        }
+    }
+
+
     public void atualizarMagiasDisponiveis (){
 
         if(magiasDisponiveisPane.getChildren().size() > 0){
@@ -229,10 +272,12 @@ public class CombateController {
             if (trecho instanceof LacoFor laco) {
                endereco = "/images/Magias/for.png";
             } else if (trecho instanceof Magia magia) {
-                if(magia.getNome().equals("FOGO")){
+                if(magia.getNome() == NomeMagia.FOGO){
                     endereco = "/images/Magias/fire.png";
-                }else{
-                    endereco = "/images/Magias/fire.png";
+                }else if(magia.getNome() == NomeMagia.THUNDER){
+                    endereco = "/images/Magias/thunder.png";
+                }else if(magia.getNome() == NomeMagia.WATER){
+                    endereco = "/images/Magias/water.png";
                 }
             } else {
                 endereco = "desconhecido";
@@ -379,11 +424,18 @@ public class CombateController {
                 ataqueButtonImg.setVisible(true);
 
                 for(Magia magia : ((LacoFor) laco).getMagias()){
+                    String endereco = "";
+
                     if(magia.getNome() == NomeMagia.FOGO){
-                        Image magiaImg = new Image("/images/Magias/fire.png");
-                        ImageView magiaIV = new ImageView(magiaImg);
-                        caixaDeMagias.getChildren().add(magiaIV);
+                        endereco = "/images/Magias/NoCost/fireNoCost.png";
+                    }else if(magia.getNome() == NomeMagia.THUNDER){
+                        endereco = "/images/Magias/NoCost/thunderNoCost.png";
+                    }else if(magia.getNome() == NomeMagia.WATER){
+                        endereco = "/images/Magias/NoCost/waterNoCost.png";
                     }
+                    Image magiaImg = new Image(endereco);
+                    ImageView magiaIV = new ImageView(magiaImg);
+                    caixaDeMagias.getChildren().add(magiaIV);
                 }
             }
         }
@@ -540,10 +592,30 @@ public class CombateController {
         if(magia.getNome() == NomeMagia.FOGO){
             label.setTextFill(Color.web("#FF5733"));
             if(laco.equals("FOR")){
-                Image img = new Image(getClass().getResource("/images/Efeitos/magiaFogoFor.gif").toExternalForm());
+                Image img = new Image(getClass().getResource("/images/Efeitos/magiaFogoFor.png").toExternalForm());
                ImageView imgV = new ImageView(img);
 
                enemyEfeictsBox.getChildren().add(imgV);
+                imgV.setLayoutX(imgV.getLayoutX() + posX);
+                imgV.setLayoutY(imgV.getLayoutY() + posY);
+            }
+        }else if(magia.getNome() == NomeMagia.THUNDER) {
+            label.setTextFill(Color.web("#a548d8"));
+            if (laco.equals("FOR")) {
+                Image img = new Image(getClass().getResource("/images/Efeitos/magiaThunderFor.png").toExternalForm());
+                ImageView imgV = new ImageView(img);
+
+                enemyEfeictsBox.getChildren().add(imgV);
+                imgV.setLayoutX(imgV.getLayoutX() + posX);
+                imgV.setLayoutY(imgV.getLayoutY() + posY);
+            }
+        }else if(magia.getNome() == NomeMagia.WATER) {
+            label.setTextFill(Color.web("#1188ea"));
+            if (laco.equals("FOR")) {
+                Image img = new Image(getClass().getResource("/images/Efeitos/magiaWaterFor.png").toExternalForm());
+                ImageView imgV = new ImageView(img);
+
+                enemyEfeictsBox.getChildren().add(imgV);
                 imgV.setLayoutX(imgV.getLayoutX() + posX);
                 imgV.setLayoutY(imgV.getLayoutY() + posY);
             }
