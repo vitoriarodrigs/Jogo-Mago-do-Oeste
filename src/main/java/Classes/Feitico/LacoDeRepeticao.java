@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class LacoDeRepeticao extends TrechoDeCodigo{
 
-    private int duracao;
-    private ArrayList<Magia> magias;
+    protected int duracao;
+    protected ArrayList<Magia> magias;
 
     public LacoDeRepeticao ( int duracao, int custo){
         super(custo);

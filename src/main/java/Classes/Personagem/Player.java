@@ -36,10 +36,8 @@ public class Player extends Personagem {
 
             if (manaAtual >= trecho.getCusto()) {
                 manaAtual -= trecho.getCusto();
+                laco.setMagia((Magia) trecho);
 
-                if (laco instanceof LacoFor) {
-                    ((LacoFor) laco).setMagia((Magia) trecho);
-                }
             }
         }
     }

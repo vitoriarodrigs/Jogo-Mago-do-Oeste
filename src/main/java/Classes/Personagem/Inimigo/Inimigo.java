@@ -2,9 +2,11 @@ package Classes.Personagem.Inimigo;
 
 import Classes.Feitico.NomeMagia;
 import Classes.Feitico.TipoMagia;
+import Classes.Personagem.Buff;
 import Classes.Personagem.Personagem;
 import Classes.Personagem.Player;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class Inimigo extends Personagem {
@@ -107,9 +109,8 @@ public abstract class Inimigo extends Personagem {
         }
     }
     public void definirAtaque(){
-
     }
     public void atacar( Player jogador){
-
     }
+
 }

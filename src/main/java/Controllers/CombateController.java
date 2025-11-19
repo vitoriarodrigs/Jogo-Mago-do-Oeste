@@ -3,11 +3,13 @@ package Controllers;
 import Classes.Animator;
 import Classes.Feitico.*;
 import Classes.Jogo;
+import Classes.Personagem.Buff;
 import Classes.Personagem.Inimigo.Inimigo;
 import Classes.Personagem.Inimigo.ModoAtaque;
 import Classes.Personagem.Inimigo.TipoAtaque;
 import Classes.Personagem.Personagem;
 import Classes.Personagem.Player;
+import Classes.Personagem.TipoBuff;
 import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -149,6 +151,13 @@ public class CombateController {
         }));
         manaRegen.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         manaRegen.play();
+
+        Timeline buffTimer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            atualizarDebuffInimigo();
+
+        }));
+        buffTimer.setCycleCount(Timeline.INDEFINITE); // roda para sempre
+        buffTimer.play();
         Timeline enemyColldown = new Timeline(new KeyFrame(Duration.seconds(inimigo.getColldownDeAtaque()), event -> {
             ataqueInimigo();
         }));
@@ -186,10 +195,15 @@ public class CombateController {
         LacoFor laco1 = new LacoFor(3,4);
         LacoWhile laco2 = new LacoWhile(5,4);
         Magia magia = new Magia(TipoMagia.ATAQUE,NomeMagia.FOGO,2,6);
+        Magia magia2 = new Magia(TipoMagia.ATAQUE,NomeMagia.WATER,2,6);
+        Magia magia3 = new Magia(TipoMagia.ATAQUE,NomeMagia.THUNDER,2,6);
+
 
         trechos.add(laco1);
         trechos.add(laco2);
         trechos.add(magia);
+        trechos.add(magia2);
+        trechos.add(magia3);
 
     }
     public void createTrecho(){
@@ -235,6 +249,8 @@ public class CombateController {
                 trechos.add(laco);
                 return;
             case 2 : LacoWhile laco2 = new LacoWhile(duracao,custo);
+                trechos.add(laco2);
+                return;
         }
     }
     public void createMagia(){
@@ -439,6 +455,7 @@ public class CombateController {
             lacoAtualText.setText("while i < "+laco.getDuracao());
             lacoAtualText2.setText("i+=1");
         }
+
         if(laco.getMagias().size() > 0){
 
             ataqueButton.setDisable(false);
@@ -489,6 +506,36 @@ public class CombateController {
 
         int qnt = personagem.getManaAtual();
         manaQuant.setText(qnt < 10 ? "0" + qnt : String.valueOf(qnt));
+    }
+    private void atualizarDebuffInimigo(){
+
+        if(enemyDebuffBox.getChildren().size()>0){
+            enemyDebuffBox.getChildren().clear();
+        }
+
+        if(inimigo.getBuffs().size() == 0 ){
+            return;
+        }
+        for(Buff buff : inimigo.getBuffs()){
+            String endereco = "";
+            if(buff.getTipo() == TipoBuff.FIRE_DEBUFF){
+                inimigo.tomarDano(buff.getPoder());
+                endereco = "/images/Efeitos/Debuff/debuffFire.png";
+                atualizarBarraHp(inimigo, enemyMaxHp, enemyHp, true);
+            }else if(buff.getTipo() == TipoBuff.WATER_DEBUFF){
+              //  inimigo.setColldownDeAtaque(inimigo.getColldownDeAtaque() + buff.getPoder());
+                endereco = "/images/Efeitos/Debuff/debuffFire.png";
+            }else if(buff.getTipo() == TipoBuff.THUNDER_DEBUFF){
+                inimigo.gastarManaAtual(buff.getPoder()+1);
+                endereco = "/images/Efeitos/Debuff/debuffFire.png";
+                atualizarBarraMana(inimigo,enemyMaxMana,enemyMana,enemyManaQuant,true);
+
+            }
+            Image img = new Image(endereco);
+            ImageView imgV = new ImageView(img);
+            enemyDebuffBox.getChildren().add(imgV);
+        }
+        inimigo.atualizarTempoBuffs();
     }
 
     private void ataqueInimigo(){
@@ -602,17 +649,30 @@ public class CombateController {
             });
         }else if( laco instanceof LacoWhile){
             int fireQuant = 0;
+            int waterQuant = 0;
+            int thunderQuant = 0;
             for (Magia magia : laco.getMagias()) {
                 if(magia.getNome() == NomeMagia.FOGO){
                     fireQuant++;
+                }else if(magia.getNome() == NomeMagia.WATER){
+                    waterQuant++;
+                }else if(magia.getNome() == NomeMagia.THUNDER){
+                    thunderQuant++;
                 }
             }
-            sequencial.play();
-            sequencial.setOnFinished(e->{
-                enemyEfeictsBox.getChildren().clear();
-                animator.slideToDown(label,enemyDamageBox);
-                avisosText.setText("compre um laço de repetição.");
-            });
+            System.out.println(fireQuant+" - " +waterQuant+" - "+thunderQuant);
+            if(fireQuant > 0){
+               Buff buff1 = new Buff(TipoBuff.FIRE_DEBUFF,laco.getDuracao(),fireQuant);
+               inimigo.addBuff(buff1);
+            }
+            if(waterQuant > 0){
+                Buff buff2 = new Buff(TipoBuff.WATER_DEBUFF,laco.getDuracao(),waterQuant);
+                inimigo.addBuff(buff2);
+            }
+            if(thunderQuant > 0){
+                Buff buff3 = new Buff(TipoBuff.THUNDER_DEBUFF,laco.getDuracao(),thunderQuant);
+                inimigo.addBuff(buff3);
+            }
         }
         jogador.removerLaco();
         ataqueButton.setDisable(true);
