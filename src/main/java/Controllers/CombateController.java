@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -34,6 +35,9 @@ public class CombateController {
     private ArrayList<TrechoDeCodigo>trechos = new ArrayList<>();
     private Animator animator = new Animator();
     private int buyTimer = 3;
+    private boolean onDebuffFire;
+    private boolean onDebuffWater;
+    private boolean onDebuffThunder;
 
 
 
@@ -78,6 +82,8 @@ public class CombateController {
 
     @FXML
     private Label lacoAtualText;
+    @FXML
+    private Label lacoAtualText2;
 
     @FXML
     private Pane magiasDisponiveisPane;
@@ -118,6 +124,9 @@ public class CombateController {
 
     @FXML
     private ImageView enemyMagiaImg;
+
+    @FXML
+    private VBox enemyDebuffBox;
 
     @FXML
     public void initialize() {
@@ -175,9 +184,11 @@ public class CombateController {
     }
     public void loadMagias(){
         LacoFor laco1 = new LacoFor(3,4);
+        LacoWhile laco2 = new LacoWhile(5,4);
         Magia magia = new Magia(TipoMagia.ATAQUE,NomeMagia.FOGO,2,6);
 
         trechos.add(laco1);
+        trechos.add(laco2);
         trechos.add(magia);
 
     }
@@ -216,13 +227,14 @@ public class CombateController {
     public void createLaco(){
 
         Random random = new Random();
-        int sorteado = random.nextInt(2);
+        int sorteado = random.nextInt(2) + 1;
         int duracao = random.nextInt(5) +1;
         int custo = random.nextInt(7)+1;
         switch (sorteado){
-            case 0,1 : LacoFor laco = new LacoFor(duracao,custo);
+            case 1 : LacoFor laco = new LacoFor(duracao,custo);
                 trechos.add(laco);
                 return;
+            case 2 : LacoWhile laco2 = new LacoWhile(duracao,custo);
         }
     }
     public void createMagia(){
@@ -271,7 +283,9 @@ public class CombateController {
             // Define o texto da Label conforme o tipo
             if (trecho instanceof LacoFor laco) {
                endereco = "/images/Magias/for.png";
-            } else if (trecho instanceof Magia magia) {
+            }else if( trecho instanceof LacoWhile){
+                endereco = "/images/Magias/while.png";
+            }else if (trecho instanceof Magia magia) {
                 if(magia.getNome() == NomeMagia.FOGO){
                     endereco = "/images/Magias/fire.png";
                 }else if(magia.getNome() == NomeMagia.THUNDER){
@@ -371,12 +385,12 @@ public class CombateController {
         }
         if(trecho instanceof Magia){
             if(jogador.getLaco() != null){
-                if(jogador.getLaco() instanceof LacoFor){
-                    if(caixaDeMagias.getChildren().size() == 3){
-                        avisosText.setText("quantidade máxima de magias atingida.");
-                        return;
-                    }
+
+                if(caixaDeMagias.getChildren().size() == 3){
+                    avisosText.setText("quantidade máxima de magias atingida.");
+                    return;
                 }
+
             }else{
                 avisosText.setText("compre primeiro um laço de repetição.");
                 return;
@@ -411,32 +425,38 @@ public class CombateController {
 
         lacoAtual.setVisible(true);
         lacoAtualText.setVisible(true);
+        lacoAtualText2.setVisible(true);
 
         if(laco instanceof LacoFor){
-            Image img = new Image("/images/Hud/caixaFor.png");
+            Image img = new Image("/images/Hud/lacoFor.png");
             lacoAtual.setImage(img);
-            lacoAtualText.setText("for(int i = 0: i < "+laco.getDuracao()+"; i++)");
+            lacoAtualText.setText("for i in range("+laco.getDuracao()+")");
+            lacoAtualText2.setText("");
 
+        }else if(laco instanceof LacoWhile){
+            Image img = new Image("/images/Hud/lacoWhile.png");
+            lacoAtual.setImage(img);
+            lacoAtualText.setText("while i < "+laco.getDuracao());
+            lacoAtualText2.setText("i+=1");
+        }
+        if(laco.getMagias().size() > 0){
 
-            if(((LacoFor) laco).getMagias().size() > 0){
+            ataqueButton.setDisable(false);
+            ataqueButtonImg.setVisible(true);
 
-                ataqueButton.setDisable(false);
-                ataqueButtonImg.setVisible(true);
+            for(Magia magia : (laco).getMagias()){
+                String endereco = "";
 
-                for(Magia magia : ((LacoFor) laco).getMagias()){
-                    String endereco = "";
-
-                    if(magia.getNome() == NomeMagia.FOGO){
-                        endereco = "/images/Magias/NoCost/fireNoCost.png";
-                    }else if(magia.getNome() == NomeMagia.THUNDER){
-                        endereco = "/images/Magias/NoCost/thunderNoCost.png";
-                    }else if(magia.getNome() == NomeMagia.WATER){
-                        endereco = "/images/Magias/NoCost/waterNoCost.png";
-                    }
-                    Image magiaImg = new Image(endereco);
-                    ImageView magiaIV = new ImageView(magiaImg);
-                    caixaDeMagias.getChildren().add(magiaIV);
+                if(magia.getNome() == NomeMagia.FOGO){
+                    endereco = "/images/Magias/NoCost/fireNoCost.png";
+                }else if(magia.getNome() == NomeMagia.THUNDER){
+                    endereco = "/images/Magias/NoCost/thunderNoCost.png";
+                }else if(magia.getNome() == NomeMagia.WATER){
+                    endereco = "/images/Magias/NoCost/waterNoCost.png";
                 }
+                Image magiaImg = new Image(endereco);
+                ImageView magiaIV = new ImageView(magiaImg);
+                caixaDeMagias.getChildren().add(magiaIV);
             }
         }
     }
@@ -580,12 +600,26 @@ public class CombateController {
                 animator.slideToDown(label,enemyDamageBox);
                avisosText.setText("compre um laço de repetição.");
             });
+        }else if( laco instanceof LacoWhile){
+            int fireQuant = 0;
+            for (Magia magia : laco.getMagias()) {
+                if(magia.getNome() == NomeMagia.FOGO){
+                    fireQuant++;
+                }
+            }
+            sequencial.play();
+            sequencial.setOnFinished(e->{
+                enemyEfeictsBox.getChildren().clear();
+                animator.slideToDown(label,enemyDamageBox);
+                avisosText.setText("compre um laço de repetição.");
+            });
         }
         jogador.removerLaco();
         ataqueButton.setDisable(true);
         ataqueButtonImg.setVisible(false);
         lacoAtual.setVisible(false);
         lacoAtualText.setVisible(false);
+        lacoAtualText2.setVisible(false);
         atualizarMagiaJogador();
     }
     public void criarEfeito(Magia magia, String laco, double posX, double posY, Label label){

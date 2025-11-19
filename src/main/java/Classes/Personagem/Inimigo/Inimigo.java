@@ -19,6 +19,7 @@ public abstract class Inimigo extends Personagem {
     protected ModoAtaque modoDeAtaque;
     protected int precoDoAtaque;
     protected NomeMagia elemento;
+    protected int debuffTimer;
 
     public Inimigo(int hpMaximo, int manaMaxima, int colldownDeAtaque) {
         super(hpMaximo, manaMaxima);
@@ -32,6 +33,7 @@ public abstract class Inimigo extends Personagem {
         this.precoDoAtaque = 10;
         this.elemento = null;
         this.danoDoAtaque = 0;
+        this.debuffTimer = 0;
     }
 
     public String getSprite() {

@@ -11,14 +11,4 @@ public class LacoFor extends LacoDeRepeticao{
         this.magias = new ArrayList<>();
     }
 
-    public ArrayList<Magia> getMagias() {
-        return magias;
-    }
-    public void setMagia(Magia magia){
-        if(magias.size() == 3){
-            return;
-        }
-            magias.add(magia);
-
-    }
 }
