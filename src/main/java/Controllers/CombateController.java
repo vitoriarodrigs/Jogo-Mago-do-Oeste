@@ -439,25 +439,25 @@ public class CombateController {
     public void comprarFeitico(TrechoDeCodigo trecho, int index, ImageView img,Label label) {
 
         if(jogador.getManaAtual() < trecho.getCusto()){
-            avisosText.setText("sem mana suficiente para comprar a magia.");
+            avisosText.setText("Sem mana suficiente para comprar a magia.");
             return;
         }
         if(trecho instanceof Magia){
             if(jogador.getLaco() != null){
 
                 if(caixaDeMagias.getChildren().size() == 3){
-                    avisosText.setText("quantidade máxima de magias atingida.");
+                    avisosText.setText("Quantidade máxima de magias atingida.");
                     return;
                 }
 
             }else{
-                avisosText.setText("compre primeiro um laço de repetição.");
+                avisosText.setText("Compre primeiro um laço de repetição.");
                 return;
             }
         }
         if(trecho instanceof LacoDeRepeticao){
             if(jogador.getLaco() != null){
-                avisosText.setText("você já possui um laço de repetição.");
+                avisosText.setText("Você já possui um laço de repetição.");
                 return;
             }
         }
