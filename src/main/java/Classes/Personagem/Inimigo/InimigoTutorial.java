@@ -32,12 +32,20 @@ public class InimigoTutorial extends Inimigo{
             setAtaqueEscolhido(TipoAtaque.FRACO);
             setModoDeAtaque(ModoAtaque.HORIZONTAL_ESQUERDA);
             setPrecoDoAtaque(4);
-            setDanoDoAtaque(5);
+            if(5 - getPoderThunder() > 0){
+                setDanoDoAtaque(5 - getPoderThunder());
+            }else{
+                setDanoDoAtaque(0);
+            }
         }else{
             setAtaqueEscolhido(TipoAtaque.FORTE);
             setModoDeAtaque(ModoAtaque.DIAGONAL_ESQUERDA);
             setPrecoDoAtaque(8);
-            setDanoDoAtaque(10);
+            if(10 - getPoderThunder() > 0){
+                setDanoDoAtaque(5 - getPoderThunder());
+            }else{
+                setDanoDoAtaque(0);
+            }
         }
     }
     @Override
@@ -50,11 +58,19 @@ public class InimigoTutorial extends Inimigo{
     }
 
     public void ataqueFraco(Player jogador){
-            setColldownDeAtaque(5);
-            jogador.tomarDano(5);
+            setColldownDeAtaque(5 + getPoderWater());
+            if(5 - getPoderThunder() > 0){
+                jogador.tomarDano(5 - getPoderThunder());
+            }else{
+                jogador.tomarDano(0);
+            }
     }
     public void ataqueForte(Player jogador){
-            setColldownDeAtaque(5);
-            jogador.tomarDano(10);
+            setColldownDeAtaque(5 + getPoderWater());
+            if(10 - getPoderThunder() > 0){
+                jogador.tomarDano(10 - getPoderThunder());
+            }else{
+                jogador.tomarDano(0);
+            }
     }
 }

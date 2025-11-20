@@ -5,6 +5,7 @@ import Classes.Feitico.TipoMagia;
 import Classes.Personagem.Buff;
 import Classes.Personagem.Personagem;
 import Classes.Personagem.Player;
+import Classes.Personagem.TipoBuff;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -21,7 +22,6 @@ public abstract class Inimigo extends Personagem {
     protected ModoAtaque modoDeAtaque;
     protected int precoDoAtaque;
     protected NomeMagia elemento;
-    protected int debuffTimer;
 
     public Inimigo(int hpMaximo, int manaMaxima, int colldownDeAtaque) {
         super(hpMaximo, manaMaxima);
@@ -35,7 +35,6 @@ public abstract class Inimigo extends Personagem {
         this.precoDoAtaque = 10;
         this.elemento = null;
         this.danoDoAtaque = 0;
-        this.debuffTimer = 0;
     }
 
     public String getSprite() {
@@ -101,8 +100,10 @@ public abstract class Inimigo extends Personagem {
     public void setColldownDeAtaque(int colldownDeAtaque) {
         this.colldownDeAtaque = colldownDeAtaque;
     }
+
     public boolean podeAtacar(int custo){
-        if(manaAtual >= custo){
+
+        if(manaAtual >= custo + getPoderThunder()){
             return true;
         }else{
             return false;

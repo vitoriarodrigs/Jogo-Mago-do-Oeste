@@ -36,7 +36,12 @@ public abstract class Personagem {
         }
     }
     public void gastarManaAtual(int mana){
-        this.manaAtual -=mana;
+
+       if(manaAtual - mana + getPoderThunder() <= 0){
+           this.manaAtual = 0;
+       }else{
+           this.manaAtual -=mana;
+       }
     }
     public void tomarDano(int dano) {
         hpAtual -= dano;
@@ -79,5 +84,23 @@ public abstract class Personagem {
         }
 
         buffs.removeAll(remover);
+    }
+    public int getPoderThunder(){
+        int debuffThunder = 0;
+        for(Buff buff : buffs){
+            if(buff.getTipo() == TipoBuff.THUNDER_DEBUFF){
+                debuffThunder += buff.getPoder();
+            }
+        }
+        return debuffThunder;
+    }
+    public int getPoderWater(){
+        int debuffWater = 0;
+        for(Buff buff : buffs){
+            if(buff.getTipo() == TipoBuff.WATER_DEBUFF){
+                debuffWater += buff.getPoder();
+            }
+        }
+        return debuffWater;
     }
 }

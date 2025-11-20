@@ -39,7 +39,7 @@ public class CombateController {
     private int buyTimer = 3;
     private boolean onDebuffFire;
     private boolean onDebuffWater;
-    private boolean onDebuffThunder;
+    private boolean inimigoIsAtacando = false;
 
 
 
@@ -145,21 +145,16 @@ public class CombateController {
         Timeline manaRegen = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             jogador.restaurarMana(1);
             atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant,false);
-            inimigo.restaurarMana(1);
-            atualizarBarraMana(inimigo,enemyMaxMana,enemyMana,enemyManaQuant,true);
 
+            inimigo.restaurarMana(1);
+            atualizarBarraMana(inimigo, enemyMaxMana, enemyMana, enemyManaQuant, true);
+            atualizarDebuffInimigo();
         }));
         manaRegen.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         manaRegen.play();
 
-        Timeline buffTimer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            atualizarDebuffInimigo();
-
-        }));
-        buffTimer.setCycleCount(Timeline.INDEFINITE); // roda para sempre
-        buffTimer.play();
         Timeline enemyColldown = new Timeline(new KeyFrame(Duration.seconds(inimigo.getColldownDeAtaque()), event -> {
-            ataqueInimigo();
+           ataqueInimigo();
         }));
         enemyColldown.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         enemyColldown.play();
@@ -193,7 +188,7 @@ public class CombateController {
     }
     public void loadMagias(){
         LacoFor laco1 = new LacoFor(3,4);
-        LacoWhile laco2 = new LacoWhile(5,4);
+        LacoWhile laco2 = new LacoWhile(10,4);
         Magia magia = new Magia(TipoMagia.ATAQUE,NomeMagia.FOGO,2,6);
         Magia magia2 = new Magia(TipoMagia.ATAQUE,NomeMagia.WATER,2,6);
         Magia magia3 = new Magia(TipoMagia.ATAQUE,NomeMagia.THUNDER,2,6);
@@ -202,8 +197,8 @@ public class CombateController {
         trechos.add(laco1);
         trechos.add(laco2);
         trechos.add(magia);
-        trechos.add(magia2);
-        trechos.add(magia3);
+        trechos.add(magia);
+        trechos.add(magia);
 
     }
     public void createTrecho(){
@@ -242,13 +237,14 @@ public class CombateController {
 
         Random random = new Random();
         int sorteado = random.nextInt(2) + 1;
-        int duracao = random.nextInt(5) +1;
+        int duracaoFor = random.nextInt(5) +3;
+        int duracaoWhile = random.nextInt(5) +8;
         int custo = random.nextInt(7)+1;
         switch (sorteado){
-            case 1 : LacoFor laco = new LacoFor(duracao,custo);
+            case 1 : LacoFor laco = new LacoFor(duracaoFor,custo);
                 trechos.add(laco);
                 return;
-            case 2 : LacoWhile laco2 = new LacoWhile(duracao,custo);
+            case 2 : LacoWhile laco2 = new LacoWhile(duracaoWhile,custo);
                 trechos.add(laco2);
                 return;
         }
@@ -492,6 +488,9 @@ public class CombateController {
         }
     }
     private void atualizarBarraMana(Personagem personagem, Rectangle maxMana, Rectangle mana, Label manaQuant, boolean inimigo) {
+        if(personagem.getManaAtual() <0){
+            return;
+        }
         double proporcao = (double) personagem.getManaAtual() / personagem.getManaMaxima();
         double novaLargura = maxMana.getWidth() * proporcao;
 
@@ -508,7 +507,9 @@ public class CombateController {
         manaQuant.setText(qnt < 10 ? "0" + qnt : String.valueOf(qnt));
     }
     private void atualizarDebuffInimigo(){
-
+        if(inimigoIsAtacando){
+            return;
+        }
         if(enemyDebuffBox.getChildren().size()>0){
             enemyDebuffBox.getChildren().clear();
         }
@@ -523,12 +524,10 @@ public class CombateController {
                 endereco = "/images/Efeitos/Debuff/debuffFire.png";
                 atualizarBarraHp(inimigo, enemyMaxHp, enemyHp, true);
             }else if(buff.getTipo() == TipoBuff.WATER_DEBUFF){
-              //  inimigo.setColldownDeAtaque(inimigo.getColldownDeAtaque() + buff.getPoder());
-                endereco = "/images/Efeitos/Debuff/debuffFire.png";
+                endereco = "/images/Efeitos/Debuff/debuffWater.png";
             }else if(buff.getTipo() == TipoBuff.THUNDER_DEBUFF){
-                inimigo.gastarManaAtual(buff.getPoder()+1);
-                endereco = "/images/Efeitos/Debuff/debuffFire.png";
-                atualizarBarraMana(inimigo,enemyMaxMana,enemyMana,enemyManaQuant,true);
+                endereco = "/images/Efeitos/Debuff/debuffThunder.png";
+
 
             }
             Image img = new Image(endereco);
@@ -563,7 +562,7 @@ public class CombateController {
 
         if(inimigo.podeAtacar(inimigo.getPrecoDoAtaque())){
             inimigo.gastarManaAtual(inimigo.getPrecoDoAtaque());
-            atualizarBarraMana(inimigo,enemyMaxMana,enemyMana,enemyManaQuant,true);
+
 
             animator.enemyElementAppear(enemyMagiaImg);
 
@@ -653,26 +652,30 @@ public class CombateController {
             int thunderQuant = 0;
             for (Magia magia : laco.getMagias()) {
                 if(magia.getNome() == NomeMagia.FOGO){
-                    fireQuant++;
+                    fireQuant += 2;
                 }else if(magia.getNome() == NomeMagia.WATER){
                     waterQuant++;
                 }else if(magia.getNome() == NomeMagia.THUNDER){
                     thunderQuant++;
                 }
             }
-            System.out.println(fireQuant+" - " +waterQuant+" - "+thunderQuant);
+            String mensagem = "";
             if(fireQuant > 0){
                Buff buff1 = new Buff(TipoBuff.FIRE_DEBUFF,laco.getDuracao(),fireQuant);
+               mensagem = "Debuff [Fire] dá dano por segundo no oponente. ";
                inimigo.addBuff(buff1);
             }
             if(waterQuant > 0){
                 Buff buff2 = new Buff(TipoBuff.WATER_DEBUFF,laco.getDuracao(),waterQuant);
                 inimigo.addBuff(buff2);
+                mensagem += "Debuff [Water] aumenta o tempo de espera do oponente. ";
             }
             if(thunderQuant > 0){
                 Buff buff3 = new Buff(TipoBuff.THUNDER_DEBUFF,laco.getDuracao(),thunderQuant);
                 inimigo.addBuff(buff3);
+                mensagem += "Debuff [Thunder] diminui o dano do oponente.";
             }
+            avisosText.setText(mensagem);
         }
         jogador.removerLaco();
         ataqueButton.setDisable(true);

@@ -114,7 +114,7 @@
       <ImageView fx:id="enemySprite" fitHeight="320.0" fitWidth="197.0" layoutX="989.0" layoutY="117.0" pickOnBounds="true" preserveRatio="true" />
       <Pane fx:id="enemyEfeictsBox" layoutX="957.0" layoutY="128.0" prefHeight="291.0" prefWidth="299.0" />
       <Pane fx:id="enemyDamageBox" layoutX="924.0" layoutY="117.0" prefHeight="97.0" prefWidth="101.0" />
-      <VBox fx:id="enemyDebuffBox" layoutX="1162.0" layoutY="117.0" prefHeight="320.0" prefWidth="100.0" />
+      <VBox fx:id="enemyDebuffBox" layoutX="1162.0" layoutY="117.0" prefHeight="320.0" prefWidth="100.0" spacing="5.0" />
       <Pane layoutX="947.0" layoutY="26.0" prefHeight="60.0" prefWidth="299.0">
          <children>
             <Pane layoutX="10.0" layoutY="3.0" prefHeight="24.0" prefWidth="285.0">
@@ -213,8 +213,8 @@
       </Pane>
       <Pane layoutX="14.0" layoutY="502.0" prefHeight="200.0" prefWidth="452.0">
          <children>
-            <ImageView fx:id="lacoAtual" fitHeight="180.0" fitWidth="316.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" visible="false" />
-            <Label fx:id="lacoAtualText" layoutX="24.0" layoutY="20.0" prefHeight="60.0" prefWidth="260.0" textFill="WHITE" visible="false">
+            <ImageView fx:id="lacoAtual" fitHeight="180.0" fitWidth="286.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" visible="false" />
+            <Label fx:id="lacoAtualText" layoutX="25.0" layoutY="10.0" prefHeight="60.0" prefWidth="260.0" textFill="WHITE" visible="false">
                <font>
                   <Font name="Calibri" size="37.0" />
                </font>
@@ -226,7 +226,7 @@
                </image>
             </ImageView>
             <Button fx:id="ataqueButton" disable="true" layoutX="294.0" layoutY="143.0" mnemonicParsing="false" onAction="#lancarFeitico" opacity="0.0" prefHeight="46.0" prefWidth="145.0" />
-            <Label fx:id="lacoAtualText2" layoutX="24.0" layoutY="126.0" prefHeight="60.0" prefWidth="131.0" textFill="WHITE" visible="false">
+            <Label fx:id="lacoAtualText2" layoutX="68.0" layoutY="136.0" prefHeight="60.0" prefWidth="101.0" textFill="WHITE" visible="false">
                <font>
                   <Font name="Calibri" size="37.0" />
                </font>
