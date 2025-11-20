@@ -53,7 +53,7 @@ public class DialogoLoopsController {
             showText(dialogs.get(index));
         } else {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Combate/Combate.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Combate/Demonstracao.fxml"));
                 Parent root = loader.load();
 
                 Stage stage = (Stage) dialogLabel.getScene().getWindow();

@@ -42,7 +42,7 @@ public class InimigoTutorial extends Inimigo{
             setModoDeAtaque(ModoAtaque.DIAGONAL_ESQUERDA);
             setPrecoDoAtaque(8);
             if(10 - getPoderThunder() > 0){
-                setDanoDoAtaque(5 - getPoderThunder());
+                setDanoDoAtaque(10 - getPoderThunder());
             }else{
                 setDanoDoAtaque(0);
             }
