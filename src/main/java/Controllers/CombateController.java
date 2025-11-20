@@ -37,9 +37,8 @@ public class CombateController {
     private ArrayList<TrechoDeCodigo>trechos = new ArrayList<>();
     private Animator animator = new Animator();
     private int buyTimer = 3;
-    private boolean onDebuffFire;
-    private boolean onDebuffWater;
-    private boolean inimigoIsAtacando = false;
+    private boolean pause = true;
+    private int timerInicial = 3;
 
 
 
@@ -143,38 +142,48 @@ public class CombateController {
 
         // Timeline para restaurar 1 ponto de mana a cada 1 segundo
         Timeline manaRegen = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            jogador.restaurarMana(1);
-            atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant,false);
+            timerInicial -=1;
+            if(timerInicial == 0){
+                pause = false;
+            }
+            if(pause == false){
+                jogador.restaurarMana(1);
+                atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant,false);
 
-            inimigo.restaurarMana(1);
-            atualizarBarraMana(inimigo, enemyMaxMana, enemyMana, enemyManaQuant, true);
-            atualizarDebuffInimigo();
+                inimigo.restaurarMana(1);
+                atualizarBarraMana(inimigo, enemyMaxMana, enemyMana, enemyManaQuant, true);
+                atualizarDebuffInimigo();
+            }
         }));
         manaRegen.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         manaRegen.play();
 
         Timeline enemyColldown = new Timeline(new KeyFrame(Duration.seconds(inimigo.getColldownDeAtaque()), event -> {
-           ataqueInimigo();
+            if(pause == false) {
+                ataqueInimigo();
+            }
         }));
         enemyColldown.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         enemyColldown.play();
 
         Timeline timerToBuy = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             //10 por que precisa ter um ultimo lugar pra mostrar o contador e cada item são 2 itens.
-            if(trechos.size() < 6){
-                if(buyTimer <= 5 && buyTimer != 0){
-                    buyTimer -= 1;
+            if(pause == false){
+                if(trechos.size() < 6){
+                    if(buyTimer <= 5 && buyTimer != 0){
+                        buyTimer -= 1;
+                    }else{
+                        createTrecho();
+                        atualizarMagiasDisponiveis();
+                        buyTimer = 3;
+                    }
                 }else{
-                    createTrecho();
-                    atualizarMagiasDisponiveis();
                     buyTimer = 3;
+                    trechos.remove(0);
+                    atualizarMagiasDisponiveis();
                 }
-            }else{
-                buyTimer = 3;
-                trechos.remove(0);
-                atualizarMagiasDisponiveis();
+                timerLabel.setText(String.valueOf(buyTimer));
             }
-            timerLabel.setText(String.valueOf(buyTimer));
         }));
         timerToBuy.setCycleCount(Timeline.INDEFINITE); // roda para sempre
         timerToBuy.play();
@@ -197,8 +206,8 @@ public class CombateController {
         trechos.add(laco1);
         trechos.add(laco2);
         trechos.add(magia);
-        trechos.add(magia);
-        trechos.add(magia);
+        trechos.add(magia2);
+        trechos.add(magia3);
 
     }
     public void createTrecho(){
@@ -237,9 +246,9 @@ public class CombateController {
 
         Random random = new Random();
         int sorteado = random.nextInt(2) + 1;
-        int duracaoFor = random.nextInt(5) +3;
+        int duracaoFor = random.nextInt(4) +2;
         int duracaoWhile = random.nextInt(5) +8;
-        int custo = random.nextInt(7)+1;
+        int custo = random.nextInt(7)+2;
         switch (sorteado){
             case 1 : LacoFor laco = new LacoFor(duracaoFor,custo);
                 trechos.add(laco);
@@ -507,9 +516,7 @@ public class CombateController {
         manaQuant.setText(qnt < 10 ? "0" + qnt : String.valueOf(qnt));
     }
     private void atualizarDebuffInimigo(){
-        if(inimigoIsAtacando){
-            return;
-        }
+
         if(enemyDebuffBox.getChildren().size()>0){
             enemyDebuffBox.getChildren().clear();
         }
@@ -519,20 +526,40 @@ public class CombateController {
         }
         for(Buff buff : inimigo.getBuffs()){
             String endereco = "";
+            String poder = "";
+            String cor = "";
             if(buff.getTipo() == TipoBuff.FIRE_DEBUFF){
                 inimigo.tomarDano(buff.getPoder());
                 endereco = "/images/Efeitos/Debuff/debuffFire.png";
+                poder = String.valueOf(buff.getPoder()/2);
+                cor = "#BF3737";
                 atualizarBarraHp(inimigo, enemyMaxHp, enemyHp, true);
             }else if(buff.getTipo() == TipoBuff.WATER_DEBUFF){
                 endereco = "/images/Efeitos/Debuff/debuffWater.png";
+                poder = String.valueOf(buff.getPoder());
+                cor = "#268FA6";
             }else if(buff.getTipo() == TipoBuff.THUNDER_DEBUFF){
                 endereco = "/images/Efeitos/Debuff/debuffThunder.png";
+                poder = String.valueOf(buff.getPoder());
+                cor = "#4E3D87";
 
 
             }
             Image img = new Image(endereco);
             ImageView imgV = new ImageView(img);
-            enemyDebuffBox.getChildren().add(imgV);
+
+            Text label = new Text();
+            label.setFont(new Font("Arial Black", 25));
+            label.setFill(Color.WHITE);
+            label.setStroke(Color.web(cor));
+            label.setStrokeWidth(1.5);
+            label.setText(poder+"X");
+            label.setLayoutX(25);
+            label.setLayoutY(45);
+            Pane pane = new Pane(imgV,label);
+
+            enemyDebuffBox.getChildren().add(pane);
+            animator.appear(pane,false);
         }
         inimigo.atualizarTempoBuffs();
     }
