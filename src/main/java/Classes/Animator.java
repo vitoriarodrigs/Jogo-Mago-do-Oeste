@@ -15,6 +15,36 @@ public class Animator {
     public Animator(){
 
     }
+
+    public void start(int timer, Label label, ImageView img, Runnable onFinish) {
+        SequentialTransition sequencial = new SequentialTransition();
+
+        for (int i = timer; i >= 0; i--) {
+            int finalI = i;
+
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            pause.setOnFinished(e -> {
+               if(finalI != 0){
+                   label.setText(String.valueOf(finalI));
+                   appear(label, true);
+               }
+            });
+
+            sequencial.getChildren().add(pause);
+        }
+
+        // Define o que acontece ao terminar TUDO
+        sequencial.setOnFinished(e -> {
+            appear(img, true);
+
+            PauseTransition pausaFinal = new PauseTransition(Duration.seconds(1));
+            pausaFinal.setOnFinished(ev -> onFinish.run());
+            pausaFinal.play();
+        });
+
+        sequencial.play();
+    }
+
     public void slideToDown(Node node, Pane pane) {
 
         // --- Movimento ---

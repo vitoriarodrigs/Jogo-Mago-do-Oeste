@@ -44,8 +44,11 @@ public abstract class Personagem {
        }
     }
     public void tomarDano(int dano) {
-        hpAtual -= dano;
-        if (hpAtual < 0) hpAtual = 0;
+        if(hpAtual - dano > 0){
+            hpAtual -= dano;
+        }else{
+            hpAtual = 0;
+        }
     }
 
     public void restaurarHp(int cura) {

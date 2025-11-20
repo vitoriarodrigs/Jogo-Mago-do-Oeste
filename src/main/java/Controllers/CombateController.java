@@ -130,6 +130,15 @@ public class CombateController {
     private VBox enemyDebuffBox;
 
     @FXML
+    private Label textoCentro;
+
+    @FXML
+    private ImageView imagemCentro;
+
+    @FXML
+    private ImageView fundoEscuro;
+
+    @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
         atualizarBarraHp(jogador,heroMaxHp,heroHp, false);
@@ -138,14 +147,11 @@ public class CombateController {
         loadMagias();
         atualizarMagiasDisponiveis();
         avisosText.setText("compre um laço de repetição.");
-
+        iniciar();
 
         // Timeline para restaurar 1 ponto de mana a cada 1 segundo
         Timeline manaRegen = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            timerInicial -=1;
-            if(timerInicial == 0){
-                pause = false;
-            }
+            verificarTerminar();
             if(pause == false){
                 jogador.restaurarMana(1);
                 atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant,false);
@@ -195,6 +201,38 @@ public class CombateController {
         Image enemySpell = new Image(inimigo.getLancarMagiaSprite());
         enemyMagiaImg.setImage(enemySpell);
     }
+
+    public void iniciar(){
+
+        fundoEscuro.setOpacity(1);
+        animator.start(timerInicial,textoCentro,imagemCentro,()->removerFundo());
+    }
+    public void removerFundo(){
+        fundoEscuro.setOpacity(0);
+        textoCentro.setOpacity(0);
+        imagemCentro.setOpacity(0);
+        pause = false;
+    }
+    public void verificarTerminar(){
+        if(pause == true){
+            return;
+        }
+
+        if(jogador.getHpAtual() <= 0){
+            pause = true;
+            fundoEscuro.setOpacity(1);
+            Image img = new Image("/images/Hud/derrota.png");
+            imagemCentro.setImage(img);
+            animator.appear(imagemCentro,false);
+        }else if(inimigo.getHpAtual() <=0){
+            pause = true;
+            fundoEscuro.setOpacity(1);
+            Image img = new Image("/images/Hud/vitoria.png");
+            imagemCentro.setImage(img);
+            animator.appear(imagemCentro,false);
+        }
+    }
+
     public void loadMagias(){
         LacoFor laco1 = new LacoFor(3,4);
         LacoWhile laco2 = new LacoWhile(10,4);
@@ -531,16 +569,16 @@ public class CombateController {
             if(buff.getTipo() == TipoBuff.FIRE_DEBUFF){
                 inimigo.tomarDano(buff.getPoder());
                 endereco = "/images/Efeitos/Debuff/debuffFire.png";
-                poder = String.valueOf(buff.getPoder()/2);
+                poder = String.valueOf("+"+buff.getPoder());
                 cor = "#BF3737";
                 atualizarBarraHp(inimigo, enemyMaxHp, enemyHp, true);
             }else if(buff.getTipo() == TipoBuff.WATER_DEBUFF){
                 endereco = "/images/Efeitos/Debuff/debuffWater.png";
-                poder = String.valueOf(buff.getPoder());
+                poder = String.valueOf("+"+buff.getPoder());
                 cor = "#268FA6";
             }else if(buff.getTipo() == TipoBuff.THUNDER_DEBUFF){
                 endereco = "/images/Efeitos/Debuff/debuffThunder.png";
-                poder = String.valueOf(buff.getPoder());
+                poder = String.valueOf("-"+buff.getPoder());
                 cor = "#4E3D87";
 
 
@@ -553,7 +591,7 @@ public class CombateController {
             label.setFill(Color.WHITE);
             label.setStroke(Color.web(cor));
             label.setStrokeWidth(1.5);
-            label.setText(poder+"X");
+            label.setText(poder);
             label.setLayoutX(25);
             label.setLayoutY(45);
             Pane pane = new Pane(imgV,label);
