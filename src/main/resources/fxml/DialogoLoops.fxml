@@ -6,7 +6,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DialogoLoopsController">
+<AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DialogoLoopsController">
 
 
     <ImageView fx:id="backgroundImage" fitHeight="720" fitWidth="1280" preserveRatio="false">
@@ -18,7 +18,7 @@
 
     <ImageView fx:id="personagemImage" fitHeight="367.0" fitWidth="268.0" layoutX="77.0" layoutY="191.0" preserveRatio="true">
         <image>
-            <Image url="@../Images/Personagens/personagemTutorial.png" />
+            <Image url="@../Images/Personagens/personagemTutorialRight.png" />
         </image>
     </ImageView>
 
