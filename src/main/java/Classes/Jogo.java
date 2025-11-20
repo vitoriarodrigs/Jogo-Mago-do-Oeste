@@ -27,7 +27,7 @@ public class Jogo {
         this.inimigoAtual = 0;
 
         inimigos = new ArrayList<>();
-        InimigoTutorial inimigo1 = new InimigoTutorial(200,10,5);
+        InimigoTutorial inimigo1 = new InimigoTutorial(170,10,5);
         inimigos.add(inimigo1);
     }
 
