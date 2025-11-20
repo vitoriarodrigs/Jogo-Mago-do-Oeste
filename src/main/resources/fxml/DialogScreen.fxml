@@ -8,17 +8,17 @@
 
 <AnchorPane prefHeight="720" prefWidth="1280" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DialogController">
 
-    <!-- Fundo com sua imagem -->
+
     <ImageView fitHeight="720" fitWidth="1280">
         <image>
             <Image url="@../Images/Backgrounds/dialog_background.png.png" />
         </image>
     </ImageView>
 
-    <!-- Texto -->
-    <Label fx:id="dialogLabel" layoutX="192.0" layoutY="528.0" prefWidth="1130" style="-fx-font-size: 22px; -fx-text-fill: #ffffff;" text="O deserto do Oeste… silencioso, mas inquieto. Algo desperta sob as areias antigas." wrapText="true" />
 
-    <!-- Botão para avançar -->
+    <Label fx:id="dialogLabel" layoutX="209.0" layoutY="528.0" prefHeight="32.0" prefWidth="1113.0" style="-fx-font-size: 22px; -fx-text-fill: #ffffff;" text="O deserto do Oeste… silencioso, mas inquieto. Algo desperta sob as areias antigas." wrapText="true" />
+
+
     <Button layoutX="952.0" layoutY="615.0" onAction="#onNext" style="-fx-background-color: rgba(255,255,255,0.25);                    -fx-text-fill: white;                    -fx-font-size: 20px;                    -fx-background-radius: 10;" text="Continuar" />
 
 </AnchorPane>
