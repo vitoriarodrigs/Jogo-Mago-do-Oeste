@@ -215,7 +215,7 @@ public class DemonstracaoController {
 
         if(demonstacaoStage == 0){
             apresentando = true;
-            avisosText.setText("Bem-vindo, essa é a interfaçe de jogo, aqui você pode formar feitiços que são combinações de laços de repetição e magias gerando diferentes efeitos.");
+            avisosText.setText("Bem-vindo, essa é a interfaçe de jogo, aqui você pode duelar contra outros magos formando feitiços que são combinações de laços de repetição e magias.");
             SequentialTransition sequencial1 = new SequentialTransition();
             PauseTransition pause1 = new PauseTransition(Duration.millis(9000));
             pause1.setOnFinished(e->{
@@ -282,7 +282,7 @@ public class DemonstracaoController {
             pause6.setOnFinished(e->{
                 avisosText.setText("Parabéns introdução concluída, agora derrote o oponente.");
             });
-            PauseTransition pause7 = new PauseTransition(Duration.millis(3000));
+            PauseTransition pause7 = new PauseTransition(Duration.millis(4000));
             pause7.setOnFinished(e->{
                 avisosText.setText("");
                 pause = true;
