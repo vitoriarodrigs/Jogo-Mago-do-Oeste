@@ -711,7 +711,7 @@ public class CombateController {
             sequencial.setOnFinished(e->{
                 enemyEfeictsBox.getChildren().clear();
                 animator.slideToDown(label,enemyDamageBox);
-               avisosText.setText("compre um laço de repetição.");
+               avisosText.setText("Compre um laço de repetição.");
             });
         }else if( laco instanceof LacoWhile){
             int fireQuant = 0;

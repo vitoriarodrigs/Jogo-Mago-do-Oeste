@@ -6,27 +6,29 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DialogoLoopsController">
+<AnchorPane prefHeight="720.0" prefWidth="1303.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DialogoLoopsController">
 
 
-    <ImageView fx:id="backgroundImage" fitHeight="720" fitWidth="1280" preserveRatio="false">
+    <ImageView fx:id="backgroundImage" fitHeight="720" fitWidth="1303.0">
         <image>
             <Image url="@../Images/Backgrounds/biblioteca.png" />
         </image>
     </ImageView>
 
-
-    <ImageView fx:id="personagemImage" fitHeight="367.0" fitWidth="268.0" layoutX="77.0" layoutY="191.0" preserveRatio="true">
+            
+                <ImageView fx:id="personagemImage" fitHeight="367.0" fitWidth="268.0" layoutX="215.0" layoutY="255.0" preserveRatio="true">
         <image>
             <Image url="@../Images/Personagens/personagemTutorialRight.png" />
         </image>
     </ImageView>
 
 
-    <Label fx:id="dialogLabel" layoutX="508.0" layoutY="520" prefHeight="140" prefWidth="590.0" style="-fx-background-color: transparent;                   -fx-text-fill: white;                   -fx-font-size: 26px;" wrapText="true" />
+    <Label fx:id="dialogLabel" layoutX="521.0" layoutY="513.0" prefHeight="104.0" prefWidth="577.0" style="-fx-background-color: transparent;                   -fx-text-fill: white;                   -fx-font-size: 26px;" wrapText="true" />
 
-    <Button layoutX="989.0" layoutY="615.0" onAction="#onNext" prefHeight="44.0" prefWidth="140.0" style="-fx-background-color: rgba(255,255,255,0.25);                    -fx-text-fill: white;                    -fx-font-size: 20px;                    -fx-background-radius: 10;" text="Continuar" />
-
-    <AnchorPane layoutX="198.0" layoutY="-23.0" onMouseClicked="#onNext" prefHeight="720" prefWidth="1280" style="-fx-background-color: transparent;" />
+    <AnchorPane layoutX="198.0" layoutY="-2.0" onMouseClicked="#onNext" prefHeight="699.0" prefWidth="1102.0" style="-fx-background-color: transparent;">
+      <children>
+      
+          <Button layoutX="884.0" layoutY="618.0" onAction="#onNext" prefHeight="44.0" prefWidth="140.0" style="-fx-background-color: rgba(255,255,255,0.25);                    -fx-text-fill: white;                    -fx-font-size: 20px;                    -fx-background-radius: 10;" text="Continuar" />
+      </children></AnchorPane>
 
 </AnchorPane>

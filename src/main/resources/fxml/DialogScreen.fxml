@@ -6,10 +6,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="720" prefWidth="1280" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DialogController">
+<AnchorPane prefHeight="720" prefWidth="1300" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DialogController">
 
 
-    <ImageView fitHeight="720" fitWidth="1280">
+    <ImageView fitHeight="720" fitWidth="1322.0">
         <image>
             <Image url="@../Images/Backgrounds/dialog_background.png.png" />
         </image>
