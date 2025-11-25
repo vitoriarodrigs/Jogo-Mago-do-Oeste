@@ -4,5 +4,9 @@ public enum NomeMagia {
     FOGO,
     GELO,
     THUNDER,
-    WATER
+    WATER,
+    HEAL,
+    RESTORE,
+    MAGIC
+
 }

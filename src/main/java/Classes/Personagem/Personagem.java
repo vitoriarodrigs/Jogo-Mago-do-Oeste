@@ -30,7 +30,7 @@ public abstract class Personagem {
     }
 
     public void restaurarMana( int mana){
-        manaAtual += mana;
+        manaAtual += mana + getPoderRestore();
         if (manaAtual > manaMaxima){
             manaAtual = manaMaxima;
         }
@@ -51,8 +51,10 @@ public abstract class Personagem {
         }
     }
 
-    public void restaurarHp(int cura) {
+    public void restaurarHp() {
+        int cura = getPoderHeal()*hpMaximo/100;
         hpAtual += cura;
+
         if (hpAtual > hpMaximo) hpAtual = hpMaximo;
     }
 
@@ -87,6 +89,24 @@ public abstract class Personagem {
         }
 
         buffs.removeAll(remover);
+    }
+    public int getPoderHeal(){
+        int buffHeal = 0;
+        for(Buff buff : buffs){
+            if(buff.getTipo() == TipoBuff.HEAL_BUFF){
+                buffHeal += buff.getPoder();
+            }
+        }
+        return buffHeal;
+    }
+    public int getPoderRestore(){
+        int buffRestore = 0;
+        for(Buff buff : buffs){
+            if(buff.getTipo() == TipoBuff.RESTORE_BUFF){
+                buffRestore += buff.getPoder();
+            }
+        }
+        return buffRestore;
     }
     public int getPoderThunder(){
         int debuffThunder = 0;

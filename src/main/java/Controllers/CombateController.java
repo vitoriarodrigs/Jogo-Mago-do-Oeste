@@ -139,6 +139,9 @@ public class CombateController {
     private ImageView fundoEscuro;
 
     @FXML
+    private VBox heroBuffBox;
+
+    @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
         atualizarBarraHp(jogador,heroMaxHp,heroHp, false);
@@ -159,6 +162,7 @@ public class CombateController {
                 inimigo.restaurarMana(1);
                 atualizarBarraMana(inimigo, enemyMaxMana, enemyMana, enemyManaQuant, true);
                 atualizarDebuffInimigo();
+                atualizarBuffJogador();
             }
         }));
         manaRegen.setCycleCount(Timeline.INDEFINITE); // roda para sempre
@@ -204,8 +208,9 @@ public class CombateController {
 
     public void iniciar(){
 
-        fundoEscuro.setOpacity(1);
-        animator.start(timerInicial,textoCentro,imagemCentro,()->removerFundo());
+       // fundoEscuro.setOpacity(1);
+       // animator.start(timerInicial,textoCentro,imagemCentro,()->removerFundo());
+        removerFundo();
     }
     public void removerFundo(){
         fundoEscuro.setOpacity(0);
@@ -239,13 +244,17 @@ public class CombateController {
         Magia magia = new Magia(TipoMagia.ATAQUE,NomeMagia.FOGO,2,6);
         Magia magia2 = new Magia(TipoMagia.ATAQUE,NomeMagia.WATER,2,6);
         Magia magia3 = new Magia(TipoMagia.ATAQUE,NomeMagia.THUNDER,2,6);
+        Magia magia4 = new Magia(TipoMagia.SUPORTE,NomeMagia.HEAL,2,3);
+        Magia magia5 = new Magia(TipoMagia.SUPORTE,NomeMagia.RESTORE,2,3);
+        Magia magia6 = new Magia(TipoMagia.SUPORTE,NomeMagia.MAGIC,2,3);
 
 
-        trechos.add(laco1);
+      //  trechos.add(laco1);
         trechos.add(laco2);
+        trechos.add(magia4);
+        trechos.add(magia5);
+        trechos.add(magia6);
         trechos.add(magia);
-        trechos.add(magia2);
-        trechos.add(magia3);
 
     }
     public void createTrecho(){
@@ -299,7 +308,7 @@ public class CombateController {
     public void createMagia(){
 
         Random random = new Random();
-        int sorteado = random.nextInt(3) + 1;
+        int sorteado = random.nextInt(6) + 1;
 
         switch (sorteado){
             case 1 : Magia fogo = new Magia(TipoMagia.ATAQUE,NomeMagia.FOGO,4,6);
@@ -310,6 +319,15 @@ public class CombateController {
                 return;
             case 3 : Magia agua = new Magia(TipoMagia.ATAQUE,NomeMagia.WATER,2,3);
                 trechos.add(agua);
+                return;
+            case 4 : Magia heal = new Magia(TipoMagia.SUPORTE,NomeMagia.HEAL,2,3);
+                trechos.add(heal);
+                return;
+            case 5 : Magia restore = new Magia(TipoMagia.SUPORTE,NomeMagia.RESTORE,2,3);
+                trechos.add(restore);
+                return;
+            case 6 : Magia magic = new Magia(TipoMagia.SUPORTE,NomeMagia.MAGIC,2,3);
+                trechos.add(magic);
                 return;
         }
     }
@@ -351,6 +369,12 @@ public class CombateController {
                     endereco = "/images/Magias/thunder.png";
                 }else if(magia.getNome() == NomeMagia.WATER){
                     endereco = "/images/Magias/water.png";
+                }else if(magia.getNome() == NomeMagia.HEAL){
+                    endereco = "/images/Magias/heal.png";
+                }else if(magia.getNome() == NomeMagia.RESTORE){
+                    endereco = "/images/Magias/restore.png";
+                }else if(magia.getNome() == NomeMagia.MAGIC){
+                    endereco = "/images/Magias/magic.png";
                 }
             } else {
                 endereco = "desconhecido";
@@ -515,6 +539,12 @@ public class CombateController {
                     endereco = "/images/Magias/NoCost/thunderNoCost.png";
                 }else if(magia.getNome() == NomeMagia.WATER){
                     endereco = "/images/Magias/NoCost/waterNoCost.png";
+                }else if(magia.getNome() == NomeMagia.HEAL){
+                    endereco = "/images/Magias/NoCost/healNoCost.png";
+                }else if(magia.getNome() == NomeMagia.RESTORE){
+                    endereco = "/images/Magias/NoCost/restoreNoCost.png";
+                }else if(magia.getNome() == NomeMagia.MAGIC){
+                    endereco = "/images/Magias/NoCost/magicNoCost.png";
                 }
                 Image magiaImg = new Image(endereco);
                 ImageView magiaIV = new ImageView(magiaImg);
@@ -523,7 +553,7 @@ public class CombateController {
         }
     }
 
-    private void atualizarBarraHp(Personagem personagem, Rectangle maxHp, Rectangle hp, boolean inimigo) {
+    public void atualizarBarraHp(Personagem personagem, Rectangle maxHp, Rectangle hp, boolean inimigo) {
         double proporcao = (double) personagem.getHpAtual() / personagem.getHpMaximo();
         double novaLargura = maxHp.getWidth() * proporcao;
 
@@ -536,7 +566,7 @@ public class CombateController {
             hp.setX(maxHp.getX());
         }
     }
-    private void atualizarBarraMana(Personagem personagem, Rectangle maxMana, Rectangle mana, Label manaQuant, boolean inimigo) {
+    public void atualizarBarraMana(Personagem personagem, Rectangle maxMana, Rectangle mana, Label manaQuant, boolean inimigo) {
         if(personagem.getManaAtual() <0){
             return;
         }
@@ -555,7 +585,7 @@ public class CombateController {
         int qnt = personagem.getManaAtual();
         manaQuant.setText(qnt < 10 ? "0" + qnt : String.valueOf(qnt));
     }
-    private void atualizarDebuffInimigo(){
+    public void atualizarDebuffInimigo(){
 
         if(enemyDebuffBox.getChildren().size()>0){
             enemyDebuffBox.getChildren().clear();
@@ -602,6 +632,56 @@ public class CombateController {
             animator.appear(pane,false);
         }
         inimigo.atualizarTempoBuffs();
+    }
+
+    public void atualizarBuffJogador(){
+        if(heroBuffBox.getChildren().size()>0){
+            heroBuffBox.getChildren().clear();
+        }
+
+        if(jogador.getBuffs().size() == 0 ){
+            return;
+        }
+        for(Buff buff : jogador.getBuffs()){
+            String endereco = "";
+            String poder = "";
+            String cor = "";
+            if(buff.getTipo() == TipoBuff.HEAL_BUFF){
+                jogador.restaurarHp();
+                atualizarBarraHp(jogador, heroMaxHp, heroHp, false);
+                endereco = "/images/Efeitos/buff/buffHeal.png";
+                poder = String.valueOf("+"+buff.getPoder());
+                cor = "#BF3737";
+                //
+            }else if(buff.getTipo() == TipoBuff.RESTORE_BUFF){
+                endereco = "/images/Efeitos/buff/buffRestore.png";
+                poder = String.valueOf("+"+buff.getPoder());
+                cor = "#268FA6";
+            }else if(buff.getTipo() == TipoBuff.MAGIC_BUFF){
+                createTrecho();
+                atualizarMagiasDisponiveis();
+                endereco = "/images/Efeitos/buff/buffMagic.png";
+                poder = String.valueOf("-"+buff.getPoder());
+                cor = "#4E3D87";
+
+            }
+            Image img = new Image(endereco);
+            ImageView imgV = new ImageView(img);
+
+            Text label = new Text();
+            label.setFont(new Font("Arial Black", 25));
+            label.setFill(Color.WHITE);
+            label.setStroke(Color.web(cor));
+            label.setStrokeWidth(1.5);
+            label.setText(poder);
+            label.setLayoutX(25);
+            label.setLayoutY(45);
+            Pane pane = new Pane(imgV,label);
+
+            heroBuffBox.getChildren().add(pane);
+            animator.appear(pane,false);
+        }
+        jogador.atualizarTempoBuffs();
     }
 
     private void ataqueInimigo(){
@@ -717,6 +797,10 @@ public class CombateController {
             int fireQuant = 0;
             int waterQuant = 0;
             int thunderQuant = 0;
+            int healQuant = 0;
+            int restoreQuant = 0;
+            int magicQuant = 0;
+
             for (Magia magia : laco.getMagias()) {
                 if(magia.getNome() == NomeMagia.FOGO){
                     fireQuant += 2;
@@ -724,6 +808,12 @@ public class CombateController {
                     waterQuant++;
                 }else if(magia.getNome() == NomeMagia.THUNDER){
                     thunderQuant++;
+                }else if(magia.getNome() == NomeMagia.HEAL){
+                    healQuant++;
+                }else if(magia.getNome() == NomeMagia.RESTORE){
+                    restoreQuant++;
+                }else if(magia.getNome() == NomeMagia.MAGIC){
+                    magicQuant++;
                 }
             }
             String mensagem = "";
@@ -741,6 +831,21 @@ public class CombateController {
                 Buff buff3 = new Buff(TipoBuff.THUNDER_DEBUFF,laco.getDuracao(),thunderQuant);
                 inimigo.addBuff(buff3);
                 mensagem += "Debuff [Thunder] diminui o dano do oponente.";
+            }
+            if(healQuant > 0){
+                Buff buff4 = new Buff(TipoBuff.HEAL_BUFF,laco.getDuracao(),healQuant*5);
+                jogador.addBuff(buff4);
+                mensagem += "Buff [Heal] restaura a vida do jogador.";
+            }
+            if(restoreQuant > 0){
+                Buff buff5 = new Buff(TipoBuff.RESTORE_BUFF,laco.getDuracao(),restoreQuant);
+                jogador.addBuff(buff5);
+                mensagem += "Buff [Restore] restaura a mana do jogador.";
+            }
+            if(magicQuant > 0){
+                Buff buff6 = new Buff(TipoBuff.MAGIC_BUFF,laco.getDuracao(),magicQuant);
+                jogador.addBuff(buff6);
+                mensagem += "Buff [Magic+] adiciona magias a loja.";
             }
             avisosText.setText(mensagem);
         }
