@@ -1,9 +1,6 @@
 package Classes.Personagem;
 
-import Classes.Feitico.LacoDeRepeticao;
-import Classes.Feitico.LacoFor;
-import Classes.Feitico.Magia;
-import Classes.Feitico.TrechoDeCodigo;
+import Classes.Feitico.*;
 import Classes.Personagem.Inimigo.Inimigo;
 
 public class Player extends Personagem {
@@ -44,6 +41,15 @@ public class Player extends Personagem {
 
     public void atacar(Inimigo inimigo, int dano){
         inimigo.tomarDano(dano);
+    }
+    public void atacarSuporte(Magia magia){
+        if(magia.getNome() == NomeMagia.HEAL){
+            hpAtual += magia.getPoder();
+            if (hpAtual > hpMaximo) hpAtual = hpMaximo;
+        }else if(magia.getNome() == NomeMagia.RESTORE){
+            manaAtual += magia.getPoder();
+            if(manaAtual > manaMaxima) manaAtual = manaMaxima;
+        }
     }
 
 

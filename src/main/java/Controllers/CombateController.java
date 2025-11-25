@@ -142,6 +142,12 @@ public class CombateController {
     private VBox heroBuffBox;
 
     @FXML
+    private Pane heroSelfDagamgeBox;
+
+    @FXML
+    private Pane heroSelfEfectsBox;
+
+    @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
         atualizarBarraHp(jogador,heroMaxHp,heroHp, false);
@@ -179,7 +185,7 @@ public class CombateController {
         Timeline timerToBuy = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             //10 por que precisa ter um ultimo lugar pra mostrar o contador e cada item são 2 itens.
             if(pause == false){
-                if(trechos.size() < 6){
+                if(trechos.size() <= 6){
                     if(buyTimer <= 5 && buyTimer != 0){
                         buyTimer -= 1;
                     }else{
@@ -187,10 +193,6 @@ public class CombateController {
                         atualizarMagiasDisponiveis();
                         buyTimer = 3;
                     }
-                }else{
-                    buyTimer = 3;
-                    trechos.remove(0);
-                    atualizarMagiasDisponiveis();
                 }
                 timerLabel.setText(String.valueOf(buyTimer));
             }
@@ -245,19 +247,23 @@ public class CombateController {
         Magia magia2 = new Magia(TipoMagia.ATAQUE,NomeMagia.WATER,2,6);
         Magia magia3 = new Magia(TipoMagia.ATAQUE,NomeMagia.THUNDER,2,6);
         Magia magia4 = new Magia(TipoMagia.SUPORTE,NomeMagia.HEAL,2,3);
-        Magia magia5 = new Magia(TipoMagia.SUPORTE,NomeMagia.RESTORE,2,3);
+        Magia magia5 = new Magia(TipoMagia.SUPORTE,NomeMagia.RESTORE,2,1);
         Magia magia6 = new Magia(TipoMagia.SUPORTE,NomeMagia.MAGIC,2,3);
 
 
-      //  trechos.add(laco1);
-        trechos.add(laco2);
+        trechos.add(laco1);
+       // trechos.add(laco2);
         trechos.add(magia4);
         trechos.add(magia5);
-        trechos.add(magia6);
         trechos.add(magia);
+        trechos.add(magia2);
 
     }
     public void createTrecho(){
+
+        if(trechos.size() ==6){
+            trechos.remove(0);
+        }
 
         Random random = new Random();
         int sorteado = random.nextInt(3) + 1;
@@ -323,7 +329,7 @@ public class CombateController {
             case 4 : Magia heal = new Magia(TipoMagia.SUPORTE,NomeMagia.HEAL,2,3);
                 trechos.add(heal);
                 return;
-            case 5 : Magia restore = new Magia(TipoMagia.SUPORTE,NomeMagia.RESTORE,2,3);
+            case 5 : Magia restore = new Magia(TipoMagia.SUPORTE,NomeMagia.RESTORE,2,1);
                 trechos.add(restore);
                 return;
             case 6 : Magia magic = new Magia(TipoMagia.SUPORTE,NomeMagia.MAGIC,2,3);
@@ -658,10 +664,13 @@ public class CombateController {
                 poder = String.valueOf("+"+buff.getPoder());
                 cor = "#268FA6";
             }else if(buff.getTipo() == TipoBuff.MAGIC_BUFF){
-                createTrecho();
+                for(int i = 0; i < buff.getPoder();i++){
+                    createTrecho();
+                }
                 atualizarMagiasDisponiveis();
+
                 endereco = "/images/Efeitos/buff/buffMagic.png";
-                poder = String.valueOf("-"+buff.getPoder());
+                poder = String.valueOf("+"+buff.getPoder());
                 cor = "#4E3D87";
 
             }
@@ -735,6 +744,8 @@ public class CombateController {
         SequentialTransition sequencial = new SequentialTransition();
         double posX = 50;
         double posY = 50;
+        double posXS = 50;
+        double posYS = 50;
         int totalDamage = 0;
 
         Label label = new Label();
@@ -756,13 +767,15 @@ public class CombateController {
                 for (Magia magia : ((LacoFor) laco).getMagias()) {
                     double pposX = posX;
                     double pposY =posY;
+                    double pposXS = posXS;
+                    double pposYS =posYS;
                     totalDamage += magia.getPoder();
                     int curentDamage = totalDamage;
 
                     if (magia.getTipo() == TipoMagia.ATAQUE) {
                         PauseTransition ataquePause = new PauseTransition(Duration.millis(100));
                         ataquePause.setOnFinished(e -> {
-                            criarEfeito(magia, "FOR", pposX, pposY, label);
+                            criarEfeitoFor(magia, pposX, pposY, label);
 
                             jogador.atacar(inimigo, magia.getPoder());
 
@@ -775,17 +788,44 @@ public class CombateController {
                             atualizarBarraHp(inimigo, enemyMaxHp, enemyHp, true);
                         });
                         sequencial.getChildren().add(ataquePause);
+                        posX +=50;
+                        posY +=50;
+
+                    }else if (magia.getTipo() == TipoMagia.SUPORTE) {
+                        PauseTransition ataquePause = new PauseTransition(Duration.millis(100));
+                        ataquePause.setOnFinished(e -> {
+                            criarEfeitoFor(magia, pposXS, pposYS, label);
+
+                            if(magia.getNome()== NomeMagia.HEAL){
+                                jogador.atacarSuporte(magia);
+                                atualizarBarraHp(jogador, heroMaxHp, heroHp, false);
+
+                            }else if(magia.getNome()== NomeMagia.RESTORE){
+
+                                jogador.atacarSuporte(magia);
+                                atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant,false);
+                            }else if(magia.getNome()== NomeMagia.MAGIC){
+                                createTrecho();
+                                atualizarMagiasDisponiveis();
+                            }
+                        });
+                        sequencial.getChildren().add(ataquePause);
+                        posXS +=50;
+                        posYS +=50;
                     }
-                    posX +=50;
-                    posY +=50;
+
                 }
                 PauseTransition ataquePause = new PauseTransition(Duration.millis(300));
                 ataquePause.setOnFinished(e -> {
                     enemyEfeictsBox.getChildren().clear();
+                    heroSelfEfectsBox.getChildren().clear();
+
                 });
                 sequencial.getChildren().add(ataquePause);
                 posX = 50;
                 posY = 50;
+                posXS =50;
+                posYS =50;
             }
             sequencial.play();
             sequencial.setOnFinished(e->{
@@ -857,34 +897,57 @@ public class CombateController {
         lacoAtualText2.setVisible(false);
         atualizarMagiaJogador();
     }
-    public void criarEfeito(Magia magia, String laco, double posX, double posY, Label label){
-        if(magia.getNome() == NomeMagia.FOGO){
-            label.setTextFill(Color.web("#FF5733"));
-            if(laco.equals("FOR")){
-                Image img = new Image(getClass().getResource("/images/Efeitos/magiaFogoFor.png").toExternalForm());
-               ImageView imgV = new ImageView(img);
+    public void criarEfeitoFor(Magia magia, double posX, double posY, Label label){
 
-               enemyEfeictsBox.getChildren().add(imgV);
+        if(magia.getTipo() == TipoMagia.ATAQUE){
+
+            if(magia.getNome() == NomeMagia.FOGO){
+                label.setTextFill(Color.web("#FF5733"));
+                Image img = new Image(getClass().getResource("/images/Efeitos/magiaFogoFor.png").toExternalForm());
+                ImageView imgV = new ImageView(img);
+
+                enemyEfeictsBox.getChildren().add(imgV);
                 imgV.setLayoutX(imgV.getLayoutX() + posX);
                 imgV.setLayoutY(imgV.getLayoutY() + posY);
-            }
-        }else if(magia.getNome() == NomeMagia.THUNDER) {
-            label.setTextFill(Color.web("#a548d8"));
-            if (laco.equals("FOR")) {
+
+            }else if(magia.getNome() == NomeMagia.THUNDER) {
+                label.setTextFill(Color.web("#a548d8"));
                 Image img = new Image(getClass().getResource("/images/Efeitos/magiaThunderFor.png").toExternalForm());
                 ImageView imgV = new ImageView(img);
 
                 enemyEfeictsBox.getChildren().add(imgV);
                 imgV.setLayoutX(imgV.getLayoutX() + posX);
                 imgV.setLayoutY(imgV.getLayoutY() + posY);
-            }
-        }else if(magia.getNome() == NomeMagia.WATER) {
-            label.setTextFill(Color.web("#1188ea"));
-            if (laco.equals("FOR")) {
+
+            }else if(magia.getNome() == NomeMagia.WATER) {
+                label.setTextFill(Color.web("#1188ea"));
                 Image img = new Image(getClass().getResource("/images/Efeitos/magiaWaterFor.png").toExternalForm());
                 ImageView imgV = new ImageView(img);
 
                 enemyEfeictsBox.getChildren().add(imgV);
+                imgV.setLayoutX(imgV.getLayoutX() + posX);
+                imgV.setLayoutY(imgV.getLayoutY() + posY);
+            }
+        }else{
+            if(magia.getNome() == NomeMagia.RESTORE){
+                label.setTextFill(Color.web("#FF5733"));
+                    Image img = new Image(getClass().getResource("/images/Efeitos/magiaRestoreFor.png").toExternalForm());
+                    ImageView imgV = new ImageView(img);
+                    heroSelfEfectsBox.getChildren().add(imgV);
+                    imgV.setLayoutX(imgV.getLayoutX() + posX);
+                    imgV.setLayoutY(imgV.getLayoutY() + posY);
+            }else if(magia.getNome() == NomeMagia.HEAL){
+                label.setTextFill(Color.web("#FF5733"));
+                Image img = new Image(getClass().getResource("/images/Efeitos/magiaHealFor.png").toExternalForm());
+                ImageView imgV = new ImageView(img);
+                heroSelfEfectsBox.getChildren().add(imgV);
+                imgV.setLayoutX(imgV.getLayoutX() + posX);
+                imgV.setLayoutY(imgV.getLayoutY() + posY);
+            }else if(magia.getNome() == NomeMagia.MAGIC){
+                label.setTextFill(Color.web("#FF5733"));
+                Image img = new Image(getClass().getResource("/images/Efeitos/magiaMagicFor.png").toExternalForm());
+                ImageView imgV = new ImageView(img);
+                heroSelfEfectsBox.getChildren().add(imgV);
                 imgV.setLayoutX(imgV.getLayoutX() + posX);
                 imgV.setLayoutY(imgV.getLayoutY() + posY);
             }
