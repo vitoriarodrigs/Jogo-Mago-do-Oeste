@@ -107,6 +107,8 @@ public class Animator {
            return "#2DA8BA";
        }else if(nome == NomeMagia.FOGO){
            return "#FF5733";
+       }else if(nome == NomeMagia.THUNDER){
+           return "#a548d8";
        }else{
            return "#FFFFFF";
        }
@@ -206,6 +208,85 @@ public class Animator {
             slideToDown(label,damage);
             pane.getChildren().clear();
             onFinish.run();
+        });
+
+    }
+    public void enemyAttackHits(Node node, Pane pane, Pane damage, NomeMagia elemento,Label label,int quant,int poder, Runnable onFinish){
+
+        label.setTextFill(Color.web(enemyElementColor(elemento)));
+
+        if(poder <10){
+            label.setText("0"+String.valueOf(poder));
+        }else{
+            label.setText(String.valueOf(poder));
+        }
+        label.setOpacity(1);
+        node.setOpacity(0);
+        pane.getChildren().add(node);
+        damage.getChildren().add(label);
+        SequentialTransition full = new SequentialTransition();
+
+        for(int i = 0; i < quant; i++){
+            int danoAtual = poder * (i + 1);
+            ImageView golpe = new ImageView(((ImageView) node).getImage());
+            golpe.setFitWidth(((ImageView) node).getFitWidth());
+            golpe.setFitHeight(((ImageView) node).getFitHeight());
+            golpe.setOpacity(0);
+            pane.getChildren().add(golpe);
+
+            int dir = i % 4; // alterna entre 0,1,2,3
+
+            switch (dir) {
+                case 0: golpe.setLayoutY(-20);
+                        golpe.setLayoutX(60);
+                        break;
+                case 1: golpe.setLayoutX(160);
+                        golpe.setLayoutY(20);
+                        break;
+                case 2: golpe.setLayoutY(90);
+                        golpe.setLayoutX(50);
+                        break;
+                case 3: golpe.setLayoutX(-40);
+                       golpe.setLayoutY(20);
+                        break;
+            }
+            // estado inicial
+            node.setScaleX(1.5);
+            node.setScaleY(1.5);
+
+            // Fade IN
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(300), golpe);
+            fadeIn.setFromValue(0.0);
+            fadeIn.setToValue(1.0);
+
+            // Scale para voltar ao tamanho normal
+            ScaleTransition scale = new ScaleTransition(Duration.millis(300), golpe);
+            scale.setFromX(1.5);
+            scale.setFromY(1.5);
+            scale.setToX(1.0);
+            scale.setToY(1.0);
+
+            // Animações simultâneas do início
+            ParallelTransition appear = new ParallelTransition(fadeIn, scale);
+            appear.setOnFinished(e->{
+                if(danoAtual< 10 ){
+                    label.setText("0"+String.valueOf(danoAtual));
+                }else{
+                    label.setText(String.valueOf(danoAtual));
+                }
+            });
+            PauseTransition pause = new PauseTransition(Duration.millis(500));
+            pause.setOnFinished(e->{
+                onFinish.run();
+                golpe.setOpacity(0);
+            });
+            full.getChildren().addAll(appear,pause);
+        }
+
+        full.play();
+        full.setOnFinished(e->{
+            slideToDown(label,damage);
+            pane.getChildren().clear();
         });
 
     }

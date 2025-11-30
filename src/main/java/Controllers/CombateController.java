@@ -148,6 +148,9 @@ public class CombateController {
     private Pane heroSelfEfectsBox;
 
     @FXML
+    private ImageView combateBg;
+
+    @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
         atualizarBarraHp(jogador,heroMaxHp,heroHp, false);
@@ -156,6 +159,8 @@ public class CombateController {
         loadMagias();
         atualizarMagiasDisponiveis();
         avisosText.setText("compre um laço de repetição.");
+        Image img = new Image(inimigo.getCenarioSprite());
+        combateBg.setImage(img);
         iniciar();
 
         // Timeline para restaurar 1 ponto de mana a cada 1 segundo
@@ -728,6 +733,11 @@ public class CombateController {
                 }else if(inimigo.getModoDeAtaque() == ModoAtaque.DIAGONAL_ESQUERDA){
                     animator.enemyAttackSlideToDiagonalLeft
                             (imgView,heroEfeictsBox, heroDamageBox, inimigo.getElemento(),label,() -> aplicarDanoInimigo());
+                }else if(inimigo.getModoDeAtaque() == ModoAtaque.HITS){
+                    Random random = new Random();
+                    int quant = random.nextInt(5)+1;
+                    animator.enemyAttackHits
+                            (imgView,heroEfeictsBox, heroDamageBox, inimigo.getElemento(),label,quant,inimigo.getDanoDoAtaque(),() -> aplicarDanoInimigo());
                 }
 
         }

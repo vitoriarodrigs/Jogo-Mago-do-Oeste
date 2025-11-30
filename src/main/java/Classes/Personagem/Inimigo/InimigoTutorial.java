@@ -14,6 +14,7 @@ public class InimigoTutorial extends Inimigo{
         this.lancarMagiaSprite="/images/Efeitos/lancarMagiaTutorial.png";
         this.magiaFracaSprite = "/images/Efeitos/magiaGeloPequena.png";
         this.magiaForteSprite = "/images/Efeitos/magiaGeloGrande.png";
+        this.cenarioSprite = "/images/Backgrounds/fundoTutorial.png";
         this.elemento = NomeMagia.GELO;
     }
     @Override

@@ -90,6 +90,7 @@ public abstract class Personagem {
 
         buffs.removeAll(remover);
     }
+
     public int getPoderHeal(){
         int buffHeal = 0;
         for(Buff buff : buffs){

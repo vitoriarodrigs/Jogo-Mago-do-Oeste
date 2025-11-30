@@ -17,6 +17,7 @@ public abstract class Inimigo extends Personagem {
     protected String lancarMagiaSprite;
     protected String magiaFracaSprite;
     protected String magiaForteSprite;
+    protected String cenarioSprite;
     protected TipoAtaque ataqueEscolhido;
     protected int danoDoAtaque;
     protected ModoAtaque modoDeAtaque;
@@ -28,8 +29,9 @@ public abstract class Inimigo extends Personagem {
         this.colldownDeAtaque = colldownDeAtaque;
         this.sprite = "";
         this.lancarMagiaSprite = "";
+        this.magiaFracaSprite = "";
         this.magiaForteSprite = "";
-        this.magiaForteSprite = "";
+        this.cenarioSprite = "";
         this.ataqueEscolhido = null;
         this.modoDeAtaque = null;
         this.precoDoAtaque = 10;
@@ -59,6 +61,10 @@ public abstract class Inimigo extends Personagem {
 
     public String getMagiaForteSprite() {
         return magiaForteSprite;
+    }
+
+    public String getCenarioSprite() {
+        return cenarioSprite;
     }
 
     public TipoAtaque getAtaqueEscolhido() {
