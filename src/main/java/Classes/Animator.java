@@ -1,6 +1,7 @@
 package Classes;
 
 import Classes.Feitico.NomeMagia;
+import Classes.Personagem.Inimigo.Inimigo;
 import javafx.animation.*;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -8,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class Animator {
@@ -43,6 +45,15 @@ public class Animator {
         });
 
         sequencial.play();
+    }
+    public void startComMensagem(Text text, Runnable onFinish) {
+
+        PauseTransition pause = new PauseTransition(Duration.millis(5000));
+        pause.setOnFinished(e->{
+            text.setText("");
+            onFinish.run();
+        });
+        pause.play();
     }
 
     public void slideToDown(Node node, Pane pane) {
@@ -211,7 +222,7 @@ public class Animator {
         });
 
     }
-    public void enemyAttackHits(Node node, Pane pane, Pane damage, NomeMagia elemento,Label label,int quant,int poder, Runnable onFinish){
+    public void enemyAttackHits(Inimigo inimigo, Node node, Pane pane, Pane damage, NomeMagia elemento, Label label, int quant, int poder, Runnable onFinish){
 
         label.setTextFill(Color.web(enemyElementColor(elemento)));
 
@@ -287,6 +298,7 @@ public class Animator {
         full.setOnFinished(e->{
             slideToDown(label,damage);
             pane.getChildren().clear();
+            inimigo.setAtacando(false);
         });
 
     }

@@ -7,6 +7,9 @@ import java.util.Random;
 
 public class InimigoEletrico extends Inimigo{
 
+    private int escudoEletricoMaximo;
+    private int escudoEletricoAtual;
+
     public InimigoEletrico(int hpMaximo, int manaMaxima, int colldownDeAtaque) {
         super(hpMaximo, manaMaxima, colldownDeAtaque);
         this.sprite = "/images/Personagens/magoEletrico.png";
@@ -15,7 +18,24 @@ public class InimigoEletrico extends Inimigo{
         this.magiaForteSprite = "/images/Efeitos/ataqueEletricoForte.png";
         this.cenarioSprite = "/images/Backgrounds/backgroundMagoEletrico.jpg";
         this.elemento = NomeMagia.THUNDER;
+        this.escudoEletricoMaximo = 25;
+        this.escudoEletricoAtual = escudoEletricoMaximo;
+        this.infoEstrategia = "Ataque várias vezes para quebrar o escudo do oponente";
+
     }
+
+    public int getEscudoEletricoAtual() {
+        return escudoEletricoAtual;
+    }
+
+    public void setEscudoEletricoAtual(int escudoEletricoAtual) {
+        this.escudoEletricoAtual = escudoEletricoAtual;
+    }
+
+    public int getEscudoEletricoMaximo() {
+        return escudoEletricoMaximo;
+    }
+
     @Override
     public void definirAtaque(){
         escolher();
@@ -58,7 +78,7 @@ public class InimigoEletrico extends Inimigo{
     }
 
     public void ataqueFraco(Player jogador){
-        setColldownDeAtaque(5 + getPoderWater());
+        //setColldownDeAtaque(5 + getPoderWater());
         if(2 - getPoderThunder() > 0){
             jogador.tomarDano(2 - getPoderThunder());
         }else{
@@ -66,11 +86,26 @@ public class InimigoEletrico extends Inimigo{
         }
     }
     public void ataqueForte(Player jogador){
-        setColldownDeAtaque(5 + getPoderWater());
+        //setColldownDeAtaque(5 + getPoderWater());
         if(4 - getPoderThunder() > 0){
             jogador.tomarDano(4 - getPoderThunder());
         }else{
             jogador.tomarDano(0);
         }
     }
+    @Override
+    public void tomarDano(int dano){
+        if(escudoEletricoAtual > 0){
+            escudoEletricoAtual --;
+            return;
+        }
+        if(escudoEletricoAtual == 0){
+            if(hpAtual - dano > 0){
+                hpAtual -= dano;
+            }else{
+                hpAtual = 0;
+            }
+        }
+    }
+
 }

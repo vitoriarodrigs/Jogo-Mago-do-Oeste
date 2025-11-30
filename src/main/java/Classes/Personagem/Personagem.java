@@ -91,6 +91,24 @@ public abstract class Personagem {
         buffs.removeAll(remover);
     }
 
+    public int getPoderBuff(TipoBuff tipo){
+        int poderBuff = 0;
+        for(Buff buff : buffs){
+            if(buff.getTipo() == tipo){
+                poderBuff += buff.getPoder();
+            }
+        }
+        return poderBuff;
+    }
+    public int getQuantBuff(TipoBuff tipo){
+        int quantBuff = 0;
+        for(Buff buff : buffs){
+            if(buff.getTipo() == tipo){
+                quantBuff ++;
+            }
+        }
+        return quantBuff;
+    }
     public int getPoderHeal(){
         int buffHeal = 0;
         for(Buff buff : buffs){

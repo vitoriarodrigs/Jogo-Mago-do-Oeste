@@ -23,6 +23,9 @@ public abstract class Inimigo extends Personagem {
     protected ModoAtaque modoDeAtaque;
     protected int precoDoAtaque;
     protected NomeMagia elemento;
+    protected int colldownAtual;
+    protected boolean atacando;
+    protected String infoEstrategia;
 
     public Inimigo(int hpMaximo, int manaMaxima, int colldownDeAtaque) {
         super(hpMaximo, manaMaxima);
@@ -37,6 +40,9 @@ public abstract class Inimigo extends Personagem {
         this.precoDoAtaque = 10;
         this.elemento = null;
         this.danoDoAtaque = 0;
+        this.colldownAtual = colldownDeAtaque;
+        this.atacando = false;
+        this.infoEstrategia = "";
     }
 
     public String getSprite() {
@@ -65,6 +71,33 @@ public abstract class Inimigo extends Personagem {
 
     public String getCenarioSprite() {
         return cenarioSprite;
+    }
+    public int getColldownAtual() {
+        return colldownAtual;
+    }
+
+    public String getInfoEstrategia() {
+        return infoEstrategia;
+    }
+
+    public boolean isAtacando() {
+        return atacando;
+    }
+
+    public void setAtacando(boolean atacando) {
+        this.atacando = atacando;
+    }
+
+    public void atualizarCowldown(){
+        if(colldownAtual == 0){
+            colldownAtual = colldownDeAtaque + getPoderBuff(TipoBuff.WATER_DEBUFF);
+        }
+        if(atacando == true){
+            return;
+        }
+        if(colldownAtual >0){
+            colldownAtual -=1;
+        }
     }
 
     public TipoAtaque getAtaqueEscolhido() {

@@ -272,5 +272,16 @@
             <Font name="Arial Bold" size="96.0" />
          </font>
       </Label>
+      <Rectangle fx:id="enemyShield" arcHeight="15.0" arcWidth="15.0" fill="DODGERBLUE" height="17.0" layoutX="965.0" layoutY="89.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="239.0" />
+      <Rectangle fx:id="enemyShieldMax" arcHeight="15.0" arcWidth="15.0" fill="DODGERBLUE" height="17.0" layoutX="975.0" layoutY="99.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="239.0" />
+      <TextFlow layoutX="445.0" layoutY="102.0" prefHeight="291.0" prefWidth="444.0" textAlignment="CENTER">
+         <children>
+            <Text fx:id="estrategiaText" fill="#f5a645" strokeType="OUTSIDE" strokeWidth="0.0">
+               <font>
+                  <Font name="Arial" size="33.0" />
+               </font>
+            </Text>
+         </children>
+      </TextFlow>
    </children>
 </Pane>

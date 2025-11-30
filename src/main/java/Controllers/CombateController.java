@@ -5,6 +5,7 @@ import Classes.Feitico.*;
 import Classes.Jogo;
 import Classes.Personagem.Buff;
 import Classes.Personagem.Inimigo.Inimigo;
+import Classes.Personagem.Inimigo.InimigoEletrico;
 import Classes.Personagem.Inimigo.ModoAtaque;
 import Classes.Personagem.Inimigo.TipoAtaque;
 import Classes.Personagem.Personagem;
@@ -59,6 +60,11 @@ public class CombateController {
 
     @FXML
     private Rectangle enemyMaxMana;
+
+    @FXML
+    private Rectangle enemyShield;
+    @FXML
+    private Rectangle enemyShieldMax;
 
     @FXML
     private ImageView enemySprite;
@@ -119,6 +125,8 @@ public class CombateController {
 
     @FXML
     private Text avisosText;
+    @FXML
+    private Text estrategiaText;
 
     @FXML
     private ImageView heroMagiaImg;
@@ -161,10 +169,19 @@ public class CombateController {
         avisosText.setText("compre um laço de repetição.");
         Image img = new Image(inimigo.getCenarioSprite());
         combateBg.setImage(img);
-        iniciar();
+
+        if(inimigo instanceof InimigoEletrico){
+            enemyShield.setOpacity(1);
+            enemyShield.setFill(Color.web("#a548d8"));
+        }
+        if(!inimigo.getInfoEstrategia().equals("")){
+            iniciarComMensagem();
+        }else{
+            iniciar();
+        }
 
         // Timeline para restaurar 1 ponto de mana a cada 1 segundo
-        Timeline manaRegen = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+        Timeline time = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             verificarTerminar();
             if(pause == false){
                 jogador.restaurarMana(1);
@@ -174,18 +191,16 @@ public class CombateController {
                 atualizarBarraMana(inimigo, enemyMaxMana, enemyMana, enemyManaQuant, true);
                 atualizarDebuffInimigo();
                 atualizarBuffJogador();
-            }
-        }));
-        manaRegen.setCycleCount(Timeline.INDEFINITE); // roda para sempre
-        manaRegen.play();
 
-        Timeline enemyColldown = new Timeline(new KeyFrame(Duration.seconds(inimigo.getColldownDeAtaque()), event -> {
-            if(pause == false) {
-                ataqueInimigo();
+                inimigo.atualizarCowldown();
+                if(inimigo.getColldownAtual() == 0){
+                    inimigo.setAtacando(true);
+                    ataqueInimigo();
+                }
             }
         }));
-        enemyColldown.setCycleCount(Timeline.INDEFINITE); // roda para sempre
-        enemyColldown.play();
+        time.setCycleCount(Timeline.INDEFINITE); // roda para sempre
+        time.play();
 
         Timeline timerToBuy = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             //10 por que precisa ter um ultimo lugar pra mostrar o contador e cada item são 2 itens.
@@ -215,9 +230,17 @@ public class CombateController {
 
     public void iniciar(){
 
-       // fundoEscuro.setOpacity(1);
-       // animator.start(timerInicial,textoCentro,imagemCentro,()->removerFundo());
-        removerFundo();
+        //fundoEscuro.setOpacity(1);
+        animator.start(timerInicial,textoCentro,imagemCentro,()->removerFundo());
+       // removerFundo();
+    }
+    public void iniciarComMensagem(){
+        fundoEscuro.setOpacity(1);
+        estrategiaText.setStroke(Color.BLACK);
+        estrategiaText.setStrokeWidth(2);
+        estrategiaText.setText(inimigo.getInfoEstrategia());
+        animator.startComMensagem(estrategiaText,()->iniciar());
+
     }
     public void removerFundo(){
         fundoEscuro.setOpacity(0);
@@ -256,10 +279,10 @@ public class CombateController {
         Magia magia6 = new Magia(TipoMagia.SUPORTE,NomeMagia.MAGIC,2,3);
 
 
-        trechos.add(laco1);
+        trechos.add(laco2);
        // trechos.add(laco2);
-        trechos.add(magia4);
-        trechos.add(magia5);
+        trechos.add(magia2);
+        trechos.add(magia2);
         trechos.add(magia);
         trechos.add(magia2);
 
@@ -596,6 +619,17 @@ public class CombateController {
         int qnt = personagem.getManaAtual();
         manaQuant.setText(qnt < 10 ? "0" + qnt : String.valueOf(qnt));
     }
+    public void atualizarEscudoinimigo(){
+       if( inimigo instanceof InimigoEletrico){
+           double proporcao = (double) ((InimigoEletrico)inimigo).getEscudoEletricoAtual()/((InimigoEletrico)inimigo).getEscudoEletricoMaximo();
+           double novaLargura = enemyShieldMax.getWidth() *proporcao;
+
+           enemyShield.setWidth(novaLargura);
+
+           double direita = enemyShieldMax.getX() + enemyShieldMax.getWidth();
+           enemyShield.setX(direita - novaLargura);
+       }
+    }
     public void atualizarDebuffInimigo(){
 
         if(enemyDebuffBox.getChildren().size()>0){
@@ -615,6 +649,9 @@ public class CombateController {
                 poder = String.valueOf("+"+buff.getPoder());
                 cor = "#BF3737";
                 atualizarBarraHp(inimigo, enemyMaxHp, enemyHp, true);
+                if(inimigo instanceof InimigoEletrico){
+                    atualizarEscudoinimigo();
+                }
             }else if(buff.getTipo() == TipoBuff.WATER_DEBUFF){
                 endereco = "/images/Efeitos/Debuff/debuffWater.png";
                 poder = String.valueOf("+"+buff.getPoder());
@@ -729,22 +766,25 @@ public class CombateController {
 
                 if(inimigo.getModoDeAtaque() == ModoAtaque.HORIZONTAL_ESQUERDA){
                     animator.enemyAttackSlideLeft
-                            (imgView,heroEfeictsBox, heroDamageBox, inimigo.getElemento(),label,() -> aplicarDanoInimigo());
+                            (imgView,heroEfeictsBox, heroDamageBox, inimigo.getElemento(),label,() -> aplicarDanoInimigo(true));
                 }else if(inimigo.getModoDeAtaque() == ModoAtaque.DIAGONAL_ESQUERDA){
                     animator.enemyAttackSlideToDiagonalLeft
-                            (imgView,heroEfeictsBox, heroDamageBox, inimigo.getElemento(),label,() -> aplicarDanoInimigo());
+                            (imgView,heroEfeictsBox, heroDamageBox, inimigo.getElemento(),label,() -> aplicarDanoInimigo(true));
                 }else if(inimigo.getModoDeAtaque() == ModoAtaque.HITS){
                     Random random = new Random();
                     int quant = random.nextInt(5)+1;
                     animator.enemyAttackHits
-                            (imgView,heroEfeictsBox, heroDamageBox, inimigo.getElemento(),label,quant,inimigo.getDanoDoAtaque(),() -> aplicarDanoInimigo());
+                            (inimigo, imgView,heroEfeictsBox, heroDamageBox, inimigo.getElemento(),label,quant,inimigo.getDanoDoAtaque(),() -> aplicarDanoInimigo(false));
                 }
 
         }
     }
-    private void aplicarDanoInimigo() {
+    private void aplicarDanoInimigo(boolean fimAtaque) {
         inimigo.atacar(jogador);
         atualizarBarraHp(jogador, heroMaxHp, heroHp, false);
+        if(fimAtaque){
+            inimigo.setAtacando(false);
+        }
     }
 
     @FXML
@@ -796,6 +836,9 @@ public class CombateController {
                             }
 
                             atualizarBarraHp(inimigo, enemyMaxHp, enemyHp, true);
+                            if(inimigo instanceof InimigoEletrico){
+                                atualizarEscudoinimigo();
+                            }
                         });
                         sequencial.getChildren().add(ataquePause);
                         posX +=50;
