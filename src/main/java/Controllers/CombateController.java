@@ -159,6 +159,9 @@ public class CombateController {
     private ImageView combateBg;
 
     @FXML
+    private ImageView lojaBuffMagic;
+
+    @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
         atualizarBarraHp(jogador,heroMaxHp,heroHp, false);
@@ -175,7 +178,8 @@ public class CombateController {
             enemyShield.setFill(Color.web("#a548d8"));
         }
         if(!inimigo.getInfoEstrategia().equals("")){
-            iniciarComMensagem();
+            //iniciarComMensagem();
+            iniciar();
         }else{
             iniciar();
         }
@@ -231,8 +235,8 @@ public class CombateController {
     public void iniciar(){
 
         //fundoEscuro.setOpacity(1);
-        animator.start(timerInicial,textoCentro,imagemCentro,()->removerFundo());
-       // removerFundo();
+       // animator.start(timerInicial,textoCentro,imagemCentro,()->removerFundo());
+        removerFundo();
     }
     public void iniciarComMensagem(){
         fundoEscuro.setOpacity(1);
@@ -281,9 +285,9 @@ public class CombateController {
 
         trechos.add(laco2);
        // trechos.add(laco2);
-        trechos.add(magia2);
-        trechos.add(magia2);
-        trechos.add(magia);
+        trechos.add(magia4);
+        trechos.add(magia5);
+        trechos.add(magia6);
         trechos.add(magia2);
 
     }
@@ -686,6 +690,11 @@ public class CombateController {
         if(heroBuffBox.getChildren().size()>0){
             heroBuffBox.getChildren().clear();
         }
+        if(jogador.getQuantBuff(TipoBuff.MAGIC_BUFF) >0){
+            lojaBuffMagic.setVisible(true);
+        }else{
+            lojaBuffMagic.setVisible(false);
+        }
 
         if(jogador.getBuffs().size() == 0 ){
             return;
@@ -699,21 +708,23 @@ public class CombateController {
                 atualizarBarraHp(jogador, heroMaxHp, heroHp, false);
                 endereco = "/images/Efeitos/buff/buffHeal.png";
                 poder = String.valueOf("+"+buff.getPoder());
-                cor = "#BF3737";
+                cor = "#59b886";
                 //
             }else if(buff.getTipo() == TipoBuff.RESTORE_BUFF){
                 endereco = "/images/Efeitos/buff/buffRestore.png";
                 poder = String.valueOf("+"+buff.getPoder());
-                cor = "#268FA6";
+                cor = "#a242d7";
             }else if(buff.getTipo() == TipoBuff.MAGIC_BUFF){
                 for(int i = 0; i < buff.getPoder();i++){
-                    createTrecho();
+                   if(trechos.size() < 6){
+                       createTrecho();
+                   }
                 }
                 atualizarMagiasDisponiveis();
 
                 endereco = "/images/Efeitos/buff/buffMagic.png";
                 poder = String.valueOf("+"+buff.getPoder());
-                cor = "#4E3D87";
+                cor = "#445b8e";
 
             }
             Image img = new Image(endereco);
@@ -829,16 +840,29 @@ public class CombateController {
 
                             jogador.atacar(inimigo, magia.getPoder());
 
-                            if(curentDamage < 10){
-                                label.setText("0"+curentDamage);
+                            if(inimigo instanceof InimigoEletrico){
+                                if(((InimigoEletrico) inimigo).getEscudoEletricoAtual() >0){
+                                    label.setTextFill(Color.web("#a548d8"));
+                                    label.setText("-1");
+
+                                }else{
+                                    if(curentDamage < 10){
+                                        label.setText("0"+curentDamage);
+                                    }else{
+                                        label.setText(String.valueOf(curentDamage));
+                                    }
+                                }
+                                atualizarEscudoinimigo();
                             }else{
-                                label.setText(String.valueOf(curentDamage));
+                                if(curentDamage < 10){
+                                    label.setText("0"+curentDamage);
+                                }else{
+                                    label.setText(String.valueOf(curentDamage));
+                                }
                             }
 
                             atualizarBarraHp(inimigo, enemyMaxHp, enemyHp, true);
-                            if(inimigo instanceof InimigoEletrico){
-                                atualizarEscudoinimigo();
-                            }
+
                         });
                         sequencial.getChildren().add(ataquePause);
                         posX +=50;
@@ -858,8 +882,10 @@ public class CombateController {
                                 jogador.atacarSuporte(magia);
                                 atualizarBarraMana(jogador,heroMaxMana,heroMana,heroManaQuant,false);
                             }else if(magia.getNome()== NomeMagia.MAGIC){
-                                createTrecho();
-                                atualizarMagiasDisponiveis();
+                                if(trechos.size() < 6){
+                                    createTrecho();
+                                    atualizarMagiasDisponiveis();
+                                }
                             }
                         });
                         sequencial.getChildren().add(ataquePause);
@@ -938,7 +964,7 @@ public class CombateController {
             if(magicQuant > 0){
                 Buff buff6 = new Buff(TipoBuff.MAGIC_BUFF,laco.getDuracao(),magicQuant);
                 jogador.addBuff(buff6);
-                mensagem += "Buff [Magic+] adiciona magias a loja.";
+                mensagem += "Buff [Magic+] adiciona magias a loja se não estiver cheia.";
             }
             avisosText.setText(mensagem);
         }
