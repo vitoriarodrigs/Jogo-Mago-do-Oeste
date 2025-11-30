@@ -21,7 +21,7 @@ public class Jogo {
         this.jogador = new Player(100,10);
         this.inimigos = new ArrayList<>();
         this.inimigos.add(new InimigoTutorial(200,10,5));
-        this.inimigos.add(new InimigoEletrico(200,10,5));
+        this.inimigos.add(new InimigoEletrico(170,10,5));
         pergaminhos = new boolean[]{
                 false,false,false,false
         };

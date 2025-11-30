@@ -40,7 +40,8 @@ public class CombateController {
     private int buyTimer = 3;
     private boolean pause = true;
     private int timerInicial = 3;
-
+    private boolean sorteouPity = false;
+    private int healPity = 0;
 
 
     @FXML
@@ -283,12 +284,16 @@ public class CombateController {
         Magia magia6 = new Magia(TipoMagia.SUPORTE,NomeMagia.MAGIC,2,3);
 
 
-        trechos.add(laco2);
+        //trechos.add(laco2);
        // trechos.add(laco2);
-        trechos.add(magia4);
-        trechos.add(magia5);
-        trechos.add(magia6);
-        trechos.add(magia2);
+       // trechos.add(magia4);
+       // trechos.add(magia5);
+       // trechos.add(magia6);
+       // trechos.add(magia2);
+
+        createLaco();
+        createTrecho();
+        createTrecho();
 
     }
     public void createTrecho(){
@@ -298,30 +303,47 @@ public class CombateController {
         }
 
         Random random = new Random();
-        int sorteado = random.nextInt(3) + 1;
+        int sorteado = random.nextInt(6) + 1;
 
         int quantMagias = 0;
         int quantLacos = 0;
+        int quantBuff = 0;
         for(TrechoDeCodigo trecho: trechos){
           if(trecho instanceof Magia){
               quantMagias ++;
+              if(((Magia) trecho).getNome() == NomeMagia.RESTORE ||
+                      ((Magia) trecho).getNome() == NomeMagia.MAGIC){
+                  quantBuff ++;
+              }
           }else{
               quantLacos ++;
           }
         }
-        if(quantMagias >= 3 && quantLacos == 0){
-            createLaco();
-            return;
-        }
-        if(quantLacos >= 2 && quantMagias == 0){
-            createMagia();
-            return;
+        if(sorteouPity == false){
+            if(quantMagias >= 3 && quantLacos == 0){
+                createLaco();
+                sorteouPity = true;
+                return;
+            }
+            if(quantLacos >= 2 && quantMagias == 0){
+                createMagia();
+                sorteouPity = true;
+                return;
+            }
+            if(trechos.size() == 4 && quantBuff ==0){
+                createBuff();
+                return;
+            }
+        }else{
+            sorteouPity = false;
         }
 
         switch (sorteado){
-            case 1 : createLaco();
+            case 1,2 : createLaco();
                      return;
-            case 2,3 : createMagia();
+            case 3,4,5 : createMagia();
+                     return;
+            case 6: createBuff();
                      return;
         }
         atualizarMagiasDisponiveis();
@@ -333,12 +355,14 @@ public class CombateController {
         int sorteado = random.nextInt(2) + 1;
         int duracaoFor = random.nextInt(4) +2;
         int duracaoWhile = random.nextInt(5) +8;
-        int custo = random.nextInt(7)+2;
+
+        int custo = duracaoWhile;
+        if (custo > 10) custo = 10;
         switch (sorteado){
-            case 1 : LacoFor laco = new LacoFor(duracaoFor,custo);
+            case 1 : LacoFor laco = new LacoFor(duracaoFor,duracaoFor);
                 trechos.add(laco);
                 return;
-            case 2 : LacoWhile laco2 = new LacoWhile(duracaoWhile,custo);
+            case 2 : LacoWhile laco2 = new LacoWhile(duracaoWhile,duracaoWhile -2);
                 trechos.add(laco2);
                 return;
         }
@@ -346,7 +370,14 @@ public class CombateController {
     public void createMagia(){
 
         Random random = new Random();
-        int sorteado = random.nextInt(6) + 1;
+        int sorteado = random.nextInt(4) + 1;
+        healPity++;
+        if(healPity == 5){
+            healPity = 0;
+            Magia heal = new Magia(TipoMagia.SUPORTE,NomeMagia.HEAL,2,5);
+            trechos.add(heal);
+            return;
+        }
 
         switch (sorteado){
             case 1 : Magia fogo = new Magia(TipoMagia.ATAQUE,NomeMagia.FOGO,4,6);
@@ -358,14 +389,22 @@ public class CombateController {
             case 3 : Magia agua = new Magia(TipoMagia.ATAQUE,NomeMagia.WATER,2,3);
                 trechos.add(agua);
                 return;
-            case 4 : Magia heal = new Magia(TipoMagia.SUPORTE,NomeMagia.HEAL,2,3);
+            case 4 : Magia heal = new Magia(TipoMagia.SUPORTE,NomeMagia.HEAL,2,5);
                 trechos.add(heal);
+                healPity = 0;
                 return;
-            case 5 : Magia restore = new Magia(TipoMagia.SUPORTE,NomeMagia.RESTORE,2,1);
-                trechos.add(restore);
-                return;
-            case 6 : Magia magic = new Magia(TipoMagia.SUPORTE,NomeMagia.MAGIC,2,3);
+        }
+    }
+    public void createBuff(){
+        Random random = new Random();
+        int sorteado = random.nextInt(2) + 1;
+
+        switch (sorteado){
+            case 1 : Magia magic = new Magia(TipoMagia.SUPORTE,NomeMagia.MAGIC,2,3);
                 trechos.add(magic);
+                return;
+            case 2 : Magia restore = new Magia(TipoMagia.SUPORTE,NomeMagia.RESTORE,2,1);
+                trechos.add(restore);
                 return;
         }
     }
@@ -843,7 +882,7 @@ public class CombateController {
                             if(inimigo instanceof InimigoEletrico){
                                 if(((InimigoEletrico) inimigo).getEscudoEletricoAtual() >0){
                                     label.setTextFill(Color.web("#a548d8"));
-                                    label.setText("-1");
+                                    label.setText("00");
 
                                 }else{
                                     if(curentDamage < 10){
@@ -942,7 +981,7 @@ public class CombateController {
                inimigo.addBuff(buff1);
             }
             if(waterQuant > 0){
-                Buff buff2 = new Buff(TipoBuff.WATER_DEBUFF,laco.getDuracao(),waterQuant);
+                Buff buff2 = new Buff(TipoBuff.WATER_DEBUFF,laco.getDuracao(),waterQuant*2);
                 inimigo.addBuff(buff2);
                 mensagem += "Debuff [Water] aumenta o tempo de espera do oponente. ";
             }
@@ -1009,21 +1048,18 @@ public class CombateController {
             }
         }else{
             if(magia.getNome() == NomeMagia.RESTORE){
-                label.setTextFill(Color.web("#FF5733"));
                     Image img = new Image(getClass().getResource("/images/Efeitos/magiaRestoreFor.png").toExternalForm());
                     ImageView imgV = new ImageView(img);
                     heroSelfEfectsBox.getChildren().add(imgV);
                     imgV.setLayoutX(imgV.getLayoutX() + posX);
                     imgV.setLayoutY(imgV.getLayoutY() + posY);
             }else if(magia.getNome() == NomeMagia.HEAL){
-                label.setTextFill(Color.web("#FF5733"));
                 Image img = new Image(getClass().getResource("/images/Efeitos/magiaHealFor.png").toExternalForm());
                 ImageView imgV = new ImageView(img);
                 heroSelfEfectsBox.getChildren().add(imgV);
                 imgV.setLayoutX(imgV.getLayoutX() + posX);
                 imgV.setLayoutY(imgV.getLayoutY() + posY);
             }else if(magia.getNome() == NomeMagia.MAGIC){
-                label.setTextFill(Color.web("#FF5733"));
                 Image img = new Image(getClass().getResource("/images/Efeitos/magiaMagicFor.png").toExternalForm());
                 ImageView imgV = new ImageView(img);
                 heroSelfEfectsBox.getChildren().add(imgV);
