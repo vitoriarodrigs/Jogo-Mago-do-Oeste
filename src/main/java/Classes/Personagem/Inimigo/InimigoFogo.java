@@ -53,8 +53,8 @@ public class InimigoFogo extends Inimigo{
             setAtaqueEscolhido(TipoAtaque.FRACO);
             setModoDeAtaque(ModoAtaque.DIAGONAL_ESQUERDA);
             setPrecoDoAtaque(4);
-            if(5 - getPoderThunder() > 0){
-                setDanoDoAtaque(2 - getPoderThunder());
+            if(8 - getPoderThunder() > 0){
+                setDanoDoAtaque(8 - getPoderThunder());
             }else{
                 setDanoDoAtaque(0);
             }
@@ -79,8 +79,8 @@ public class InimigoFogo extends Inimigo{
     }
 
     public void ataqueFraco(Player jogador){
-        if(5 - getPoderThunder() > 0){
-            jogador.tomarDano(5 - getPoderThunder());
+        if(8 - getPoderThunder() > 0){
+            jogador.tomarDano(8 - getPoderThunder());
         }else{
             jogador.tomarDano(0);
         }
@@ -109,7 +109,11 @@ public class InimigoFogo extends Inimigo{
     @Override
     public void atualizarTempoBuffs() {
         if(escudoFogoAtual > 0){
-            escudoFogoAtual -= getPoderBuffsTotal();
+            if(escudoFogoAtual - getPoderBuffsTotal() < 0){
+                escudoFogoAtual = 0;
+            }else{
+                escudoFogoAtual -= getPoderBuffsTotal();
+            }
         }
         super.atualizarTempoBuffs();
     }
