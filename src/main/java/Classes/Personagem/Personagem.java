@@ -90,6 +90,13 @@ public abstract class Personagem {
 
         buffs.removeAll(remover);
     }
+    public int getPoderBuffsTotal(){
+        int poder = 0;
+        for(Buff buff : buffs){
+            poder += buff.getPoder();
+        }
+        return poder;
+    }
 
     public int getPoderBuff(TipoBuff tipo){
         int poderBuff = 0;

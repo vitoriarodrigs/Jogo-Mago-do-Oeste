@@ -117,7 +117,7 @@ public class Animator {
        if(nome == NomeMagia.GELO){
            return "#2DA8BA";
        }else if(nome == NomeMagia.FOGO){
-           return "#FF5733";
+           return "#9cf2c2";
        }else if(nome == NomeMagia.THUNDER){
            return "#a548d8";
        }else{
@@ -299,6 +299,37 @@ public class Animator {
             slideToDown(label,damage);
             pane.getChildren().clear();
             inimigo.setAtacando(false);
+        });
+
+    }
+    public void enemyAttackFadeIn(Node node, Pane pane, Pane damage,Label label, Runnable onFinish){
+
+
+        node.setOpacity(0);
+
+        pane.getChildren().add(node);
+
+        TranslateTransition translate = new TranslateTransition(Duration.millis(3000), node);
+        translate.setByX(node.getLayoutX() -15);
+        // esquerda
+
+
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(300), node);
+        fadeIn.setFromValue(0.0);
+        fadeIn.setToValue(1.0);
+
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(300), node);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+
+        ParallelTransition animation = new ParallelTransition(translate, fadeIn);
+
+        SequentialTransition full = new SequentialTransition(animation, fadeOut);
+        full.play();
+        full.setOnFinished(e->{
+            slideToDown(label,damage);
+            pane.getChildren().clear();
+            onFinish.run();
         });
 
     }

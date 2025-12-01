@@ -4,10 +4,7 @@ import Classes.Animator;
 import Classes.Feitico.*;
 import Classes.Jogo;
 import Classes.Personagem.Buff;
-import Classes.Personagem.Inimigo.Inimigo;
-import Classes.Personagem.Inimigo.InimigoEletrico;
-import Classes.Personagem.Inimigo.ModoAtaque;
-import Classes.Personagem.Inimigo.TipoAtaque;
+import Classes.Personagem.Inimigo.*;
 import Classes.Personagem.Personagem;
 import Classes.Personagem.Player;
 import Classes.Personagem.TipoBuff;
@@ -177,6 +174,9 @@ public class CombateController {
         if(inimigo instanceof InimigoEletrico){
             enemyShield.setOpacity(1);
             enemyShield.setFill(Color.web("#a548d8"));
+        }else if( inimigo instanceof InimigoFogo){
+            enemyShield.setOpacity(1);
+            enemyShield.setFill(Color.web("#64ebb4"));
         }
         if(!inimigo.getInfoEstrategia().equals("")){
             //iniciarComMensagem();
@@ -671,6 +671,14 @@ public class CombateController {
 
            double direita = enemyShieldMax.getX() + enemyShieldMax.getWidth();
            enemyShield.setX(direita - novaLargura);
+       }else if (inimigo instanceof InimigoFogo){
+           double proporcao = (double) ((InimigoFogo)inimigo).getEscudoFogoAtual()/((InimigoFogo)inimigo).getEscudoFogoMaximo();
+           double novaLargura = enemyShieldMax.getWidth() *proporcao;
+
+           enemyShield.setWidth(novaLargura);
+
+           double direita = enemyShieldMax.getX() + enemyShieldMax.getWidth();
+           enemyShield.setX(direita - novaLargura);
        }
     }
     public void atualizarDebuffInimigo(){
@@ -681,6 +689,9 @@ public class CombateController {
 
         if(inimigo.getBuffs().size() == 0 ){
             return;
+        }
+        if(inimigo instanceof InimigoFogo){
+            atualizarEscudoinimigo();
         }
         for(Buff buff : inimigo.getBuffs()){
             String endereco = "";
@@ -765,7 +776,14 @@ public class CombateController {
                 poder = String.valueOf("+"+buff.getPoder());
                 cor = "#445b8e";
 
+            }else if(buff.getTipo() == TipoBuff.FIRE_DEBUFF){
+                jogador.tomarDano(buff.getPoder());
+                endereco = "/images/Efeitos/Debuff/debuffGreenFire.png";
+                poder = String.valueOf("+"+buff.getPoder());
+                cor = "#377d91";
+                atualizarBarraHp(jogador, heroMaxHp, heroHp, false);
             }
+
             Image img = new Image(endereco);
             ImageView imgV = new ImageView(img);
 
@@ -825,6 +843,9 @@ public class CombateController {
                     int quant = random.nextInt(5)+1;
                     animator.enemyAttackHits
                             (inimigo, imgView,heroEfeictsBox, heroDamageBox, inimigo.getElemento(),label,quant,inimigo.getDanoDoAtaque(),() -> aplicarDanoInimigo(false));
+                }else if(inimigo.getModoDeAtaque() == ModoAtaque.FADE_IN){
+                    animator.enemyAttackFadeIn
+                            (imgView,heroEfeictsBox, heroDamageBox,label,() -> aplicarDanoInimigo(true));
                 }
 
         }
@@ -892,10 +913,20 @@ public class CombateController {
                                     }
                                 }
                                 atualizarEscudoinimigo();
-                            }else{
-                                if(curentDamage < 10){
-                                    label.setText("0"+curentDamage);
-                                }else{
+                            }else if(inimigo instanceof InimigoFogo) {
+                                if (((InimigoFogo) inimigo).getEscudoFogoAtual() > 0) {
+                                    label.setText("00");
+                                } else {
+                                    if (curentDamage < 10) {
+                                        label.setText("0" + curentDamage);
+                                    } else {
+                                        label.setText(String.valueOf(curentDamage));
+                                    }
+                                }
+                            } else {
+                                if (curentDamage < 10) {
+                                    label.setText("0" + curentDamage);
+                                } else {
                                     label.setText(String.valueOf(curentDamage));
                                 }
                             }

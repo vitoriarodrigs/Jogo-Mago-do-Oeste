@@ -2,6 +2,7 @@ package Classes;
 
 import Classes.Personagem.Inimigo.Inimigo;
 import Classes.Personagem.Inimigo.InimigoEletrico;
+import Classes.Personagem.Inimigo.InimigoFogo;
 import Classes.Personagem.Inimigo.InimigoTutorial;
 import Classes.Personagem.Player;
 
@@ -22,11 +23,12 @@ public class Jogo {
         this.inimigos = new ArrayList<>();
         this.inimigos.add(new InimigoTutorial(200,10,5));
         this.inimigos.add(new InimigoEletrico(170,10,5));
+        this.inimigos.add(new InimigoFogo(170,10,8));
         pergaminhos = new boolean[]{
                 false,false,false,false
         };
         this.cenaAtual = "";
-        this.inimigoAtual = 1;
+        this.inimigoAtual = 2;
     }
 
     //metodo do padrão singleton
