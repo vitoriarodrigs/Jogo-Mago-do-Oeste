@@ -179,8 +179,8 @@ public class CombateController {
             enemyShield.setFill(Color.web("#64ebb4"));
         }
         if(!inimigo.getInfoEstrategia().equals("")){
-            //iniciarComMensagem();
-            iniciar();
+            iniciarComMensagem();
+            //iniciar();
         }else{
             iniciar();
         }
@@ -236,7 +236,7 @@ public class CombateController {
     public void iniciar(){
 
         //fundoEscuro.setOpacity(1);
-       // animator.start(timerInicial,textoCentro,imagemCentro,()->removerFundo());
+       animator.start(timerInicial,textoCentro,imagemCentro,()->removerFundo());
         removerFundo();
     }
     public void iniciarComMensagem(){
