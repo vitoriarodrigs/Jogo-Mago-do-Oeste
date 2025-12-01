@@ -28,7 +28,7 @@ public class Jogo {
                 false,false,false,false
         };
         this.cenaAtual = "";
-        this.inimigoAtual = 2;
+        this.inimigoAtual = 1;
     }
 
     //metodo do padrão singleton

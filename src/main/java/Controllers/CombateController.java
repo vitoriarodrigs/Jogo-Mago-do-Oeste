@@ -237,7 +237,7 @@ public class CombateController {
 
         //fundoEscuro.setOpacity(1);
        animator.start(timerInicial,textoCentro,imagemCentro,()->removerFundo());
-        removerFundo();
+        //removerFundo();
     }
     public void iniciarComMensagem(){
         fundoEscuro.setOpacity(1);
