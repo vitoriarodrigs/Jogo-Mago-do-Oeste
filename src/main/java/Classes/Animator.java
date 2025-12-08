@@ -120,6 +120,8 @@ public class Animator {
            return "#9cf2c2";
        }else if(nome == NomeMagia.THUNDER){
            return "#a548d8";
+       }else if(nome == NomeMagia.WATER){
+           return "#0097be";
        }else{
            return "#FFFFFF";
        }

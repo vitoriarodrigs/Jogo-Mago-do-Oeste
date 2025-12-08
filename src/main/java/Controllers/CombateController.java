@@ -177,6 +177,9 @@ public class CombateController {
         }else if( inimigo instanceof InimigoFogo){
             enemyShield.setOpacity(1);
             enemyShield.setFill(Color.web("#64ebb4"));
+        }else if( inimigo instanceof InimigoAgua){
+            enemyShield.setOpacity(1);
+            enemyShield.setFill(Color.web("#6ee6e4"));
         }
         if(!inimigo.getInfoEstrategia().equals("")){
             iniciarComMensagem();
@@ -228,6 +231,11 @@ public class CombateController {
         Image heroImg = new Image(getClass().getResource("/images/Personagens/personagemPrincipal.png").toExternalForm());
         jogadorIMG.setImage(heroImg);
         Image enemyImg = new Image(getClass().getResource(inimigo.getSprite()).toExternalForm());
+        if(inimigo instanceof InimigoAgua){
+            enemySprite.setPreserveRatio(false);
+            enemySprite.setFitWidth(300);
+            enemySprite.setFitHeight(300);
+        }
         enemySprite.setImage(enemyImg);
         Image enemySpell = new Image(inimigo.getLancarMagiaSprite());
         enemyMagiaImg.setImage(enemySpell);
@@ -672,6 +680,14 @@ public class CombateController {
            double direita = enemyShieldMax.getX() + enemyShieldMax.getWidth();
            enemyShield.setX(direita - novaLargura);
        }else if (inimigo instanceof InimigoFogo){
+           double proporcao = (double) ((InimigoFogo)inimigo).getEscudoFogoAtual()/((InimigoFogo)inimigo).getEscudoFogoMaximo();
+           double novaLargura = enemyShieldMax.getWidth() *proporcao;
+
+           enemyShield.setWidth(novaLargura);
+
+           double direita = enemyShieldMax.getX() + enemyShieldMax.getWidth();
+           enemyShield.setX(direita - novaLargura);
+       }else if (inimigo instanceof InimigoAgua){
            double proporcao = (double) ((InimigoFogo)inimigo).getEscudoFogoAtual()/((InimigoFogo)inimigo).getEscudoFogoMaximo();
            double novaLargura = enemyShieldMax.getWidth() *proporcao;
 

@@ -4,5 +4,6 @@ public enum ModoAtaque {
     HORIZONTAL_ESQUERDA,
     DIAGONAL_ESQUERDA,
     HITS,
-    FADE_IN
+    FADE_IN,
+    DRAW_CARD
 }
