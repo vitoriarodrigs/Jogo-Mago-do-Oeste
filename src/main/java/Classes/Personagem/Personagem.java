@@ -1,6 +1,7 @@
 package Classes.Personagem;
 
 import Classes.Feitico.LacoDeRepeticao;
+import Classes.Feitico.Magia;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,9 @@ public abstract class Personagem {
         }else{
             hpAtual = 0;
         }
+    }
+    public void tomarDano(LacoDeRepeticao laco, Magia magia){
+
     }
 
     public void restaurarHp() {

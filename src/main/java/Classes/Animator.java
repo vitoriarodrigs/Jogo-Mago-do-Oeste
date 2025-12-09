@@ -2,15 +2,20 @@ package Classes;
 
 import Classes.Feitico.NomeMagia;
 import Classes.Personagem.Inimigo.Inimigo;
+import Classes.Personagem.Inimigo.InimigoAgua;
 import javafx.animation.*;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
+
+import java.util.Random;
 
 public class Animator {
 
@@ -333,6 +338,69 @@ public class Animator {
             pane.getChildren().clear();
             onFinish.run();
         });
+
+    }
+    public void enemyAttackDrawCard(int numeroRand, Pane pane,Text text, Runnable onFinish){
+        Image image1 = new Image("images/Efeitos/Cartas/cartaVerso.png");
+        ImageView carta = new ImageView(image1);
+        carta.setFitHeight(150);
+        carta.setFitWidth(120);
+
+        String sorteado = "";
+
+        switch (numeroRand){
+            case 1:
+                sorteado = "images/Efeitos/Cartas/cartaBuffHp.png";
+                text.setText("Hp restaurado");
+                break;
+            case 2:
+                sorteado = "images/Efeitos/Cartas/cartaDebuffHp.png";
+                text.setText("Troca de hp");
+                break;
+            case 3:
+                sorteado = "images/Efeitos/Cartas/cartaBuffLoja.png";
+                text.setText("Magia adicionada a loja");
+                break;
+            case 4:
+                sorteado = "images/Efeitos/Cartas/cartaDebuffLoja.png";
+                text.setText("A loja foi roubada");
+                break;
+            case 5:
+                sorteado = "images/Efeitos/Cartas/cartaBuffMana.png";
+                text.setText("Mana restaurada");
+                break;
+            case 6:
+                sorteado = "images/Efeitos/Cartas/cartaDebuffMana.png";
+                text.setText("Mana drenada");
+                break;
+        }
+
+        Image image2 = new Image(sorteado);
+
+        pane.getChildren().add(carta);
+
+        RotateTransition rotate = new RotateTransition();
+        rotate.setNode(carta);
+        rotate.setDuration(Duration.millis(1000));
+        rotate.setCycleCount(3);
+        rotate.setInterpolator(Interpolator.LINEAR);
+        rotate.setByAngle(360);
+        rotate.setAxis(Rotate.Y_AXIS);
+        rotate.setOnFinished(e->{
+            carta.setImage(image2);
+            text.setOpacity(1);
+        });
+        PauseTransition pause = new PauseTransition(Duration.millis(3000));
+
+        SequentialTransition full = new SequentialTransition(rotate, pause);
+
+        full.setOnFinished(e->{
+            text.setOpacity(0);
+            pane.getChildren().clear();
+            onFinish.run();
+        });
+
+        full.play();
 
     }
 }

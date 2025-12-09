@@ -40,7 +40,6 @@ public class CombateController {
     private boolean sorteouPity = false;
     private int healPity = 0;
 
-
     @FXML
     private HBox caixaDeMagias;
 
@@ -687,8 +686,9 @@ public class CombateController {
 
            double direita = enemyShieldMax.getX() + enemyShieldMax.getWidth();
            enemyShield.setX(direita - novaLargura);
+
        }else if (inimigo instanceof InimigoAgua){
-           double proporcao = (double) ((InimigoFogo)inimigo).getEscudoFogoAtual()/((InimigoFogo)inimigo).getEscudoFogoMaximo();
+           double proporcao = (double) ((InimigoAgua)inimigo).getEscudoAguaAtual()/((InimigoAgua)inimigo).getEscudoAguaMaximo();
            double novaLargura = enemyShieldMax.getWidth() *proporcao;
 
            enemyShield.setWidth(novaLargura);
@@ -862,6 +862,13 @@ public class CombateController {
                 }else if(inimigo.getModoDeAtaque() == ModoAtaque.FADE_IN){
                     animator.enemyAttackFadeIn
                             (imgView,heroEfeictsBox, heroDamageBox,label,() -> aplicarDanoInimigo(true));
+                }else{
+                    if(inimigo.getModoDeAtaque() == ModoAtaque.DRAW_CARD){
+                        if(inimigo instanceof InimigoAgua){
+                           int numero = ((InimigoAgua) inimigo).sortearCarta();
+                           animator.enemyAttackDrawCard(numero,heroEfeictsBox,estrategiaText,()->sortearCartaInimigo(numero, true));
+                        }
+                    }
                 }
 
         }
@@ -869,6 +876,11 @@ public class CombateController {
     private void aplicarDanoInimigo(boolean fimAtaque) {
         inimigo.atacar(jogador);
         atualizarBarraHp(jogador, heroMaxHp, heroHp, false);
+        if(fimAtaque){
+            inimigo.setAtacando(false);
+        }
+    }
+    private void sortearCartaInimigo(int numero ,boolean fimAtaque){
         if(fimAtaque){
             inimigo.setAtacando(false);
         }
@@ -914,7 +926,9 @@ public class CombateController {
                         ataquePause.setOnFinished(e -> {
                             criarEfeitoFor(magia, pposX, pposY, label);
 
-                            jogador.atacar(inimigo, magia.getPoder());
+                            if(!(inimigo instanceof InimigoAgua)){
+                                jogador.atacar(inimigo, magia.getPoder());
+                            }
 
                             if(inimigo instanceof InimigoEletrico){
                                 if(((InimigoEletrico) inimigo).getEscudoEletricoAtual() >0){
@@ -939,7 +953,22 @@ public class CombateController {
                                         label.setText(String.valueOf(curentDamage));
                                     }
                                 }
-                            } else {
+                            } else if(inimigo instanceof InimigoAgua){
+                                jogador.atacar(inimigo,laco,magia);
+
+                                if(((InimigoAgua) inimigo).getEscudoAguaAtual() >0){
+                                    label.setTextFill(Color.web("#06aac7"));
+                                    label.setText("00");
+
+                                }else{
+                                    if(curentDamage < 10){
+                                        label.setText("0"+curentDamage);
+                                    }else{
+                                        label.setText(String.valueOf(curentDamage));
+                                    }
+                                }
+                                atualizarEscudoinimigo();
+                            }else {
                                 if (curentDamage < 10) {
                                     label.setText("0" + curentDamage);
                                 } else {

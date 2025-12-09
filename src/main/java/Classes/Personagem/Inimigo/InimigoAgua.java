@@ -11,20 +11,19 @@ public class InimigoAgua extends Inimigo{
 
     private int escudoAguaMaximo;
     private int escudoAguaAtual;
-    private LacoDeRepeticao laco;
-    private LacoDeRepeticao lacoHeroi;
+    private LacoDeRepeticao lacoFraqueza;
 
     public InimigoAgua(int hpMaximo, int manaMaxima, int colldownDeAtaque) {
         super(hpMaximo, manaMaxima, colldownDeAtaque);
         this.sprite = "/images/Personagens/magoAgua.png";
         this.lancarMagiaSprite="/images/Efeitos/lancarMagiaAgua.png";
         this.magiaFracaSprite = "/images/Efeitos/ataqueAguaFraco.png";
+        this.magiaForteSprite = "/images/Efeitos/ataqueAguaFraco.png";
         this.cenarioSprite = "/images/Backgrounds/backgroundMagoAgua.jpg";
         this.elemento = NomeMagia.WATER;
         this.escudoAguaMaximo = 25;
         this.escudoAguaAtual = escudoAguaMaximo;
-        this.laco = null;
-        this.lacoHeroi = null;
+        this.lacoFraqueza = null;
         sortearFraqueza();
     }
 
@@ -44,9 +43,6 @@ public class InimigoAgua extends Inimigo{
         this.escudoAguaAtual = escudoAguaAtual;
     }
 
-    public void setLacoHeroi(LacoDeRepeticao lacoHeroi) {
-        this.lacoHeroi = lacoHeroi;
-    }
 
     @Override
     public void definirAtaque(){
@@ -55,7 +51,7 @@ public class InimigoAgua extends Inimigo{
             escolher();
         }
     }
-    public void escolher (){
+    /*public void escolher (){
         Random random = new Random();
 
         int escolha = random.nextInt(2)+1;
@@ -69,6 +65,22 @@ public class InimigoAgua extends Inimigo{
             }else{
                 setDanoDoAtaque(0);
             }
+        }else{
+            setAtaqueEscolhido(TipoAtaque.FORTE);
+            setModoDeAtaque(ModoAtaque.DRAW_CARD);
+            setPrecoDoAtaque(8);
+
+        }
+    }*/
+    public void escolher (){
+        Random random = new Random();
+
+        int escolha = random.nextInt(2)+1;
+
+        if(escolha == 1){
+            setAtaqueEscolhido(TipoAtaque.FORTE);
+            setModoDeAtaque(ModoAtaque.DRAW_CARD);
+            setPrecoDoAtaque(8);
         }else{
             setAtaqueEscolhido(TipoAtaque.FORTE);
             setModoDeAtaque(ModoAtaque.DRAW_CARD);
@@ -93,31 +105,36 @@ public class InimigoAgua extends Inimigo{
         }
     }
     public void ataqueForte(Player jogador) {
-        if (3 - getPoderThunder() > 0) {
-            Buff debuff = new Buff(TipoBuff.FIRE_DEBUFF, 10, 3 - getPoderThunder());
-            jogador.addBuff(debuff);
-
-        }
+        return;
     }
 
-    public boolean podeTomarDano(LacoDeRepeticao lacoRecebido){
 
-        if(lacoRecebido.getClass() == laco.getClass()){
-            for(Magia magiaRecebida :lacoRecebido.getMagias()){
-                for(Magia magia :laco.getMagias()){
-                    if(magiaRecebida.getNome() == magia.getNome()){
-                        return true;
+    @Override
+    public void tomarDano(LacoDeRepeticao laco,Magia magia){
+        if(escudoAguaAtual > 0){
+            if(laco.getClass() == lacoFraqueza.getClass()){
+                for(Magia magiaFraqueza : lacoFraqueza.getMagias()){
+                    if(magia.getNome() == magiaFraqueza.getNome()){
+                        escudoAguaAtual--;
+                        break;
                     }
                 }
             }
         }
 
-        return false;
+        if(escudoAguaAtual == 0){
+            if(hpAtual - magia.getPoder() > 0){
+                hpAtual -= magia.getPoder();
+            }else{
+                hpAtual = 0;
+            }
+        }
     }
-
     @Override
     public void tomarDano(int dano){
-
+        if(escudoAguaAtual > 0){
+            return;
+        }
         if(escudoAguaAtual == 0){
             if(hpAtual - dano > 0){
                 hpAtual -= dano;
@@ -126,6 +143,40 @@ public class InimigoAgua extends Inimigo{
             }
         }
     }
+
+    @Override
+    public void atualizarTempoBuffs() {
+
+        if(escudoAguaAtual > 0){
+            if(lacoFraqueza instanceof LacoWhile){
+                for (Buff buff : buffs){
+                    for(Magia magia : lacoFraqueza.getMagias()){
+                        if(magia.getNome() == NomeMagia.FOGO && buff.getTipo() == TipoBuff.FIRE_DEBUFF ||
+                                magia.getNome() == NomeMagia.WATER && buff.getTipo() == TipoBuff.WATER_DEBUFF||
+                                magia.getNome() == NomeMagia.THUNDER && buff.getTipo() == TipoBuff.THUNDER_DEBUFF )
+                        {
+                            escudoAguaAtual --;
+                        }
+                    }
+                }
+            }
+        }
+
+        super.atualizarTempoBuffs();
+    }
+
+    public int sortearCarta(){
+        Random random = new Random();
+        int numeroRand = random.nextInt(6)+1;
+
+        if(escudoAguaAtual > 0){
+            while (numeroRand == 2){
+                numeroRand = random.nextInt(6)+1;
+            }
+        }
+        return numeroRand;
+    }
+
     public Magia sortearMagiaFraqueza(){
         Random random = new Random();
         int magiaSorteada = random.nextInt(3)+1;
@@ -159,21 +210,21 @@ public class InimigoAgua extends Inimigo{
             LacoFor laco1 = new LacoFor(1,1);
             laco1.setMagia(magia1);
             laco1.setMagia(magia2);
-            this.laco = laco1;
+            lacoFraqueza = laco1;
 
             this.infoEstrategia = "Quebre o escudo do oponente com laço [For] com "+
-                    " ["+laco.getMagias().get(0).getNome()+"]"+
-                    " ou ["+laco.getMagias().get(1).getNome()+"]";
+                    " ["+lacoFraqueza.getMagias().get(0).getNome()+"]"+
+                    " ou ["+lacoFraqueza.getMagias().get(1).getNome()+"]";
 
         }else{
             LacoWhile laco2 = new LacoWhile(1,1);
             laco2.setMagia(magia1);
             laco2.setMagia(magia2);
-            this.laco = laco2;
+            lacoFraqueza = laco2;
 
             this.infoEstrategia = "Quebre o escudo do oponente com laço [While] com"+
-                    " ["+laco.getMagias().get(0).getNome()+"]"+
-                    " ou ["+laco.getMagias().get(1).getNome()+"]";
+                    " ["+lacoFraqueza.getMagias().get(0).getNome()+"]"+
+                    " ou ["+lacoFraqueza.getMagias().get(1).getNome()+"]";
         }
 
     }

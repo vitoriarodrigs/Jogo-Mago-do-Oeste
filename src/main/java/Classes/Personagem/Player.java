@@ -42,6 +42,9 @@ public class Player extends Personagem {
     public void atacar(Inimigo inimigo, int dano){
         inimigo.tomarDano(dano);
     }
+    public void atacar(Inimigo inimigo,LacoDeRepeticao laco, Magia magia){
+        inimigo.tomarDano(laco, magia);
+    }
     public void atacarSuporte(Magia magia){
         if(magia.getNome() == NomeMagia.HEAL){
             hpAtual += magia.getPoder();
