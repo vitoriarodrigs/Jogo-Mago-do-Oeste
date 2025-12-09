@@ -378,6 +378,8 @@ public class Animator {
         Image image2 = new Image(sorteado);
 
         pane.getChildren().add(carta);
+        carta.setLayoutX(60);
+        carta.setLayoutY(50);
 
         RotateTransition rotate = new RotateTransition();
         rotate.setNode(carta);

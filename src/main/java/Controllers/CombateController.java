@@ -706,7 +706,7 @@ public class CombateController {
         if(inimigo.getBuffs().size() == 0 ){
             return;
         }
-        if(inimigo instanceof InimigoFogo){
+        if(inimigo instanceof InimigoFogo || inimigo instanceof InimigoAgua){
             atualizarEscudoinimigo();
         }
         for(Buff buff : inimigo.getBuffs()){
@@ -730,7 +730,6 @@ public class CombateController {
                 endereco = "/images/Efeitos/Debuff/debuffThunder.png";
                 poder = String.valueOf("-"+buff.getPoder());
                 cor = "#4E3D87";
-
 
             }
             Image img = new Image(endereco);
@@ -881,6 +880,14 @@ public class CombateController {
         }
     }
     private void sortearCartaInimigo(int numero ,boolean fimAtaque){
+
+        switch(numero){
+            case 1: //restaurar hp
+
+                break;
+            case 2: //trocar hp
+        }
+
         if(fimAtaque){
             inimigo.setAtacando(false);
         }

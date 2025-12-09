@@ -146,7 +146,6 @@ public class InimigoAgua extends Inimigo{
 
     @Override
     public void atualizarTempoBuffs() {
-
         if(escudoAguaAtual > 0){
             if(lacoFraqueza instanceof LacoWhile){
                 for (Buff buff : buffs){
@@ -155,7 +154,11 @@ public class InimigoAgua extends Inimigo{
                                 magia.getNome() == NomeMagia.WATER && buff.getTipo() == TipoBuff.WATER_DEBUFF||
                                 magia.getNome() == NomeMagia.THUNDER && buff.getTipo() == TipoBuff.THUNDER_DEBUFF )
                         {
-                            escudoAguaAtual --;
+                            if(escudoAguaAtual -1 > 0){
+                                escudoAguaAtual --;
+                            }else{
+                                escudoAguaAtual = 0;
+                            }
                         }
                     }
                 }
