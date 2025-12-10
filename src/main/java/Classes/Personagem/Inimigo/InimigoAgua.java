@@ -12,6 +12,7 @@ public class InimigoAgua extends Inimigo{
     private int escudoAguaMaximo;
     private int escudoAguaAtual;
     private LacoDeRepeticao lacoFraqueza;
+    private int magiaFortePity;
 
     public InimigoAgua(int hpMaximo, int manaMaxima, int colldownDeAtaque) {
         super(hpMaximo, manaMaxima, colldownDeAtaque);
@@ -24,6 +25,7 @@ public class InimigoAgua extends Inimigo{
         this.escudoAguaMaximo = 25;
         this.escudoAguaAtual = escudoAguaMaximo;
         this.lacoFraqueza = null;
+        this.magiaFortePity =0;
         sortearFraqueza();
     }
 
@@ -43,6 +45,9 @@ public class InimigoAgua extends Inimigo{
         this.escudoAguaAtual = escudoAguaAtual;
     }
 
+    public LacoDeRepeticao getLacoFraqueza() {
+        return lacoFraqueza;
+    }
 
     @Override
     public void definirAtaque(){
@@ -51,43 +56,39 @@ public class InimigoAgua extends Inimigo{
             escolher();
         }
     }
-    /*public void escolher (){
+    public void escolher (){
+
         Random random = new Random();
 
         int escolha = random.nextInt(2)+1;
 
+        if(magiaFortePity == 3){
+            escolha = 2;
+            magiaFortePity = 0;
+        }
+
         if(escolha == 1){
+
+            magiaFortePity ++;
+
             setAtaqueEscolhido(TipoAtaque.FRACO);
             setModoDeAtaque(ModoAtaque.HORIZONTAL_ESQUERDA);
             setPrecoDoAtaque(4);
-            if(8 - getPoderThunder() > 0){
-                setDanoDoAtaque(8 - getPoderThunder());
+            if(15 - getPoderThunder() > 0){
+                setDanoDoAtaque(15 - getPoderThunder());
             }else{
                 setDanoDoAtaque(0);
             }
         }else{
-            setAtaqueEscolhido(TipoAtaque.FORTE);
-            setModoDeAtaque(ModoAtaque.DRAW_CARD);
-            setPrecoDoAtaque(8);
+            magiaFortePity = 0;
 
-        }
-    }*/
-    public void escolher (){
-        Random random = new Random();
-
-        int escolha = random.nextInt(2)+1;
-
-        if(escolha == 1){
-            setAtaqueEscolhido(TipoAtaque.FORTE);
-            setModoDeAtaque(ModoAtaque.DRAW_CARD);
-            setPrecoDoAtaque(8);
-        }else{
             setAtaqueEscolhido(TipoAtaque.FORTE);
             setModoDeAtaque(ModoAtaque.DRAW_CARD);
             setPrecoDoAtaque(8);
 
         }
     }
+
     @Override
     public void atacar (Player jogador){
         if(ataqueEscolhido == TipoAtaque.FRACO){
@@ -98,8 +99,8 @@ public class InimigoAgua extends Inimigo{
     }
 
     public void ataqueFraco(Player jogador){
-        if(8 - getPoderThunder() > 0){
-            jogador.tomarDano(8 - getPoderThunder());
+        if(15 - getPoderThunder() > 0){
+            jogador.tomarDano(15 - getPoderThunder());
         }else{
             jogador.tomarDano(0);
         }

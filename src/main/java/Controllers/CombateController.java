@@ -159,6 +159,15 @@ public class CombateController {
     private ImageView lojaBuffMagic;
 
     @FXML
+    private ImageView lacoFraquezaImg;
+
+    @FXML
+    private ImageView magiaFraqueza1Img;
+
+    @FXML
+    private ImageView magiaFraqueza2Img;
+
+    @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
         atualizarBarraHp(jogador,heroMaxHp,heroHp, false);
@@ -179,6 +188,7 @@ public class CombateController {
         }else if( inimigo instanceof InimigoAgua){
             enemyShield.setOpacity(1);
             enemyShield.setFill(Color.web("#6ee6e4"));
+
         }
         if(!inimigo.getInfoEstrategia().equals("")){
             iniciarComMensagem();
@@ -252,6 +262,45 @@ public class CombateController {
         estrategiaText.setStrokeWidth(2);
         estrategiaText.setText(inimigo.getInfoEstrategia());
         animator.startComMensagem(estrategiaText,()->iniciar());
+
+        if( inimigo instanceof InimigoAgua){
+
+            lacoFraquezaImg.setOpacity(1);
+            magiaFraqueza1Img.setOpacity(1);
+            magiaFraqueza2Img.setOpacity(1);
+
+            if(!(((InimigoAgua) inimigo).getLacoFraqueza() instanceof LacoFor)){
+                String frquezaLaco = "images/Efeitos/fraquezaWhile.png";
+                Image imgLaco = new Image(frquezaLaco);
+                lacoFraquezaImg.setImage(imgLaco);
+            }
+            String fraqueza1 = "images/Efeitos/fraquezaFire.png";
+            String fraqueza2 = "images/Efeitos/fraquezaFire.png";
+            NomeMagia nome1 = ((InimigoAgua) inimigo).getLacoFraqueza().getMagias().get(0).getNome();
+            NomeMagia nome2 = ((InimigoAgua) inimigo).getLacoFraqueza().getMagias().get(1).getNome();
+            if(nome1 == NomeMagia.FOGO){
+                fraqueza1 = "images/Efeitos/fraquezaFire.png";
+            }else if(nome1 == NomeMagia.THUNDER){
+                fraqueza1 = "images/Efeitos/fraquezaThunder.png";
+            }else if(nome1 == NomeMagia.WATER){
+                fraqueza1 = "images/Efeitos/fraquezaWater.png";
+            }
+
+            if(nome2 == NomeMagia.FOGO){
+                fraqueza2 = "images/Efeitos/fraquezaFire.png";
+            }else if(nome2 == NomeMagia.THUNDER){
+                fraqueza2 = "images/Efeitos/fraquezaThunder.png";
+            }else if(nome2 == NomeMagia.WATER){
+                fraqueza2 = "images/Efeitos/fraquezaWater.png";
+            }
+
+            Image img1 = new Image(fraqueza1);
+            Image img2 = new Image(fraqueza2);
+
+            magiaFraqueza1Img.setImage(img1);
+            magiaFraqueza2Img.setImage(img2);
+
+        }
 
     }
     public void removerFundo(){
@@ -695,6 +744,12 @@ public class CombateController {
 
            double direita = enemyShieldMax.getX() + enemyShieldMax.getWidth();
            enemyShield.setX(direita - novaLargura);
+
+           if(((InimigoAgua) inimigo).getEscudoAguaAtual() == 0){
+               lacoFraquezaImg.setOpacity(0);
+               magiaFraqueza1Img.setOpacity(0);
+               magiaFraqueza2Img.setOpacity(0);
+           }
        }
     }
     public void atualizarDebuffInimigo(){
@@ -882,10 +937,29 @@ public class CombateController {
     private void sortearCartaInimigo(int numero ,boolean fimAtaque){
 
         switch(numero){
-            case 1: //restaurar hp
-
+            case 1:
+                jogador.restaurarHp(15);
+                atualizarBarraHp(jogador, heroMaxHp, heroHp, false);
                 break;
-            case 2: //trocar hp
+            case 2:
+                inimigo.trocarHpProporcional(jogador);
+                atualizarBarraHp(jogador, heroMaxHp, heroHp, false);
+                atualizarBarraHp(inimigo, enemyMaxHp, enemyHp, true);
+                break;
+            case 3:
+                createTrecho();
+                atualizarMagiasDisponiveis();
+                break;
+            case 4:
+                trechos.clear();
+                atualizarMagiasDisponiveis();
+                break;
+            case 5:
+                jogador.setManaAtual(10);
+                break;
+            case 6:
+                jogador.setManaAtual(0);
+                break;
         }
 
         if(fimAtaque){

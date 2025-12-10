@@ -30,7 +30,15 @@ public abstract class Personagem {
         return manaMaxima;
     }
 
-    public void restaurarMana( int mana){
+    public void setManaAtual(int manaAtual) {
+        this.manaAtual = manaAtual;
+    }
+
+    public void setHpAtual(int hpAtual) {
+        this.hpAtual = hpAtual;
+    }
+
+    public void restaurarMana(int mana){
         manaAtual += mana + getPoderRestore();
         if (manaAtual > manaMaxima){
             manaAtual = manaMaxima;
@@ -53,6 +61,13 @@ public abstract class Personagem {
     }
     public void tomarDano(LacoDeRepeticao laco, Magia magia){
 
+    }
+    public void restaurarHp(int cura){
+        if(hpAtual + cura >= hpMaximo){
+            hpAtual = hpMaximo;
+        }else{
+            hpAtual += cura;
+        }
     }
 
     public void restaurarHp() {

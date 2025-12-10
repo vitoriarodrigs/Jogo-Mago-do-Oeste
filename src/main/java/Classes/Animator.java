@@ -392,7 +392,7 @@ public class Animator {
             carta.setImage(image2);
             text.setOpacity(1);
         });
-        PauseTransition pause = new PauseTransition(Duration.millis(3000));
+        PauseTransition pause = new PauseTransition(Duration.millis(1500));
 
         SequentialTransition full = new SequentialTransition(rotate, pause);
 

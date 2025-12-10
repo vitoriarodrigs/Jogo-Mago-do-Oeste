@@ -262,6 +262,23 @@
       <Pane fx:id="heroDamageBox" layoutX="323.0" layoutY="97.0" prefHeight="97.0" prefWidth="101.0" />
       <Pane fx:id="heroSelfEfectsBox" layoutX="124.0" layoutY="178.0" prefHeight="291.0" prefWidth="298.0" />
       <Pane fx:id="heroSelfDamageBox" layoutX="333.0" layoutY="107.0" prefHeight="97.0" prefWidth="101.0" />
+      <Rectangle fx:id="enemyShield" arcHeight="15.0" arcWidth="15.0" fill="DODGERBLUE" height="17.0" layoutX="965.0" layoutY="89.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="239.0" />
+      <Rectangle fx:id="enemyShieldMax" arcHeight="15.0" arcWidth="15.0" fill="DODGERBLUE" height="17.0" layoutX="975.0" layoutY="99.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="239.0" />
+      <ImageView fx:id="lacoFraquezaImg" fitHeight="17.0" fitWidth="65.0" layoutX="1214.0" layoutY="94.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Efeitos/fraquezaFor.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="magiaFraqueza1Img" fitHeight="15.0" fitWidth="15.0" layoutX="1249.0" layoutY="95.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Efeitos/fraquezaFire.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="magiaFraqueza2Img" fitHeight="15.0" fitWidth="15.0" layoutX="1268.0" layoutY="95.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Efeitos/fraquezaFire.png" />
+         </image>
+      </ImageView>
       <ImageView fx:id="fundoEscuro" disable="true" fitHeight="727.0" fitWidth="1318.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Images/Hud/fundoEscuro.png" />
@@ -277,8 +294,6 @@
             <Font name="Arial Bold" size="96.0" />
          </font>
       </Label>
-      <Rectangle fx:id="enemyShield" arcHeight="15.0" arcWidth="15.0" fill="DODGERBLUE" height="17.0" layoutX="965.0" layoutY="89.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="239.0" />
-      <Rectangle fx:id="enemyShieldMax" arcHeight="15.0" arcWidth="15.0" fill="DODGERBLUE" height="17.0" layoutX="975.0" layoutY="99.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="239.0" />
       <TextFlow layoutX="445.0" layoutY="102.0" prefHeight="291.0" prefWidth="444.0" textAlignment="CENTER">
          <children>
             <Text fx:id="estrategiaText" fill="#f5a645" strokeType="OUTSIDE" strokeWidth="0.0">

@@ -99,6 +99,25 @@ public abstract class Inimigo extends Personagem {
             colldownAtual -=1;
         }
     }
+    //metodo usado apenas por inimigo agua
+    public void trocarHpProporcional(Personagem p1) {
+
+        // porcentagens atuais
+        double percentP1 = (double) p1.getHpAtual() / p1.getHpMaximo();
+        double percentP2 = (double) hpAtual / hpMaximo;
+
+        // aplica porcentagem do outro personagem
+        int novoHpP1 = (int) Math.round(percentP2 * p1.getHpMaximo());
+        int novoHpP2 = (int) Math.round(percentP1 * hpMaximo);
+
+        // garante limites válidos
+        novoHpP1 = Math.max(0, Math.min(novoHpP1, p1.getHpMaximo()));
+        novoHpP2 = Math.max(0, Math.min(novoHpP2, hpMaximo));
+
+        // atualiza
+        p1.setHpAtual(novoHpP1);
+        hpAtual = novoHpP2;
+    }
 
     public TipoAtaque getAtaqueEscolhido() {
         return ataqueEscolhido;
