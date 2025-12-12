@@ -11,7 +11,6 @@ import Classes.Personagem.TipoBuff;
 import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -20,7 +19,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -278,7 +276,7 @@ public class CombateController {
             String fraqueza2 = "images/Efeitos/fraquezaFire.png";
             NomeMagia nome1 = ((InimigoAgua) inimigo).getLacoFraqueza().getMagias().get(0).getNome();
             NomeMagia nome2 = ((InimigoAgua) inimigo).getLacoFraqueza().getMagias().get(1).getNome();
-            if(nome1 == NomeMagia.FOGO){
+            if(nome1 == NomeMagia.FIRE){
                 fraqueza1 = "images/Efeitos/fraquezaFire.png";
             }else if(nome1 == NomeMagia.THUNDER){
                 fraqueza1 = "images/Efeitos/fraquezaThunder.png";
@@ -286,7 +284,7 @@ public class CombateController {
                 fraqueza1 = "images/Efeitos/fraquezaWater.png";
             }
 
-            if(nome2 == NomeMagia.FOGO){
+            if(nome2 == NomeMagia.FIRE){
                 fraqueza2 = "images/Efeitos/fraquezaFire.png";
             }else if(nome2 == NomeMagia.THUNDER){
                 fraqueza2 = "images/Efeitos/fraquezaThunder.png";
@@ -332,7 +330,7 @@ public class CombateController {
     public void loadMagias(){
         LacoFor laco1 = new LacoFor(3,4);
         LacoWhile laco2 = new LacoWhile(10,4);
-        Magia magia = new Magia(TipoMagia.ATAQUE,NomeMagia.FOGO,2,6);
+        Magia magia = new Magia(TipoMagia.ATAQUE,NomeMagia.FIRE,2,6);
         Magia magia2 = new Magia(TipoMagia.ATAQUE,NomeMagia.WATER,2,6);
         Magia magia3 = new Magia(TipoMagia.ATAQUE,NomeMagia.THUNDER,2,6);
         Magia magia4 = new Magia(TipoMagia.SUPORTE,NomeMagia.HEAL,2,3);
@@ -436,7 +434,7 @@ public class CombateController {
         }
 
         switch (sorteado){
-            case 1 : Magia fogo = new Magia(TipoMagia.ATAQUE,NomeMagia.FOGO,4,6);
+            case 1 : Magia fogo = new Magia(TipoMagia.ATAQUE,NomeMagia.FIRE,4,6);
                 trechos.add(fogo);
                 return;
             case 2 : Magia raio = new Magia(TipoMagia.ATAQUE,NomeMagia.THUNDER,3,4);
@@ -496,7 +494,7 @@ public class CombateController {
             }else if( trecho instanceof LacoWhile){
                 endereco = "/images/Magias/while.png";
             }else if (trecho instanceof Magia magia) {
-                if(magia.getNome() == NomeMagia.FOGO){
+                if(magia.getNome() == NomeMagia.FIRE){
                     endereco = "/images/Magias/fire.png";
                 }else if(magia.getNome() == NomeMagia.THUNDER){
                     endereco = "/images/Magias/thunder.png";
@@ -666,7 +664,7 @@ public class CombateController {
             for(Magia magia : (laco).getMagias()){
                 String endereco = "";
 
-                if(magia.getNome() == NomeMagia.FOGO){
+                if(magia.getNome() == NomeMagia.FIRE){
                     endereco = "/images/Magias/NoCost/fireNoCost.png";
                 }else if(magia.getNome() == NomeMagia.THUNDER){
                     endereco = "/images/Magias/NoCost/thunderNoCost.png";
@@ -1117,7 +1115,7 @@ public class CombateController {
             int magicQuant = 0;
 
             for (Magia magia : laco.getMagias()) {
-                if(magia.getNome() == NomeMagia.FOGO){
+                if(magia.getNome() == NomeMagia.FIRE){
                     fireQuant += 2;
                 }else if(magia.getNome() == NomeMagia.WATER){
                     waterQuant++;
@@ -1176,7 +1174,7 @@ public class CombateController {
 
         if(magia.getTipo() == TipoMagia.ATAQUE){
 
-            if(magia.getNome() == NomeMagia.FOGO){
+            if(magia.getNome() == NomeMagia.FIRE){
                 label.setTextFill(Color.web("#FF5733"));
                 Image img = new Image(getClass().getResource("/images/Efeitos/magiaFogoFor.png").toExternalForm());
                 ImageView imgV = new ImageView(img);

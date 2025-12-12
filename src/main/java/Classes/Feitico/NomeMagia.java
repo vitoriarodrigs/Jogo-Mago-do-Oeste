@@ -1,7 +1,7 @@
 package Classes.Feitico;
 
 public enum NomeMagia {
-    FOGO,
+    FIRE,
     GELO,
     THUNDER,
     WATER,

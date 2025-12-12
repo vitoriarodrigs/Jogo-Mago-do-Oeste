@@ -20,7 +20,7 @@ public class InimigoFogo extends Inimigo{
         this.magiaFracaSprite = "/images/Efeitos/ataqueFogoFraco.png";
         this.magiaForteSprite = "/images/Efeitos/ataqueFogoForte.png";
         this.cenarioSprite = "/images/Backgrounds/backgroundMagoFogo.jpg";
-        this.elemento = NomeMagia.FOGO;
+        this.elemento = NomeMagia.FIRE;
         this.escudoFogoMaximo = 100;
         this.escudoFogoAtual = escudoFogoMaximo;
         this.infoEstrategia = "Ataque com Debuffs para quebrar o escudo do oponente";

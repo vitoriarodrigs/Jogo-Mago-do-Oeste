@@ -121,7 +121,7 @@ public class Animator {
     public String enemyElementColor(NomeMagia nome){
        if(nome == NomeMagia.GELO){
            return "#2DA8BA";
-       }else if(nome == NomeMagia.FOGO){
+       }else if(nome == NomeMagia.FIRE){
            return "#9cf2c2";
        }else if(nome == NomeMagia.THUNDER){
            return "#a548d8";

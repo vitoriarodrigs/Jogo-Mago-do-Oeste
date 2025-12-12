@@ -151,7 +151,7 @@ public class InimigoAgua extends Inimigo{
             if(lacoFraqueza instanceof LacoWhile){
                 for (Buff buff : buffs){
                     for(Magia magia : lacoFraqueza.getMagias()){
-                        if(magia.getNome() == NomeMagia.FOGO && buff.getTipo() == TipoBuff.FIRE_DEBUFF ||
+                        if(magia.getNome() == NomeMagia.FIRE && buff.getTipo() == TipoBuff.FIRE_DEBUFF ||
                                 magia.getNome() == NomeMagia.WATER && buff.getTipo() == TipoBuff.WATER_DEBUFF||
                                 magia.getNome() == NomeMagia.THUNDER && buff.getTipo() == TipoBuff.THUNDER_DEBUFF )
                         {
@@ -186,7 +186,7 @@ public class InimigoAgua extends Inimigo{
         int magiaSorteada = random.nextInt(3)+1;
 
         switch (magiaSorteada){
-            case 1: Magia magia1 = new Magia(TipoMagia.ATAQUE,NomeMagia.FOGO,1,1);
+            case 1: Magia magia1 = new Magia(TipoMagia.ATAQUE,NomeMagia.FIRE,1,1);
             return magia1;
 
             case 2: Magia magia2 = new Magia(TipoMagia.ATAQUE,NomeMagia.WATER,1,1);
