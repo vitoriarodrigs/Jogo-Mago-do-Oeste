@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.VitoriaController">
+   <children>
+      <ImageView fx:id="combateBg" fitHeight="720.0" fitWidth="1300.0" pickOnBounds="true">
+         <image>
+            <Image url="@../Images/Backgrounds/fundoTutorial.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="jogadorIMG" fitHeight="320.0" fitWidth="286.0" layoutX="105.0" layoutY="117.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Personagens/personagemPrincipal.png" />
+         </image></ImageView>
+      <ImageView fx:id="enemySprite" fitHeight="320.0" fitWidth="197.0" layoutX="989.0" layoutY="117.0" pickOnBounds="true" preserveRatio="true" />
+      <Pane fx:id="dialogoPane" layoutX="116.0" layoutY="452.0" prefHeight="252.0" prefWidth="1041.0">
+         <children>
+            <ImageView fitHeight="245.0" fitWidth="1041.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../Images/Hud/dialogoBoxImage.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="54.0" fitWidth="159.0" layoutX="864.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/Hud/avancarButtonImage.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="avancarButton" layoutX="864.0" layoutY="163.0" mnemonicParsing="false" onAction="#avancarDialogo" opacity="0.0" prefHeight="54.0" prefWidth="148.0" />
+            <TextFlow layoutX="44.0" layoutY="34.0" prefHeight="177.0" prefWidth="812.0">
+               <children>
+                  <Text fx:id="dialogoText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0">
+                     <font>
+                        <Font name="Arial" size="29.0" />
+                     </font>
+                  </Text>
+               </children>
+            </TextFlow>
+         </children>
+      </Pane>
+      <ImageView fx:id="enemyItemImg" fitHeight="215.0" fitWidth="300.0" layoutX="500.0" layoutY="157.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="fundoEscuro" fitHeight="727.0" fitWidth="1318.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../Images/Hud/fundoEscuro.png" />
+         </image>
+      </ImageView>
+      <Pane fx:id="pergaminhoPane" layoutX="443.0" layoutY="21.0" prefHeight="513.0" prefWidth="439.0" visible="false">
+         <children>
+            <ImageView fx:id="pergaminhoAberto" fitHeight="543.0" fitWidth="454.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/Hud/pergaminhoAberto.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="47.0" fitWidth="113.0" layoutX="50.0" layoutY="442.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/Hud/confirmarButtonImage.png" />
+               </image>
+            </ImageView>
+            <TextFlow layoutX="35.0" layoutY="89.0" prefHeight="42.0" prefWidth="384.0" textAlignment="CENTER">
+               <children>
+                  <Text fill="#a87538" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome do conhecimento bla" textAlignment="CENTER">
+                     <font>
+                        <Font name="Arial Bold" size="29.0" />
+                     </font>
+                  </Text>
+               </children>
+            </TextFlow>
+            <TextFlow layoutX="42.0" layoutY="146.0" prefHeight="280.0" prefWidth="384.0">
+               <children>
+                  <Text fx:id="estrategiaText" fill="#cd9652" strokeType="OUTSIDE" strokeWidth="0.0" text="Testando dialogo blabla osmanthus wine" wrappingWidth="359.60009765625">
+                     <font>
+                        <Font name="Arial" size="28.0" />
+                     </font>
+                  </Text>
+               </children>
+            </TextFlow>
+            <Button fx:id="confirmarButton" disable="true" layoutX="51.0" layoutY="440.0" mnemonicParsing="false" onAction="#confirmarPergaminho" opacity="0.0" prefHeight="48.0" prefWidth="113.0" />
+         </children>
+      </Pane>
+      <ImageView fx:id="transictionBox" fitHeight="727.0" fitWidth="1318.0" layoutX="-5.0" layoutY="-3.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/Hud/telaTransição.png" />
+         </image>
+      </ImageView>
+   </children>
+</Pane>
