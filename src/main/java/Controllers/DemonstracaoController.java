@@ -334,6 +334,8 @@ public class DemonstracaoController {
             fundoEscuro.setOpacity(1);
             Image img = new Image("/images/Hud/derrota.png");
             imagemCentro.setImage(img);
+            inimigo.switchDialogoVitoria("Nossa, você quase me venceu! Nada mal para um iniciante.",0);
+            inimigo.switchDialogoVitoria("Eles são bem fortes, mas vejo potencial em você, acredito que consiga os vencer.",3);
             animator.appearEndGame(imagemCentro, transictionBox,()->avancarTelaVitoria());
         }else if(inimigo.getHpAtual() <=0){
             pause = true;

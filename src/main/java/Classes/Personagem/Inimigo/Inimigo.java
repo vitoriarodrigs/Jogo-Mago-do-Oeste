@@ -90,6 +90,10 @@ public abstract class Inimigo extends Personagem {
         return dialogoVitoria;
     }
 
+    public void switchDialogoVitoria(String novoDialogo, int posicao){
+        dialogoVitoria.set(posicao,novoDialogo);
+    }
+
     public String getPergaminho() {
         return pergaminho;
     }

@@ -25,11 +25,11 @@ public class DialogController {
     @FXML
     public void initialize() {
 
-        dialogs.add("Bem vindo jovem Mago, Estavamos te esperando...");
-        dialogs.add("O Oeste nunca esteve tão ameaçado...");
-        dialogs.add("Forças antigas despertaram no coração do deserto.");
-        dialogs.add("Você, jovem mago, é a última esperança.");
-        dialogs.add("Sua jornada começa agora...");
+        dialogs.add("Em um mundo com magos e magia, um jovem mago vaga sem rumo em busca de");
+        dialogs.add("conhecimento.");
+        dialogs.add("Ao vagar por essas terras distantes ele avista uma biblioteca.");
+        dialogs.add("Adentrando a biblioteca ele encontra uma figura peculiar.");
+        dialogs.add("Quem sabe o que o espera.");
 
         showText(dialogs.get(0));
     }

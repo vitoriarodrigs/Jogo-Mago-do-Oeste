@@ -33,14 +33,19 @@ public class DialogoLoopsController {
     public void initialize() {
 
         // Falas do tutorial
-        dialogs.add("Muito bem, jovem mago...");
-        dialogs.add("Agora aprenderemos os LAÇOS DE REPETIÇÃO.");
-        dialogs.add("Eles permitem que você repita magias várias vezes!");
-        dialogs.add("No Python, o mais comum é o laço 'for'.");
+        dialogs.add("Olha só um forasteiro.");
+        dialogs.add("Vejo que parece bem cansado, deve ter caminhado muito até aqui.");
+        dialogs.add("Faz tempo que não vejo ninguém novo adentrar nessas terras distantes.");
+        dialogs.add("Muito bem, jovem mago, seu esforço será recompensado com o seguinte conhecimento:");
+        dialogs.add("[LAÇOS DE REPETIÇÃO].");
+        dialogs.add("Na programação eles permitem que você repita um trecho de código várias vezes.");
+        dialogs.add("Esssa estrutura de código está disponível em várias linguagens de programação.");
+        dialogs.add("Em Python, o mais comum é o laço 'for'.");
         dialogs.add("Exemplo:  for i in range(5):  print(i)");
-        dialogs.add("Também existe o 'while', que repete até que algo pare.");
+        dialogs.add("Outro laço bastante comum é o [WHILE], ele permite que algo se repita indefinidamente até");
+        dialogs.add("que uma condição seja atendida.");
         dialogs.add("Use esses laços para criar feitiços poderosos no combate.");
-        dialogs.add("Prepare-se... sua jornada no conhecimento está apenas começando.");
+        dialogs.add("Vamos la para fora duelar, você verá na pratica o que estou falando.");
 
         showText(dialogs.get(0));
     }
