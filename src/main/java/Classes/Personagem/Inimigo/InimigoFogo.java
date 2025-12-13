@@ -24,7 +24,7 @@ public class InimigoFogo extends Inimigo{
         this.escudoFogoMaximo = 100;
         this.escudoFogoAtual = escudoFogoMaximo;
         this.infoEstrategia = "Ataque com Debuffs para quebrar o escudo do oponente";
-        this.pergaminho = ("/images/Hud/pergaminhoThunder.png");
+        this.pergaminho = ("/images/Hud/pergaminhoFire.png");
         this.pergaminhoInfo.add("Pergaminho de Função");
         this.pergaminhoInfo.add("Este pergaminho possui conhecimentos antigos sobre Funções.");
         this.dialogoVitoria.add("Fui derrotado, isso foi inesperado.");

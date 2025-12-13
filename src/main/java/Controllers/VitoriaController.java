@@ -103,7 +103,7 @@ public class VitoriaController  {
     public void enemyLeft(){
         if(inimigo instanceof InimigoAgua){
             animator.enemyRotateSlideLeft(enemySprite, ()->onEnemyLeft());
-        }else if(inimigo instanceof InimigoFogo){
+        }else {
             animator.enemyFlipLeft(enemySprite,()->onEnemyLeft() );
         }
     }

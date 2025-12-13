@@ -18,7 +18,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DemonstracaoController">
    <children>
-      <ImageView fitHeight="720.0" fitWidth="1300.0" pickOnBounds="true">
+      <ImageView fx:id="combateBg" fitHeight="720.0" fitWidth="1300.0" pickOnBounds="true">
          <image>
             <Image url="@../Images/Backgrounds/fundo%201.png" />
          </image>
@@ -107,7 +107,7 @@
          <image>
             <Image url="@../Images/Personagens/personagemPrincipal.png" />
          </image></ImageView>
-      <ImageView fitHeight="200.0" fitWidth="1272.0" layoutX="14.0" layoutY="502.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="200.0" fitWidth="1272.0" layoutX="14.0" layoutY="502.0" pickOnBounds="true">
          <image>
             <Image url="@../Images/Hud/menuCombate.png" />
          </image></ImageView>
@@ -269,5 +269,10 @@
             <Font name="Arial Bold" size="96.0" />
          </font>
       </Label>
+      <ImageView fx:id="transictionBox" fitHeight="727.0" fitWidth="1318.0" layoutX="-6.0" layoutY="-3.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../Images/Hud/telaTransição.png" />
+         </image>
+      </ImageView>
    </children>
 </Pane>

@@ -21,7 +21,18 @@ public class InimigoEletrico extends Inimigo{
         this.escudoEletricoMaximo = 25;
         this.escudoEletricoAtual = escudoEletricoMaximo;
         this.infoEstrategia = "Ataque várias vezes para quebrar o escudo do oponente";
-
+        this.pergaminho = ("/images/Hud/pergaminhoThunder.png");
+        this.pergaminhoInfo.add("Pergaminho de Vetor");
+        this.pergaminhoInfo.add("Este pergaminho possui conhecimentos antigos sobre Vetores.");
+        this.dialogoVitoria.add("Maldição, fui derrotada!");
+        this.dialogoVitoria.add("Como pode existir um mago capáz de resistir aos meus rápidos golpes elétricos?");
+        this.dialogoVitoria.add("Na programação quando precisamos salvar vários valores sem a necessidade de criar várias variáveis utilizamos [VETORES].");
+        this.dialogoVitoria.add("Eles são bastante úteis, pois permitem agrupar qualquer tipo de valor, facilitando na orgamização e otmização de um código.");
+        this.dialogoVitoria.add("Imagine que um vetor é como um conjunto de magias, e ao comprar esse conjunto, todas as magias preenchem seu laço de repetição.");
+        this.dialogoVitoria.add("Isso agilizaria bastante a criação de feitiços.");
+        this.dialogoVitoria.add("Dependendo da linguágem, existem diferentes bibliotecas que facilitam na ordenação dos vetores.");
+        this.dialogoVitoria.add("Ok, sei reconhecer alguem forte e você é merecedor do meu pergaminho, pegue.");
+        this.dialogoVitoria.add("Preciso continuar meu treinamento.");
     }
 
     public int getEscudoEletricoAtual() {

@@ -16,6 +16,18 @@ public class InimigoTutorial extends Inimigo{
         this.magiaForteSprite = "/images/Efeitos/magiaGeloGrande.png";
         this.cenarioSprite = "/images/Backgrounds/fundoTutorial.png";
         this.elemento = NomeMagia.GELO;
+        this.pergaminho = ("/images/Hud/IconeMapa.png");
+        this.pergaminhoInfo.add("Mapa dos Magos Cardinais");
+        this.pergaminhoInfo.add("Este mapa possui a localização de todos os magos cardinais, diz a lenda que ao serem derrotaos, concedem conhecmentos antigos esquecidos.");
+        this.dialogoVitoria.add("Caramba você é bem forte!");
+        this.dialogoVitoria.add("Porém, infelizmente eu não sou um dos magos que procura.");
+        this.dialogoVitoria.add("Eu possuo um mapa com a localização de todos os Magos Cardinais.");
+        this.dialogoVitoria.add("Eles são bem fortes, mas acredito que você consiga os vencer.");
+        this.dialogoVitoria.add("Diz a lenda que caso você os enfrente e vença, eles te darão um pergaminho contendo conhecimento antigo.");
+        this.dialogoVitoria.add("Nessas terras distantes, nunca vi ninguem conseguir os vencer.");
+        this.dialogoVitoria.add("De qualquer forma, acho que isso seria mais útil a você do que a mim.");
+        this.dialogoVitoria.add("aqui, pegue o mapa.");
+        this.dialogoVitoria.add("Preciso continuar meu treinamento.");
     }
     @Override
     public void definirAtaque(){

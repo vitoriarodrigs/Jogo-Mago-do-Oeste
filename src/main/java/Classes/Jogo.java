@@ -19,14 +19,14 @@ public class Jogo {
         this.jogador = new Player(100,10);
         this.inimigos = new ArrayList<>();
         this.inimigos.add(new InimigoTutorial(200,10,5));
-        this.inimigos.add(new InimigoEletrico(170,10,5));
+        this.inimigos.add(new InimigoEletrico(50,10,5));
         this.inimigos.add(new InimigoFogo(170,10,8));
         this.inimigos.add(new InimigoAgua(100,10,5));
         pergaminhos = new boolean[]{
                 false,false,false,false
         };
         this.cenaAtual = "";
-        this.inimigoAtual = 2;
+        this.inimigoAtual = 0;
     }
 
     //metodo do padrão singleton

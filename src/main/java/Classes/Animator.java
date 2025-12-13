@@ -118,6 +118,44 @@ public class Animator {
         SequentialTransition full = new SequentialTransition(appear, fadeOut);
         full.play();
     }
+    public void appearEndGame(Node node, Node node2, Runnable onFinish){
+        // estado inicial
+        node.setOpacity(0);
+        node2.setOpacity(0);
+        node2.setVisible(true);
+        node.setScaleX(1.5);
+        node.setScaleY(1.5);
+
+        // Fade IN
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(300), node);
+        fadeIn.setFromValue(0.0);
+        fadeIn.setToValue(1.0);
+
+        // Scale para voltar ao tamanho normal
+        ScaleTransition scale = new ScaleTransition(Duration.millis(300), node);
+        scale.setFromX(1.5);
+        scale.setFromY(1.5);
+        scale.setToX(1.0);
+        scale.setToY(1.0);
+
+        // Animações simultâneas do início
+        ParallelTransition appear = new ParallelTransition(fadeIn, scale);
+
+
+        FadeTransition fadeIn2 = new FadeTransition(Duration.millis(1000), node2);
+        fadeIn2.setFromValue(0.0);
+        fadeIn2.setToValue(1.0);
+
+        fadeIn2.setOnFinished(e->{
+            onFinish.run();
+        });
+
+        PauseTransition pause = new PauseTransition(Duration.millis(500));
+
+        // Aparece → desaparece
+        SequentialTransition full = new SequentialTransition(appear,pause, fadeIn2);
+        full.play();
+    }
     public void appearPergaminho(Node node,Node node2, Node node3) {
 
         // estado inicial
@@ -201,7 +239,7 @@ public class Animator {
     }
     public void fadeOut(Node node){
         node.setOpacity(1);
-        FadeTransition fadeOut = new FadeTransition(Duration.millis(2000), node);
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(1500), node);
         fadeOut.setFromValue(1.0);
         fadeOut.setToValue(0.0);
         fadeOut.play();

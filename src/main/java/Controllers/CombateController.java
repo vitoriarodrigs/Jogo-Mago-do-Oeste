@@ -11,6 +11,9 @@ import Classes.Personagem.TipoBuff;
 import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -22,8 +25,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -37,6 +42,10 @@ public class CombateController {
     private int timerInicial = 3;
     private boolean sorteouPity = false;
     private int healPity = 0;
+
+
+    @FXML
+    private Pane mainPane;
 
     @FXML
     private HBox caixaDeMagias;
@@ -164,6 +173,9 @@ public class CombateController {
 
     @FXML
     private ImageView magiaFraqueza2Img;
+
+    @FXML
+    private ImageView transiciontBox;
 
     @FXML
     public void initialize() {
@@ -323,8 +335,23 @@ public class CombateController {
             fundoEscuro.setOpacity(1);
             Image img = new Image("/images/Hud/vitoria.png");
             imagemCentro.setImage(img);
-            animator.appear(imagemCentro,false);
+            animator.appearEndGame(imagemCentro, transiciontBox, ()-> avancarTelaVitoria());
         }
+    }
+    public void avancarTelaVitoria(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Combate/Vitoria.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) mainPane.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void loadMagias(){

@@ -13,6 +13,9 @@ import Classes.Personagem.TipoBuff;
 import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -24,8 +27,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -139,6 +144,12 @@ public class DemonstracaoController {
     private ImageView fundoEscuro;
 
     @FXML
+    private ImageView combateBg;
+
+    @FXML
+    private ImageView transictionBox;
+
+    @FXML
     public void initialize() {
         // Atualiza as barras na inicialização
         atualizarBarraHp(jogador,heroMaxHp,heroHp, false);
@@ -200,6 +211,8 @@ public class DemonstracaoController {
         enemySprite.setImage(enemyImg);
         Image enemySpell = new Image(inimigo.getLancarMagiaSprite());
         enemyMagiaImg.setImage(enemySpell);
+        Image image = new Image(inimigo.getCenarioSprite());
+        combateBg.setImage(image);
     }
     public void atualizarDemo(){
         if(apresentando){
@@ -321,13 +334,25 @@ public class DemonstracaoController {
             fundoEscuro.setOpacity(1);
             Image img = new Image("/images/Hud/derrota.png");
             imagemCentro.setImage(img);
-            animator.appear(imagemCentro,false);
+            animator.appearEndGame(imagemCentro, transictionBox,()->avancarTelaVitoria());
         }else if(inimigo.getHpAtual() <=0){
             pause = true;
             fundoEscuro.setOpacity(1);
             Image img = new Image("/images/Hud/vitoria.png");
             imagemCentro.setImage(img);
-            animator.appear(imagemCentro,false);
+            animator.appearEndGame(imagemCentro, transictionBox,()->avancarTelaVitoria());
+        }
+    }
+    public void avancarTelaVitoria(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Combate/Vitoria.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) combateBg.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
