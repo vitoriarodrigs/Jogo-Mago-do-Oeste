@@ -24,6 +24,16 @@ public class InimigoFogo extends Inimigo{
         this.escudoFogoMaximo = 100;
         this.escudoFogoAtual = escudoFogoMaximo;
         this.infoEstrategia = "Ataque com Debuffs para quebrar o escudo do oponente";
+        this.pergaminho = ("/images/Hud/pergaminhoThunder.png");
+        this.pergaminhoInfo.add("Pergaminho de Função");
+        this.pergaminhoInfo.add("Este pergaminho possui conhecimentos antigos sobre Funções.");
+        this.dialogoVitoria.add("Fui derrotado, isso foi inesperado.");
+        this.dialogoVitoria.add("Quem diria que existiria um mago capaz de sobreviver ao [Feitiço de Debuff] criado por mim.");
+        this.dialogoVitoria.add("Na programação quando precisamos utilizar trecho de código em diversas partes de um código maior, utilizamos [FUNÇÕES].");
+        this.dialogoVitoria.add("Elas agilizam o trabalho, ajudam a evitar erros e organizar o código, pois todas as repetições desse trecho vem de apenas um lugar.");
+        this.dialogoVitoria.add("Imagine que uma função é como um feitiço que você deixa salvo e pode o lançar sem precisar o montar.");
+        this.dialogoVitoria.add("São tantas as possibilidades... Bom, você é merecedor do meu pergaminho, pegue.");
+        this.dialogoVitoria.add("Agora irei aprimorar meu feitiço, adeus.");
     }
     public int getEscudoFogoAtual() {
         return escudoFogoAtual;

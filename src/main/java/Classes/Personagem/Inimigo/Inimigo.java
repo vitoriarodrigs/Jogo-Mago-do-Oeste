@@ -26,6 +26,9 @@ public abstract class Inimigo extends Personagem {
     protected int colldownAtual;
     protected boolean atacando;
     protected String infoEstrategia;
+    protected ArrayList<String> dialogoVitoria;
+    protected String pergaminho;
+    protected ArrayList<String> pergaminhoInfo;
 
     public Inimigo(int hpMaximo, int manaMaxima, int colldownDeAtaque) {
         super(hpMaximo, manaMaxima);
@@ -43,6 +46,9 @@ public abstract class Inimigo extends Personagem {
         this.colldownAtual = colldownDeAtaque;
         this.atacando = false;
         this.infoEstrategia = "";
+        this.dialogoVitoria = new ArrayList<>();
+        this.pergaminho = "";
+        this.pergaminhoInfo = new ArrayList<>();
     }
 
     public String getSprite() {
@@ -78,6 +84,18 @@ public abstract class Inimigo extends Personagem {
 
     public String getInfoEstrategia() {
         return infoEstrategia;
+    }
+
+    public ArrayList<String> getDialogoVitoria() {
+        return dialogoVitoria;
+    }
+
+    public String getPergaminho() {
+        return pergaminho;
+    }
+
+    public ArrayList<String> getPergaminhoInfo() {
+        return pergaminhoInfo;
     }
 
     public boolean isAtacando() {

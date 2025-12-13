@@ -118,6 +118,97 @@ public class Animator {
         SequentialTransition full = new SequentialTransition(appear, fadeOut);
         full.play();
     }
+    public void appearPergaminho(Node node,Node node2, Node node3) {
+
+        // estado inicial
+        node.setOpacity(0);
+        node.setScaleX(1.5);
+        node.setScaleY(1.5);
+
+        // Fade IN
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(300), node);
+        fadeIn.setFromValue(0.0);
+        fadeIn.setToValue(1.0);
+
+        // Scale para voltar ao tamanho normal
+        ScaleTransition scale = new ScaleTransition(Duration.millis(300), node);
+        scale.setFromX(1.5);
+        scale.setFromY(1.5);
+        scale.setToX(1.0);
+        scale.setToY(1.0);
+
+        // Animações simultâneas do início
+        ParallelTransition pergaminhoAparecer = new ParallelTransition(fadeIn, scale);
+
+        RotateTransition rotate = new RotateTransition(Duration.millis(500), node);
+        rotate.setByAngle(360); // gira 1 volta completa
+        rotate.setInterpolator(Interpolator.LINEAR);
+
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(500), node);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+
+        ParallelTransition pergaminhoDesaparecer = new ParallelTransition(fadeOut, rotate);
+        pergaminhoDesaparecer.setOnFinished(e->{
+            node2.setOpacity(1);
+            node2.setDisable(false);
+            node2.setVisible(true);
+
+            node3.setOpacity(1);
+            node3.setDisable(false);
+            node3.setVisible(true);
+        });
+        PauseTransition pause1 = new PauseTransition(Duration.millis(1000));
+
+        PauseTransition pause2 = new PauseTransition(Duration.millis(1000));
+
+
+        // Aparece → desaparece
+        SequentialTransition full = new SequentialTransition(pergaminhoAparecer,pause1,pergaminhoDesaparecer);
+        full.play();
+    }
+
+    public void enemyRotateSlideLeft(Node node, Runnable onFinish){
+        RotateTransition rotate = new RotateTransition(Duration.seconds(1), node);
+        rotate.setByAngle(720); // gira 1 volta completa
+        rotate.setInterpolator(Interpolator.LINEAR);
+
+        TranslateTransition move = new TranslateTransition(Duration.seconds(1), node);
+        move.setByX(350); // move 200px para a direita
+        move.setInterpolator(Interpolator.EASE_BOTH);
+
+        ParallelTransition animation = new ParallelTransition(rotate, move);
+        animation.play();
+        animation.setOnFinished(e->{
+            onFinish.run();
+        });
+    }
+    public void enemyFlipLeft(Node node, Runnable onFinish){
+
+        ScaleTransition flip = new ScaleTransition(Duration.seconds(0.3), node);
+        flip.setFromX(1);
+        flip.setToX(-1);
+
+        TranslateTransition move = new TranslateTransition(Duration.seconds(1), node);
+        move.setByX(350); // move 200px para a direita
+        move.setInterpolator(Interpolator.EASE_BOTH);
+
+        ParallelTransition animation = new ParallelTransition(flip, move);
+        animation.play();
+        animation.setOnFinished(e->{
+            onFinish.run();
+        });
+    }
+    public void fadeOut(Node node){
+        node.setOpacity(1);
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(2000), node);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.play();
+        fadeOut.setOnFinished(e->{
+            node.setDisable(true);
+        });
+    }
     public String enemyElementColor(NomeMagia nome){
        if(nome == NomeMagia.GELO){
            return "#2DA8BA";

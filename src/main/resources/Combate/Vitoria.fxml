@@ -64,7 +64,7 @@
             </ImageView>
             <TextFlow layoutX="35.0" layoutY="89.0" prefHeight="42.0" prefWidth="384.0" textAlignment="CENTER">
                <children>
-                  <Text fill="#a87538" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome do conhecimento bla" textAlignment="CENTER">
+                  <Text fx:id="pergaminhoTitleText" fill="#a87538" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome do conhecimento bla" textAlignment="CENTER">
                      <font>
                         <Font name="Arial Bold" size="29.0" />
                      </font>
@@ -73,7 +73,7 @@
             </TextFlow>
             <TextFlow layoutX="42.0" layoutY="146.0" prefHeight="280.0" prefWidth="384.0">
                <children>
-                  <Text fx:id="estrategiaText" fill="#cd9652" strokeType="OUTSIDE" strokeWidth="0.0" text="Testando dialogo blabla osmanthus wine" wrappingWidth="359.60009765625">
+                  <Text fx:id="pergaminhoDescriptionText" fill="#cd9652" strokeType="OUTSIDE" strokeWidth="0.0" text="Testando dialogo blabla osmanthus wine" wrappingWidth="359.60009765625">
                      <font>
                         <Font name="Arial" size="28.0" />
                      </font>

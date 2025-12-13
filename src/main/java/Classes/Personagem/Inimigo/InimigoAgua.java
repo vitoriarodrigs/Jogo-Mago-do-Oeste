@@ -27,6 +27,15 @@ public class InimigoAgua extends Inimigo{
         this.lacoFraqueza = null;
         this.magiaFortePity =0;
         sortearFraqueza();
+        this.pergaminho = ("/images/Hud/pergaminhoWater.png");
+        this.pergaminhoInfo.add("Pergaminho condicional");
+        this.pergaminhoInfo.add("Este pergaminho possui conhecimentos antigos sobre estruturas condicionais.");
+        this.dialogoVitoria.add("Parabéns você me derrotou.");
+        this.dialogoVitoria.add("Minha magia condicional não foi parea para você.");
+        this.dialogoVitoria.add("Na programação quando você quer impor uma condição a algo utilizamos a estrutura [IF], essa estrutura é bastante útil podendo ser utilizada para comparar variáveis, verificar se uma variavél atindiu determinado valor...");
+        this.dialogoVitoria.add("Ainda, se quisermos que algo aconteça caso o [IF] não seja verdadeiro, utilizamos [ELSE] e ainda podemos utilizar\n [ELSE IF] para casos em queremos verificar se uma segunda condição é atendida apenas quando a primeira não for.");
+        this.dialogoVitoria.add("Caso existam muitas condições, uma boa pratica é utilizar a estrutura [SWITCH] que permite vários resultados diferentes dependendo do estado de uma varável.");
+        this.dialogoVitoria.add("Você é merecedor do meu pergaminho, pege e Adeeeeeeus :)");
     }
 
     public int getEscudoAguaMaximo() {
