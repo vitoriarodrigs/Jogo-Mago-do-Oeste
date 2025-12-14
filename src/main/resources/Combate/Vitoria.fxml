@@ -80,7 +80,7 @@
                   </Text>
                </children>
             </TextFlow>
-            <Button fx:id="confirmarButton" disable="true" layoutX="51.0" layoutY="440.0" mnemonicParsing="false" onAction="#confirmarPergaminho" opacity="0.0" prefHeight="48.0" prefWidth="113.0" />
+            <Button fx:id="confirmarButton" layoutX="51.0" layoutY="440.0" mnemonicParsing="false" onAction="#confirmarPergaminho" opacity="0.0" prefHeight="48.0" prefWidth="113.0" />
          </children>
       </Pane>
       <ImageView fx:id="transictionBox" fitHeight="727.0" fitWidth="1318.0" layoutX="-5.0" layoutY="-3.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">

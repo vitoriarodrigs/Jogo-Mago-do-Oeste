@@ -202,7 +202,6 @@ public class CombateController {
         }
         if(!inimigo.getInfoEstrategia().equals("")){
             iniciarComMensagem();
-            //iniciar();
         }else{
             iniciar();
         }
@@ -261,10 +260,8 @@ public class CombateController {
     }
 
     public void iniciar(){
-
-        //fundoEscuro.setOpacity(1);
+       fundoEscuro.setOpacity(1);
        animator.start(timerInicial,textoCentro,imagemCentro,()->removerFundo());
-        //removerFundo();
     }
     public void iniciarComMensagem(){
         fundoEscuro.setOpacity(1);

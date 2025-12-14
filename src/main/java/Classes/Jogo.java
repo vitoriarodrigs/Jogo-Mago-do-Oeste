@@ -44,11 +44,26 @@ public class Jogo {
     public Inimigo getInimigo(int i){
         return inimigos.get(i);
     }
+
     public Inimigo getInimigoAtual(){
         if(inimigos.get(inimigoAtual) != null){
             return inimigos.get(inimigoAtual);
         }
         return null;
+    }
+    public int getNumeroInimgigoAtual(){
+        return inimigoAtual;
+    }
+    public void atualizarPergaminho(int i){
+        pergaminhos[i] = true;
+    }
+    public boolean verificarPergaminhos(){
+        for(int i = 0; i <pergaminhos.length;i++){
+            if(pergaminhos[i] == false){
+                return false;
+            }
+        }
+        return true;
     }
 
     public Boolean getPergaminho(int i){
