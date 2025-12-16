@@ -126,6 +126,8 @@ public class VitoriaController  {
                         textoFinal.get(textoFinalAtual)
                 );
                 textoFinalAtual++;
+            }else{
+                avancarTelaInicio();
             }
         }
     }
@@ -138,6 +140,7 @@ public class VitoriaController  {
       if(Jogo.getInstancia().verificarPergaminhos()){
           avancarTelaFinal();
       }else{
+          Jogo.getInstancia().restaurarValoresIniciais();
           avancarTelaMapa();
       }
 
@@ -162,6 +165,19 @@ public class VitoriaController  {
     public void avancarTelaFinal(){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Combate/Vitoria.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) combateBg.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void avancarTelaInicio(){
+        Jogo.getInstancia().clear();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/StartScreen.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) combateBg.getScene().getWindow();
             stage.setScene(new Scene(root));

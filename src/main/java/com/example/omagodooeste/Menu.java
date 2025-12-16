@@ -11,7 +11,7 @@ public class Menu extends Application {
     public void start(Stage stage) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/fxml/Mapa.fxml")
+                    getClass().getResource("/fxml/StartScreen.fxml")
             );
 
             Scene scene = new Scene(loader.load(), 1300, 720);

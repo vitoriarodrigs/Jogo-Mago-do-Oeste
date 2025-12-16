@@ -326,6 +326,7 @@ public class CombateController {
             fundoEscuro.setOpacity(1);
             Image img = new Image("/images/Hud/derrota.png");
             imagemCentro.setImage(img);
+            Jogo.getInstancia().restaurarValoresIniciais();
             animator.appearEndGame(imagemCentro, transiciontBox, ()-> avancarTelaMapa());
         }else if(inimigo.getHpAtual() <=0){
             pause = true;

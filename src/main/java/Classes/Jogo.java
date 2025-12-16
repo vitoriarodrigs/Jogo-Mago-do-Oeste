@@ -36,9 +36,22 @@ public class Jogo {
         }
         return instancia;
     }
+    public void restaurarValoresIniciais(){
+        Player jogador = new Player(100,10);
+        setJogador(jogador);
+
+        this.inimigos.set(0,new InimigoTutorial(200,10,5));
+        this.inimigos.set(1,new InimigoEletrico(170,10,5));
+        this.inimigos.set(2,new InimigoFogo(170,10,8));
+        this.inimigos.set(3,new InimigoAgua(100,10,5));
+    }
 
     public Player getJogador() {
         return jogador;
+    }
+
+    public void setJogador(Player jogador) {
+        this.jogador = jogador;
     }
 
     public Inimigo getInimigo(int i){
@@ -67,6 +80,9 @@ public class Jogo {
             }
         }
         return true;
+    }
+    public static void clear() {
+        instancia = null;
     }
 
     public boolean getPergaminho(int i){
