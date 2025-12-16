@@ -326,7 +326,7 @@ public class CombateController {
             fundoEscuro.setOpacity(1);
             Image img = new Image("/images/Hud/derrota.png");
             imagemCentro.setImage(img);
-            animator.appear(imagemCentro,false);
+            animator.appearEndGame(imagemCentro, transiciontBox, ()-> avancarTelaMapa());
         }else if(inimigo.getHpAtual() <=0){
             pause = true;
             fundoEscuro.setOpacity(1);
@@ -338,6 +338,21 @@ public class CombateController {
     public void avancarTelaVitoria(){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Combate/Vitoria.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) mainPane.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void avancarTelaMapa(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Mapa.fxml"));
             Parent root = loader.load();
 
             Scene scene = new Scene(root);

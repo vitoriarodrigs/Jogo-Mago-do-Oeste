@@ -6,26 +6,29 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="524.0" prefWidth="682.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.MapaController">
+<AnchorPane prefHeight="524.0" prefWidth="682.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.MapaController">
    <children>
-      <ImageView fitHeight="720" fitWidth="1300">
+      <ImageView fx:id="fundo" fitHeight="720" fitWidth="1300">
          <image>
             <Image url="@../Images/Backgrounds/Gemini_Generated_Image_yi6g6dyi6g6dyi6g.png" />
          </image>
       </ImageView>
-       <ButtonBar layoutX="317.0" layoutY="547.0" prefHeight="98.0" prefWidth="85.0">
+       <ButtonBar layoutX="234.0" layoutY="525.0" prefHeight="164.0" prefWidth="293.0">
            <buttons>
-               <Button fx:id="fase1Btn" onAction="#irParaFase1" style="                          -fx-background-color: transparent;                         -fx-border-color: transparent;                         -fx-text-fill: transparent;                          -fx-background-insets: 0;                          -fx-padding: 0;" text="Fase 1" />
+               <Button fx:id="fase1Btn" onAction="#irParaFase1" prefHeight="160.0" prefWidth="283.0" style="                          -fx-background-color: transparent;                         -fx-border-color: transparent;                         -fx-text-fill: transparent;                          -fx-background-insets: 0;                          -fx-padding: 0;" text="Fase 1" />
            </buttons>
        </ButtonBar>
 
-       <ButtonBar layoutX="837.0" layoutY="566.0" prefHeight="79.0" prefWidth="85.0">
+       <ButtonBar layoutX="726.0" layoutY="515.0" prefHeight="189.0" prefWidth="304.0">
            <buttons>
-               <Button fx:id="fase2Btn" onAction="#irParaFase2" style="                          -fx-background-color: transparent;                         -fx-border-color: transparent;                         -fx-text-fill: transparent;                          -fx-background-insets: 0;                          -fx-padding: 0;" text="Fase 2" />
+               <Button fx:id="fase2Btn" onAction="#irParaFase2" prefHeight="179.0" prefWidth="294.0" style="                          -fx-background-color: transparent;                         -fx-border-color: transparent;                         -fx-text-fill: transparent;                          -fx-background-insets: 0;                          -fx-padding: 0;" text="Fase 2" />
            </buttons>
        </ButtonBar>
 
-       <ButtonBar layoutX="828.0" layoutY="117.0" prefHeight="92.0" prefWidth="104.0" />
+       <ButtonBar layoutX="735.0" layoutY="86.0" prefHeight="144.0" prefWidth="280.0">
+         <buttons>
+            <Button fx:id="fase3Btn" onAction="#irParaFase3" opacity="0.0" prefHeight="132.0" prefWidth="270.0" style="                          -fx-background-color: transparent;                         -fx-border-color: transparent;                         -fx-text-fill: transparent;                          -fx-background-insets: 0;                          -fx-padding: 0;" text="fase 3" />
+         </buttons></ButtonBar>
 
    </children>
 </AnchorPane>

@@ -137,6 +137,8 @@ public class VitoriaController  {
         //se possuir todos os pergaminhos > tela final.
       if(Jogo.getInstancia().verificarPergaminhos()){
           avancarTelaFinal();
+      }else{
+          avancarTelaMapa();
       }
 
     }
@@ -161,6 +163,19 @@ public class VitoriaController  {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Combate/Vitoria.fxml"));
             Parent root = loader.load();
+            Stage stage = (Stage) combateBg.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void avancarTelaMapa() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Mapa.fxml"));
+            Parent root = loader.load();
+
             Stage stage = (Stage) combateBg.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();

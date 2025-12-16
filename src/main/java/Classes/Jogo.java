@@ -19,7 +19,7 @@ public class Jogo {
         this.jogador = new Player(100,10);
         this.inimigos = new ArrayList<>();
         this.inimigos.add(new InimigoTutorial(200,10,5));
-        this.inimigos.add(new InimigoEletrico(50,10,5));
+        this.inimigos.add(new InimigoEletrico(170,10,5));
         this.inimigos.add(new InimigoFogo(170,10,8));
         this.inimigos.add(new InimigoAgua(100,10,5));
         pergaminhos = new boolean[]{
@@ -54,6 +54,9 @@ public class Jogo {
     public int getNumeroInimgigoAtual(){
         return inimigoAtual;
     }
+    public void atualizarInimigoAtual(int i){
+        this.inimigoAtual = i;
+    }
     public void atualizarPergaminho(int i){
         pergaminhos[i] = true;
     }
@@ -66,11 +69,11 @@ public class Jogo {
         return true;
     }
 
-    public Boolean getPergaminho(int i){
+    public boolean getPergaminho(int i){
        if(i< pergaminhos.length && i >=0){
            return pergaminhos[i];
        }
-       return null;
+       return false;
     }
     //sprites dos inimigos e cenas
 
